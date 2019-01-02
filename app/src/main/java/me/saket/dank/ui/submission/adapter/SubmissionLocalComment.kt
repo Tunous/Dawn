@@ -69,7 +69,7 @@ interface SubmissionLocalComment {
     fun setupGestures(commentSwipeActionsProvider: CommentSwipeActionsProvider) {
       swipeableLayout.setSwipeActionIconProvider(commentSwipeActionsProvider.iconProvider())
       swipeableLayout.setSwipeActions(commentSwipeActionsProvider.actions())
-      swipeableLayout.setOnPerformSwipeActionListener { /* TODO.*/ }
+      swipeableLayout.setOnPerformSwipeActionListener { _, _ -> /* TODO.*/ }
     }
 
     fun setupClicks(uiEvents: PublishRelay<UiEvent>) {

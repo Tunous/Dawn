@@ -1,0 +1,179 @@
+package me.saket.dank.ui.preferences.gestures.submissions
+
+import android.content.Context
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.Toolbar
+import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.AttributeSet
+import android.view.Gravity
+import android.view.MotionEvent
+import android.view.View
+import android.widget.RelativeLayout
+import butterknife.BindView
+import butterknife.ButterKnife
+import com.jakewharton.rxbinding2.view.RxView
+import io.reactivex.BackpressureStrategy
+import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
+import io.reactivex.schedulers.Schedulers.io
+import me.saket.dank.R
+import me.saket.dank.di.Dank
+import me.saket.dank.ui.preferences.UserPreferenceNestedScreen
+import me.saket.dank.ui.preferences.gestures.*
+import me.saket.dank.ui.subreddit.SubmissionSwipeActions
+import me.saket.dank.ui.subreddit.SubmissionSwipeActionsProvider
+import me.saket.dank.utils.ItemTouchHelperDragAndDropCallback
+import me.saket.dank.utils.RxDiffUtil
+import me.saket.dank.utils.Views
+import me.saket.dank.utils.itemanimators.SlideLeftAlphaAnimator
+import me.saket.dank.widgets.swipe.RecyclerSwipeListener
+import javax.inject.Inject
+import kotlin.math.abs
+import kotlin.math.max
+
+class SubmissionGesturesPreferenceScreen(context: Context, attrs: AttributeSet?) :
+  RelativeLayout(context, attrs),
+  UserPreferenceNestedScreen {
+
+  @BindView(R.id.userpreferences_gestures_recyclerview)
+  lateinit var gesturesRecyclerView: RecyclerView
+
+  @Inject
+  lateinit var swipeActionsAdapter: GesturePreferencesAdapter
+
+  @Inject
+  lateinit var swipeActionsProvider: SubmissionSwipeActionsProvider
+
+  @Inject
+  lateinit var uiConstructor: GesturePreferencesUiConstructor
+
+  @Inject
+  lateinit var swipeActionsRepository: SubmissionSwipeActionsRepository
+
+  private lateinit var toolbar: Toolbar
+
+  override fun onFinishInflate() {
+    super.onFinishInflate()
+
+    Dank.dependencyInjector().inject(this)
+    ButterKnife.bind(this)
+
+    toolbar = findViewById(R.id.userpreferences_gestures_toolbar)
+    toolbar.setTitle(R.string.userprefs_customize_submission_gestures)
+
+    setupGestureList()
+  }
+
+  override fun setNavigationOnClickListener(listener: View.OnClickListener) {
+    toolbar.setNavigationOnClickListener(listener)
+  }
+
+  override fun onInterceptPullToCollapseGesture(
+    event: MotionEvent,
+    downX: Float,
+    downY: Float,
+    upwardPagePull: Boolean
+  ): Boolean {
+    return Views.touchLiesOn(gesturesRecyclerView, downX, downY)
+        && gesturesRecyclerView.canScrollVertically(if (upwardPagePull) 1 else -1)
+  }
+
+  private fun setupGestureList() {
+    val animator = SlideLeftAlphaAnimator.create()
+    animator.supportsChangeAnimations = false
+    gesturesRecyclerView.itemAnimator = animator
+    gesturesRecyclerView.layoutManager = LinearLayoutManager(context)
+    gesturesRecyclerView.adapter = swipeActionsAdapter
+
+    // Drags.
+    val dragHelper = ItemTouchHelper(createDragAndDropCallbacks())
+    dragHelper.attachToRecyclerView(gesturesRecyclerView)
+    swipeActionsAdapter.streamDragStarts()
+      .takeUntil(RxView.detaches(this))
+      .subscribe(dragHelper::startDrag)
+
+    // Swipes.
+    // WARNING: THIS TOUCH LISTENER FOR SWIPE SHOULD BE REGISTERED AFTER DRAG-DROP LISTENER.
+    // Drag-n-drop's long-press listener does not get canceled if a row is being swiped.
+    gesturesRecyclerView.addOnItemTouchListener(RecyclerSwipeListener(gesturesRecyclerView))
+    swipeActionsAdapter.streamDeletes()
+      .takeUntil(RxView.detaches(this))
+      .subscribe { actionWithDirection ->
+        swipeActionsRepository.removeSwipeAction(actionWithDirection.swipeAction, actionWithDirection.isStartAction)
+      }
+
+    // Adds.
+    swipeActionsAdapter.streamAddClicks()
+      .takeUntil(RxView.detaches(this))
+      .subscribe { (view, uiModel) ->
+        val popup =
+          SubmissionSwipeActionPreferenceChoicePopup(
+            context,
+            uiModel.isStartAction
+          )
+        popup.showAtLocation(view, Gravity.TOP or Gravity.START, Views.locationOnScreen(view))
+      }
+
+    val startSwipeActions = swipeActionsRepository.startSwipeActions
+      .subscribeOn(io())
+      .map { swipeActions ->
+        swipeActions.map {
+          GesturePreferencesSwipeAction.UiModel(
+            it,
+            true,
+            SubmissionSwipeActions.getSwipeActionIconRes(it)
+          )
+        }
+      }
+
+    val endSwipeActions = swipeActionsRepository.endSwipeActions
+      .subscribeOn(io())
+      .map { swipeActions ->
+        swipeActions.map {
+          GesturePreferencesSwipeAction.UiModel(
+            it,
+            false,
+            SubmissionSwipeActions.getSwipeActionIconRes(it)
+          )
+        }
+      }
+
+    uiConstructor.stream(context, startSwipeActions, endSwipeActions)
+      .observeOn(io())
+      .map { it.rowUiModels }
+      .toFlowable(BackpressureStrategy.LATEST)
+      .compose(RxDiffUtil.calculate(GesturePreferenceItemDiffer))
+      .toObservable()
+      .distinctUntilChanged { pair1, pair2 -> pair1.first() == pair2.first() }
+      .observeOn(mainThread())
+      .takeUntil(RxView.detaches(this))
+      .subscribe(swipeActionsAdapter)
+  }
+
+  private fun createDragAndDropCallbacks(): ItemTouchHelperDragAndDropCallback {
+    return object : ItemTouchHelperDragAndDropCallback() {
+      override fun onItemMove(source: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder) {
+        val sourceViewHolder = source as GesturePreferencesSwipeAction.ViewHolder
+        val targetViewHolder = target as GesturePreferencesSwipeAction.ViewHolder
+
+        val isStart = sourceViewHolder.uiModel.isStartAction
+        if (isStart != targetViewHolder.uiModel.isStartAction) {
+          return
+        }
+
+        val fromPosition = sourceViewHolder.adapterPosition
+        val toPosition = targetViewHolder.adapterPosition
+
+        val items = swipeActionsAdapter.items
+        val startPosition = items.indexOfFirst {
+          val swipe = it as? GesturePreferencesSwipeAction.UiModel
+          swipe?.isStartAction == isStart
+        }
+        val from = max(fromPosition, toPosition) - startPosition - 1
+        val to = from + abs(fromPosition - toPosition)
+
+        swipeActionsRepository.moveSwipeAction(from, to, isStart)
+      }
+    }
+  }
+}

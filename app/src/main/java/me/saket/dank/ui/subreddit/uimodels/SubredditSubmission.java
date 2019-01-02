@@ -31,6 +31,8 @@ import me.saket.dank.ui.subreddit.events.SubredditSubmissionThumbnailClickEvent;
 import me.saket.dank.utils.Optional;
 import me.saket.dank.utils.Pair;
 import me.saket.dank.utils.glide.GlideCircularTransformation;
+import me.saket.dank.widgets.swipe.SwipeActions;
+import me.saket.dank.widgets.swipe.SwipeDirection;
 import me.saket.dank.widgets.swipe.SwipeableLayout;
 import me.saket.dank.widgets.swipe.ViewHolderWithSwipeActions;
 
@@ -40,7 +42,8 @@ public interface SubredditSubmission {
     TITLE,
     BYLINE,
     THUMBNAIL,
-    SAVE_STATUS
+    SAVE_STATUS,
+    SWIPE_ACTIONS
   }
 
   @AutoValue
@@ -66,6 +69,8 @@ public interface SubredditSubmission {
     public abstract Submission submission();
 
     public abstract boolean isSaved();
+
+    public abstract SwipeActions swipeActions();
 
     public static Builder builder() {
       return new AutoValue_SubredditSubmission_UiModel.Builder();
@@ -96,6 +101,8 @@ public interface SubredditSubmission {
       public abstract Builder submission(Submission submission);
 
       public abstract Builder isSaved(boolean isSaved);
+
+      public abstract Builder swipeActions(SwipeActions swipeActions);
 
       public abstract UiModel build();
     }
@@ -168,7 +175,7 @@ public interface SubredditSubmission {
       }
     }
 
-    public void renderPartialChanges(List<Object> payloads, SubmissionSwipeActionsProvider swipeActionsProvider) {
+    public void renderPartialChanges(List<Object> payloads) {
       for (Object payload : payloads) {
         //noinspection unchecked
         for (PartialChange partialChange : (List<PartialChange>) payload) {
@@ -186,7 +193,8 @@ public interface SubredditSubmission {
               break;
 
             case SAVE_STATUS:
-              getSwipeableLayout().setSwipeActions(swipeActionsProvider.actionsFor(uiModel.submission()));
+            case SWIPE_ACTIONS:
+              getSwipeableLayout().setSwipeActions(uiModel.swipeActions());
               break;
 
             default:
@@ -253,9 +261,11 @@ public interface SubredditSubmission {
       });
 
       SwipeableLayout swipeableLayout = holder.getSwipeableLayout();
-      swipeableLayout.setSwipeActionIconProvider(swipeActionsProvider);
-      swipeableLayout.setOnPerformSwipeActionListener(action ->
-          swipeActionsProvider.performSwipeAction(action, holder.uiModel.submission(), swipeableLayout)
+      swipeableLayout.setSwipeActionIconProvider((imageView, oldAction, newAction) ->
+          swipeActionsProvider.showSwipeActionIcon(imageView, oldAction, newAction, holder.uiModel.submission())
+      );
+      swipeableLayout.setOnPerformSwipeActionListener((action, swipeDirection) ->
+          swipeActionsProvider.performSwipeAction(action, holder.uiModel.submission(), swipeableLayout, swipeDirection)
       );
       return holder;
     }
@@ -268,14 +278,14 @@ public interface SubredditSubmission {
     @Override
     public void onBindViewHolder(ViewHolder holder, UiModel uiModel) {
       holder.setUiModel(uiModel);
-      holder.getSwipeableLayout().setSwipeActions(swipeActionsProvider.actionsFor(uiModel.submission()));
+      holder.getSwipeableLayout().setSwipeActions(uiModel.swipeActions());
       holder.render();
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, UiModel uiModel, List<Object> payloads) {
       holder.setUiModel(uiModel);
-      holder.renderPartialChanges(payloads, swipeActionsProvider);
+      holder.renderPartialChanges(payloads);
     }
 
     @CheckResult
@@ -290,7 +300,7 @@ public interface SubredditSubmission {
 
     @CheckResult
     public Observable<SwipeEvent> swipeEvents() {
-      return swipeActionsProvider.swipeEvents;
+      return swipeActionsProvider.getSwipeEvents();
     }
   }
 }

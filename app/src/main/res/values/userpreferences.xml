@@ -153,6 +153,10 @@
     <item name="android:paddingTop">@dimen/userprefs_item_padding</item>
   </style>
 
+  <style name="DankUserPreferenceDraggable" parent="DankUserPreferenceButton">
+    <!--<item name="android:clickable">false</item>-->
+  </style>
+
   <!-- DIMENS -->
 
   <dimen name="userprefs_item_padding">@dimen/spacing16</dimen>

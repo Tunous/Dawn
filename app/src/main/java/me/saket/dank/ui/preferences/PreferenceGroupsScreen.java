@@ -16,14 +16,14 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.jakewharton.rxrelay2.BehaviorRelay;
+import dagger.Lazy;
+import io.reactivex.BackpressureStrategy;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import dagger.Lazy;
-import io.reactivex.BackpressureStrategy;
 import me.saket.dank.R;
 import me.saket.dank.di.Dank;
 import me.saket.dank.ui.ScreenSavedState;
@@ -74,10 +74,7 @@ public class PreferenceGroupsScreen extends ExpandablePageLayout implements Pref
 
     //noinspection ConstantConditions
     toolbar.setNavigationOnClickListener(v -> ((UserPreferencesActivity) getContext()).onClickPreferencesToolbarUp());
-    setPullToCollapseIntercepter((event, downX, downY, upwardPagePull) -> {
-      //noinspection CodeBlock2Expr
-      return Views.touchLiesOn(preferenceRecyclerView, downX, downY) && preferenceRecyclerView.canScrollVertically(upwardPagePull ? 1 : -1);
-    });
+    setPullToCollapseIntercepter(Views.verticalScrollPullToCollapseIntercepter(preferenceRecyclerView));
 
     lifecycle = LifecycleOwnerViews.create(this, ((LifecycleOwnerActivity) getContext()).lifecycle());
 
@@ -190,9 +187,11 @@ public class PreferenceGroupsScreen extends ExpandablePageLayout implements Pref
       nestedPage.removeAllViews();
     }
 
-    View nestedPageScreen = LayoutInflater.from(getContext()).inflate(nestedLayoutRes, nestedPage, false);
-    ((UserPreferenceNestedScreen) nestedPageScreen).setNavigationOnClickListener(o -> preferenceRecyclerView.collapse());
-    nestedPage.addView(nestedPageScreen);
+    View nestedPageView = LayoutInflater.from(getContext()).inflate(nestedLayoutRes, nestedPage, false);
+    UserPreferenceNestedScreen nestedPageScreen = (UserPreferenceNestedScreen) nestedPageView;
+    nestedPageScreen.setNavigationOnClickListener(o -> preferenceRecyclerView.collapse());
+    nestedPage.setPullToCollapseIntercepter(nestedPageScreen);
+    nestedPage.addView(nestedPageView);
     nestedPage.post(() ->
         preferenceRecyclerView.expandItem(viewHolderToExpand.getAdapterPosition(), viewHolderToExpand.getItemId())
     );

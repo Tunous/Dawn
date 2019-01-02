@@ -26,6 +26,7 @@ import me.saket.dank.R;
 import me.saket.dank.data.EmptyState;
 import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.data.ErrorState;
+import me.saket.dank.ui.preferences.gestures.submissions.SubmissionSwipeActionsRepository;
 import me.saket.dank.ui.submission.BookmarksRepository;
 import me.saket.dank.ui.submission.PrivateSubredditException;
 import me.saket.dank.ui.submission.SubredditNotFoundException;
@@ -40,6 +41,7 @@ import me.saket.dank.utils.Themes;
 import me.saket.dank.utils.Truss;
 import me.saket.dank.vote.VotingManager;
 import me.saket.dank.walkthrough.SubmissionGesturesWalkthrough;
+import me.saket.dank.widgets.swipe.SwipeActions;
 
 public class SubredditUiConstructor {
 
@@ -53,6 +55,7 @@ public class SubredditUiConstructor {
   private final Preference<Boolean> showThumbnailsPref;
   private final ErrorResolver errorResolver;
   private final Lazy<BookmarksRepository> bookmarksRepository;
+  private final Lazy<SubmissionSwipeActionsRepository> swipeActionsRepository;
 
   @Inject
   public SubredditUiConstructor(
@@ -62,8 +65,9 @@ public class SubredditUiConstructor {
       Lazy<SubmissionGesturesWalkthrough> gesturesWalkthrough,
       @Named("comment_count_in_submission_list_byline") Preference<Boolean> showCommentCountInByline,
       @Named("show_nsfw_content") Preference<Boolean> showNsfwContent,
-      @Named("show_submission_thumbnails") Preference<Boolean> showThumbnailsPref)
-  {
+      @Named("show_submission_thumbnails") Preference<Boolean> showThumbnailsPref,
+      Lazy<SubmissionSwipeActionsRepository> swipeActionsRepository
+  ) {
     this.votingManager = votingManager;
     this.errorResolver = errorResolver;
     this.bookmarksRepository = bookmarksRepository;
@@ -71,6 +75,7 @@ public class SubredditUiConstructor {
     this.showCommentCountInByline = showCommentCountInByline;
     this.showNsfwContent = showNsfwContent;
     this.showThumbnailsPref = showThumbnailsPref;
+    this.swipeActionsRepository = swipeActionsRepository;
   }
 
   @CheckResult
@@ -100,6 +105,7 @@ public class SubredditUiConstructor {
         gesturesWalkthrough.get().walkthroughRows(),
         cachedSubmissionLists,
         externalChanges,
+        swipeActionsRepository.get().getSwipeActions().distinctUntilChanged(),
         (fullscreenProgressVisible,
             optFullscreenError,
             optEmptyState,
@@ -107,7 +113,8 @@ public class SubredditUiConstructor {
             optPagination,
             optWalkthroughRow,
             optCachedSubs,
-            o) ->
+            o,
+            swipeActions) ->
         {
           int rowCount = optPagination.map(p -> 1).orElse(0) + optCachedSubs.map(subs -> subs.size()).orElse(0);
           List<SubredditScreenUiModel.SubmissionRowUiModel> rowUiModels = new ArrayList<>(rowCount);
@@ -119,7 +126,7 @@ public class SubredditUiConstructor {
 
             for (Submission submission : cachedSubs) {
               int pendingSyncReplyCount = 0;  // TODO v2:  Get this from database.
-              rowUiModels.add(submissionUiModel(context, submission, pendingSyncReplyCount));
+              rowUiModels.add(submissionUiModel(context, submission, pendingSyncReplyCount, swipeActions));
             }
           });
           optPagination.ifPresent(pagination -> rowUiModels.add(pagination));
@@ -231,11 +238,12 @@ public class SubredditUiConstructor {
     );
   }
 
-  private SubredditSubmission.UiModel submissionUiModel(
+  public SubredditSubmission.UiModel submissionUiModel(
       Context c,
       Submission submission,
-      Integer pendingSyncReplyCount)
-  {
+      Integer pendingSyncReplyCount,
+      SwipeActions swipeActions
+  ) {
     int submissionScore = votingManager.getScoreAfterAdjustingPendingVote(submission);
     VoteDirection voteDirection = votingManager.getPendingOrDefaultVote(submission, submission.getVote());
     int postedAndPendingCommentCount = submission.getCommentCount() + pendingSyncReplyCount;
@@ -355,6 +363,7 @@ public class SubredditUiConstructor {
         .byline(bylineBuilder.build(), postedAndPendingCommentCount)
         .backgroundDrawableRes(rowBackgroundResource)
         .isSaved(bookmarksRepository.get().isSaved(submission))
+        .swipeActions(swipeActions)
         .build();
   }
 
