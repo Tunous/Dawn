@@ -29,6 +29,7 @@ public class SwipeableLayout extends FrameLayout {
   private SwipeActions swipeActions;
   private SwipeActionIconView actionIconView;
   private SwipeAction activeSwipeAction;
+  private SwipeDirection activeSwipeDirection;
   private boolean swipeDistanceThresholdCrossed;
   private ObjectAnimator translationAnimator;
   private BackgroundDrawable backgroundDrawable;
@@ -53,7 +54,7 @@ public class SwipeableLayout extends FrameLayout {
      * Called when the finger is lifted on an action. Only called when the swipe threshold (presently at
      * 40% of the icon) is crossed.
      */
-    void onPerformSwipeAction(SwipeAction action);
+    void onPerformSwipeAction(SwipeAction action, SwipeDirection swipeDirection);
   }
 
   public SwipeableLayout(Context context, AttributeSet attrs) {
@@ -87,6 +88,7 @@ public class SwipeableLayout extends FrameLayout {
 
     if (!enabled) {
       activeSwipeAction = null;
+      activeSwipeDirection = null;
       setSwipeDistanceThresholdCrossed(false);
     }
   }
@@ -167,16 +169,19 @@ public class SwipeableLayout extends FrameLayout {
         backgroundDrawable.animateColorTransition(Color.TRANSPARENT);
         setSwipeDistanceThresholdCrossed(false);
         activeSwipeAction = null;
+        activeSwipeDirection = null;
 
       } else {
         if (!isSettlingBackToPosition()) {
+          SwipeDirection swipeDirection = swipingFromEndToStart ? SwipeDirection.END_TO_START : SwipeDirection.START_TO_END;
           SwipeAction swipeAction = swipingFromEndToStart
-              ? swipeActions.endActions().findActionAtSwipeDistance(getWidth(), translationXAbs, SwipeDirection.END_TO_START)
-              : swipeActions.startActions().findActionAtSwipeDistance(getWidth(), translationXAbs, SwipeDirection.START_TO_END);
+              ? swipeActions.endActions().findActionAtSwipeDistance(getWidth(), translationXAbs, swipeDirection)
+              : swipeActions.startActions().findActionAtSwipeDistance(getWidth(), translationXAbs, swipeDirection);
 
-          if (activeSwipeAction != swipeAction) {
+          if (activeSwipeAction != swipeAction || activeSwipeDirection != swipeDirection) {
             SwipeAction oldAction = activeSwipeAction;
             activeSwipeAction = swipeAction;
+            activeSwipeDirection = swipeDirection;
 
             // Request an update to the icon.
             swipeActionIconProvider.showSwipeActionIcon(actionIconView, oldAction, swipeAction);
@@ -212,7 +217,7 @@ public class SwipeableLayout extends FrameLayout {
 
   public void handleOnRelease() {
     if (hasCrossedSwipeDistanceThreshold()) {
-      onPerformSwipeActionListener.onPerformSwipeAction(activeSwipeAction);
+      onPerformSwipeActionListener.onPerformSwipeAction(activeSwipeAction, activeSwipeDirection);
     }
   }
 
@@ -298,12 +303,11 @@ public class SwipeableLayout extends FrameLayout {
 // ======== RIPPLE DRAWABLE ======== //
 
   /**
-   * Called from {@link OnPerformSwipeActionListener#onPerformSwipeAction(SwipeAction)}, when a swipe action is performed.
+   * Called from {@link OnPerformSwipeActionListener#onPerformSwipeAction(SwipeAction, SwipeDirection)}, when a swipe action is performed.
    */
-  public void playRippleAnimation(SwipeAction forAction, SwipeTriggerRippleDrawable.RippleType swipeRippleType) {
+  public void playRippleAnimation(SwipeAction forAction, SwipeTriggerRippleDrawable.RippleType swipeRippleType, SwipeDirection fromDirection) {
     int swipeActionColor = ContextCompat.getColor(getContext(), forAction.backgroundColorRes());
-    SwipeDirection rippleDirection = swipeActions.startActions().contains(forAction) ? SwipeDirection.START_TO_END : SwipeDirection.END_TO_START;
-    swipeActionTriggerDrawable.play(swipeActionColor, rippleDirection, swipeRippleType);
+    swipeActionTriggerDrawable.play(swipeActionColor, fromDirection, swipeRippleType);
   }
 
   @Override

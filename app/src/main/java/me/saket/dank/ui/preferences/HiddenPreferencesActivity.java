@@ -17,8 +17,10 @@ import android.widget.Button;
 import android.widget.ScrollView;
 
 import com.bumptech.glide.Glide;
+import com.f2prateek.rx.preferences2.Preference;
 import com.squareup.sqlbrite2.BriteDatabase;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -38,6 +40,7 @@ import me.saket.dank.ui.appshortcuts.AppShortcutRepository;
 import me.saket.dank.ui.media.MediaHostRepository;
 import me.saket.dank.ui.submission.SubmissionCommentTreeUiConstructor;
 import me.saket.dank.ui.submission.SubmissionRepository;
+import me.saket.dank.ui.subreddit.SubmissionSwipeAction;
 import me.saket.dank.ui.subscriptions.SubscriptionRepository;
 import me.saket.dank.ui.user.messages.CachedMessage;
 import me.saket.dank.urlparser.UrlParser;
@@ -67,6 +70,8 @@ public class HiddenPreferencesActivity extends DankPullCollapsibleActivity {
   @Inject Lazy<MediaHostRepository> mediaHostRepository;
   @Inject Lazy<AppShortcutRepository> appShortcutRepository;
   @Inject @Named("walkthroughs") Lazy<SharedPreferences> sharedPreferences;
+  @Inject @Named("submission_start_swipe_actions") Lazy<Preference<List<SubmissionSwipeAction>>> startSwipeActionsPref;
+  @Inject @Named("submission_end_swipe_actions") Lazy<Preference<List<SubmissionSwipeAction>>> endSwipeActionsPref;
 
   public static void start(Context context) {
     context.startActivity(new Intent(context, HiddenPreferencesActivity.class));
@@ -185,6 +190,11 @@ public class HiddenPreferencesActivity extends DankPullCollapsibleActivity {
 
     addButton("Reset collapsed comments", o -> {
       SubmissionCommentTreeUiConstructor.COLLAPSED_COMMENT_IDS.clear();
+    });
+
+    addButton("Reset swipe action preferences",v -> {
+      startSwipeActionsPref.get().delete();
+      endSwipeActionsPref.get().delete();
     });
   }
 
