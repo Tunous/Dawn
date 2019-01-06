@@ -16,16 +16,19 @@ import me.saket.dank.ui.preferences.TypefaceResource;
 
 public class LookAndFeelPreferencesConstructor implements UserPreferencesConstructor.ChildConstructor {
 
-  private final Preference<TypefaceResource> typefacePref;
-  private final Preference<Boolean> showSubmissionThumbnails;
+    private final Preference<TypefaceResource> typefacePref;
+    private final Preference<Boolean> showSubmissionThumbnails;
+    private final Preference<Boolean> showCommentCountInByline;
 
   @Inject
   public LookAndFeelPreferencesConstructor(
       Preference<TypefaceResource> typefacePref,
-      @Named("show_submission_thumbnails") Preference<Boolean> showSubmissionThumbnails)
+      @Named("show_submission_thumbnails") Preference<Boolean> showSubmissionThumbnails,
+      @Named("comment_count_in_submission_list_byline") Preference<Boolean> showCommentCountInByline)
   {
     this.typefacePref = typefacePref;
     this.showSubmissionThumbnails = showSubmissionThumbnails;
+    this.showCommentCountInByline = showCommentCountInByline;
   }
 
   public List<UserPreferencesScreenUiModel> construct(Context c) {
@@ -70,15 +73,23 @@ public class LookAndFeelPreferencesConstructor implements UserPreferencesConstru
           }));
     }
 
-    uiModels.add(UserPreferenceSectionHeader.UiModel.create(c.getString(R.string.userprefs_group_subreddit)));
+      uiModels.add(UserPreferenceSectionHeader.UiModel.create(c.getString(R.string.userprefs_group_subreddit)));
 
-    uiModels.add(UserPreferenceSwitch.UiModel.create(
-        c.getString(R.string.userprefs_submission_thumbnails),
-        showSubmissionThumbnails.get()
-            ? c.getString(R.string.userprefs_submission_thumbnail_summary_on)
-            : c.getString(R.string.userprefs_submission_thumbnail_summary_off),
-        showSubmissionThumbnails.get(),
-        showSubmissionThumbnails));
+      uiModels.add(UserPreferenceSwitch.UiModel.create(
+              c.getString(R.string.userprefs_submission_thumbnails),
+              showSubmissionThumbnails.get()
+                      ? c.getString(R.string.userprefs_submission_thumbnail_summary_on)
+                      : c.getString(R.string.userprefs_submission_thumbnail_summary_off),
+              showSubmissionThumbnails.get(),
+              showSubmissionThumbnails));
+
+      uiModels.add(UserPreferenceSwitch.UiModel.create(
+              c.getString(R.string.userprefs_item_byline_comment_count),
+              showCommentCountInByline.get()
+                      ? c.getString(R.string.userprefs_item_byline_comment_count_summary_on)
+                      : c.getString(R.string.userprefs_item_byline_comment_count_summary_off),
+              showCommentCountInByline.get(),
+              showCommentCountInByline));
 
     uiModels.add(UserPreferenceSectionHeader.UiModel.create(c.getString(R.string.userprefs_group_gestures)));
 
