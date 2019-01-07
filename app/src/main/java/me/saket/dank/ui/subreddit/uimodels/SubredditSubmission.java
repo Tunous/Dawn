@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.auto.value.AutoValue;
 import com.jakewharton.rxrelay2.PublishRelay;
 
@@ -20,6 +21,7 @@ import net.dean.jraw.models.VoteDirection;
 
 import java.util.List;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import io.reactivex.Observable;
 import me.saket.dank.R;
@@ -197,7 +199,7 @@ public interface SubredditSubmission {
     }
 
     private void setThumbnail(Optional<UiModel.Thumbnail> optionalThumbnail) {
-      thumbnailView.setVisibility(uiModel.thumbnail().isPresent() ? View.VISIBLE : View.GONE);
+      //thumbnailView.setVisibility(uiModel.thumbnail().isPresent() ? View.VISIBLE : View.GONE);
 
       optionalThumbnail.ifPresent(thumb -> {
         thumbnailView.setBackgroundResource(thumb.backgroundRes().orElse(0));
@@ -233,6 +235,8 @@ public interface SubredditSubmission {
     private final PublishRelay<SubredditSubmissionThumbnailClickEvent> thumbnailClicks = PublishRelay.create();
     private final SubmissionSwipeActionsProvider swipeActionsProvider;
 
+    @Inject @Named("submission_thumbnails_position") Preference<Boolean> submissionThumbnailsPosition;
+
     @Inject
     public Adapter(SubmissionSwipeActionsProvider swipeActionsProvider) {
       this.swipeActionsProvider = swipeActionsProvider;
@@ -262,7 +266,10 @@ public interface SubredditSubmission {
 
     @LayoutRes
     protected int itemLayoutRes() {
-      return R.layout.list_item_submission;
+      if (!submissionThumbnailsPosition.get())
+        return R.layout.list_item_submission;
+      else
+        return R.layout.list_item_submission_left;
     }
 
     @Override

@@ -310,7 +310,11 @@ public class SubredditUiConstructor {
             throw new AssertionError();
 
           case UNKNOWN:
-            thumbnail = Optional.empty();
+            thumbnail = Optional.of(
+                 thumbnailForStaticImage(c)
+                     .staticRes(Optional.of(R.drawable.ic_visibility_off_24dp))
+                     .contentDescription(c.getString(R.string.cd_subreddit_submission_item_no_thumbnail))
+                     .build());
             break;
 
           default:

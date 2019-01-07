@@ -107,6 +107,12 @@ public class UserPreferencesModule {
   }
 
   @Provides
+  @Named("submission_thumbnails_position")
+  Preference<Boolean> submissionThumnailsPositionPref(@Named("user_prefs") RxSharedPreferences rxPrefs) {
+    return rxPrefs.getBoolean("submission_thumbnails_position", false);
+  }
+
+  @Provides
   Preference<TypefaceResource> typefacePref(@Named("user_prefs") RxSharedPreferences rxPrefs, Moshi moshi) {
     return rxPrefs.getObject("typeface", TypefaceResource.DEFAULT, new TypefaceResource.Converter(moshi));
   }

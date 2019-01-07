@@ -17,6 +17,10 @@
   <string name="userprefs_submission_thumbnail_summary_on">Show if available</string>
   <string name="userprefs_submission_thumbnail_summary_off">Always hidden</string>
 
+  <string name="userprefs_submission_thumbnails_position">Thumbnails position (requires restart)</string>
+  <string name="userprefs_submission_thumbnail_position_summary_on">Show on the left</string>
+  <string name="userprefs_submission_thumbnail_position_summary_off">Show on the right</string>
+
   <string name="userprefs_item_byline_comment_count">Submission comments count</string>
   <string name="userprefs_item_byline_comment_count_summary_on">Always show</string>
   <string name="userprefs_item_byline_comment_count_summary_off">Always hidden</string>
