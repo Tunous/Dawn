@@ -81,8 +81,8 @@ public class SwipeActionsHolder {
     }
   }
 
-  public boolean contains(SwipeAction swipeAction) {
-    return actions.contains(swipeAction);
+  public boolean hasActions() {
+    return !actions.isEmpty();
   }
 
   // TODO: avoid creating a new iterator because this method gets called on every motion event.

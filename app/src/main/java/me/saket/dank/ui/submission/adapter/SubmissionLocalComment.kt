@@ -107,7 +107,7 @@ interface SubmissionLocalComment {
       bodyView.maxLines = uiModel.bodyMaxLines
 
       // TODO: Add support for locally posted replies too.
-      swipeableLayout.isSwipeEnabled = false
+      swipeableLayout.setSwipeEnabled(false)
     }
 
     fun renderPartialChanges(payloads: List<Any>) {
