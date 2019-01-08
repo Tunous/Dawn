@@ -33,7 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing24"
-        android:layout_marginStart="@dimen/subreddit_submission_start_padding"
+        android:layout_marginStart="@dimen/subreddit_submission_padding"
         android:layout_toStartOf="@+id/submissiongestureswalkthrough_item_icon" />
 
       <me.saket.dank.walkthrough.TextSwitcherWithDistinctCheck

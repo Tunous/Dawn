@@ -2,6 +2,8 @@ package me.saket.dank.ui.subreddit.uimodels;
 
 import android.support.annotation.CheckResult;
 import android.support.annotation.LayoutRes;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +44,8 @@ public interface SubredditSubmission {
     TITLE,
     BYLINE,
     THUMBNAIL,
-    SAVE_STATUS
+    SAVE_STATUS,
+    THUMBNAIL_POSITION
   }
 
   @AutoValue
@@ -68,6 +71,8 @@ public interface SubredditSubmission {
     public abstract Submission submission();
 
     public abstract boolean isSaved();
+
+    public abstract boolean displayThumbnailOnLeftSide();
 
     public static Builder builder() {
       return new AutoValue_SubredditSubmission_UiModel.Builder();
@@ -98,6 +103,8 @@ public interface SubredditSubmission {
       public abstract Builder submission(Submission submission);
 
       public abstract Builder isSaved(boolean isSaved);
+
+      public abstract Builder displayThumbnailOnLeftSide(boolean displayThumbnailOnLeftSide);
 
       public abstract UiModel build();
     }
@@ -143,13 +150,20 @@ public interface SubredditSubmission {
     private final ImageView thumbnailView;
     private final TextView titleView;
     private final TextView bylineView;
+    private final ConstraintLayout contentContainerConstraintLayout;
     private UiModel uiModel;
+    private final ConstraintSet originalConstraintSet = new ConstraintSet();
+    private final ConstraintSet leftAlignedThumbnailConstraintSet = new ConstraintSet();
 
     protected ViewHolder(View itemView) {
       super(itemView);
       thumbnailView = itemView.findViewById(R.id.submission_item_icon);
       titleView = itemView.findViewById(R.id.submission_item_title);
       bylineView = itemView.findViewById(R.id.submission_item_byline);
+
+      contentContainerConstraintLayout = itemView.findViewById(R.id.submission_item_content_container);
+      originalConstraintSet.clone(contentContainerConstraintLayout);
+      leftAlignedThumbnailConstraintSet.clone(itemView.getContext(), R.layout.list_item_submission_content_left);
     }
 
     public void setUiModel(UiModel uiModel) {
@@ -157,6 +171,8 @@ public interface SubredditSubmission {
     }
 
     public void render() {
+      setConstraints(uiModel.displayThumbnailOnLeftSide());
+
       titleView.setText(uiModel.title());
       bylineView.setText(uiModel.byline());
 
@@ -191,6 +207,10 @@ public interface SubredditSubmission {
               getSwipeableLayout().setSwipeActions(swipeActionsProvider.actionsFor(uiModel.submission()));
               break;
 
+            case THUMBNAIL_POSITION:
+              setConstraints(uiModel.displayThumbnailOnLeftSide());
+              break;
+
             default:
               throw new UnsupportedOperationException("Unknown partial change: " + partialChange);
           }
@@ -198,8 +218,16 @@ public interface SubredditSubmission {
       }
     }
 
+    private void setConstraints(boolean displayThumbnailsOnLeftSide) {
+      if (displayThumbnailsOnLeftSide) {
+        leftAlignedThumbnailConstraintSet.applyTo(contentContainerConstraintLayout);
+      } else {
+        originalConstraintSet.applyTo(contentContainerConstraintLayout);
+      }
+    }
+
     private void setThumbnail(Optional<UiModel.Thumbnail> optionalThumbnail) {
-      //thumbnailView.setVisibility(uiModel.thumbnail().isPresent() ? View.VISIBLE : View.GONE);
+      thumbnailView.setVisibility(uiModel.thumbnail().isPresent() ? View.VISIBLE : View.GONE);
 
       optionalThumbnail.ifPresent(thumb -> {
         thumbnailView.setBackgroundResource(thumb.backgroundRes().orElse(0));
@@ -266,10 +294,7 @@ public interface SubredditSubmission {
 
     @LayoutRes
     protected int itemLayoutRes() {
-      if (!submissionThumbnailsPosition.get())
-        return R.layout.list_item_submission;
-      else
-        return R.layout.list_item_submission_left;
+      return R.layout.list_item_submission;
     }
 
     @Override
