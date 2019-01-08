@@ -253,17 +253,17 @@ public class UserProfileSheetView extends FrameLayout {
       logoutButton.setText(R.string.userprofile_logging_out);
 
       logoutDisposable = userSessionRepository.get().logout()
-            .subscribeOn(io())
-            .observeOn(mainThread())
-            .subscribe(
-                    () -> parentSheet.collapse(),
-                    error -> {
-                        logoutButton.setText(R.string.login_logout);
+        .subscribeOn(io())
+        .observeOn(mainThread())
+        .subscribe(
+            () -> parentSheet.collapse(),
+            error -> {
+                logoutButton.setText(R.string.login_logout);
 
-                        ResolvedError resolvedError = errorResolver.get().resolve(error);
-                        resolvedError.ifUnknown(() -> Timber.e(error, "Logout failure"));
-                    }
-            );
+                ResolvedError resolvedError = errorResolver.get().resolve(error);
+                resolvedError.ifUnknown(() -> Timber.e(error, "Logout failure"));
+            }
+        );
     }
   }
 }

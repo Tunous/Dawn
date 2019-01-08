@@ -23,7 +23,7 @@ class JrawReddit @Inject constructor(
 
     Timber.i("Existing usernames: ${tokenStore.usernames}")
     when {
-      userSessionRepository.isUserLoggedIn() -> {
+      userSessionRepository.isUserLoggedIn -> {
         val loggedInUserName = userSessionRepository.loggedInUserName()!!
 
         if (!tokenStore.usernames.contains(loggedInUserName)) {
