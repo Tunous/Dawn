@@ -5,9 +5,11 @@ import static io.reactivex.schedulers.Schedulers.io;
 import static me.saket.dank.utils.RxUtils.applySchedulers;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.data.InboxRepository;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.di.Dank;
+import me.saket.dank.ui.authentication.LoginActivity;
 import me.saket.dank.ui.user.UserProfileRepository;
 import me.saket.dank.ui.user.UserSessionRepository;
 import me.saket.dank.ui.user.messages.InboxActivity;
@@ -124,6 +127,8 @@ public class UserProfileSheetView extends FrameLayout {
               resolvedError.ifUnknown(() -> Timber.e(error, "Couldn't update unread message count"));
             });
 
+    this.populateUserAccounts();
+
     // This call is intentionally allowed to outlive this View's lifecycle.
     // Additionally, NYT-Store blocks multiple calls so it's safe to refresh
     // even if the previous get also triggered a network call.
@@ -154,6 +159,35 @@ public class UserProfileSheetView extends FrameLayout {
     karmaView.setText(getResources().getString(R.string.userprofile_karma_count, compactKarma));
   }
 
+  private void populateUserAccounts() {
+    LinearLayout layout = findViewById(R.id.userprofilesheet_accounts_container);
+      String userLoggedIn = userSessionRepository.get().loggedInUserName();
+
+      for (String _account : userSessionRepository.get().getAccounts()) {
+      // only display the others accounts based on which is logged in now
+
+
+      if ( userLoggedIn.equals(_account) == false ) {
+        View userTemplate = LayoutInflater.from(this.getContext()).inflate(R.layout.list_item_user_account, null);
+        me.saket.dank.widgets.TintableCompoundDrawableTextView userEntry = userTemplate.findViewById(R.id.userprofilesheet_switch_account);
+        userEntry.setText("u/" + _account.toUpperCase());
+        userEntry.setTag(_account);
+        userEntry.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                karmaView.setText("");
+                parentSheet.collapse();
+                String newUser = v.getTag().toString();
+                Timber.i("Switching to user: " + newUser);
+                userSessionRepository.get().switchAccount(newUser, getContext());
+            }
+        });
+        layout.addView(userTemplate);
+      }
+    }
+  }
+
+
   private void populateUnreadMessageCount(int unreadMessageCount) {
     if (unreadMessageCount == 0) {
       messagesView.setText(R.string.userprofile_messages);
@@ -178,6 +212,11 @@ public class UserProfileSheetView extends FrameLayout {
 
   public void setParentSheet(ToolbarExpandableSheet parentSheet) {
     this.parentSheet = parentSheet;
+  }
+
+  @OnClick(R.id.userprofilesheet_add_account)
+  void onClickAddAccount(View addAccountButton) {
+    this.getContext().startActivity(LoginActivity.intent(this.getContext()));
   }
 
   @OnClick(R.id.userprofilesheet_messages)
@@ -214,17 +253,17 @@ public class UserProfileSheetView extends FrameLayout {
       logoutButton.setText(R.string.userprofile_logging_out);
 
       logoutDisposable = userSessionRepository.get().logout()
-          .subscribeOn(io())
-          .observeOn(mainThread())
-          .subscribe(
-              () -> parentSheet.collapse(),
-              error -> {
-                logoutButton.setText(R.string.login_logout);
+            .subscribeOn(io())
+            .observeOn(mainThread())
+            .subscribe(
+                    () -> parentSheet.collapse(),
+                    error -> {
+                        logoutButton.setText(R.string.login_logout);
 
-                ResolvedError resolvedError = errorResolver.get().resolve(error);
-                resolvedError.ifUnknown(() -> Timber.e(error, "Logout failure"));
-              }
-          );
+                        ResolvedError resolvedError = errorResolver.get().resolve(error);
+                        resolvedError.ifUnknown(() -> Timber.e(error, "Logout failure"));
+                    }
+            );
     }
   }
 }

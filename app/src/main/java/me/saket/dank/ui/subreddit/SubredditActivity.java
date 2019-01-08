@@ -716,7 +716,7 @@ public class SubredditActivity extends DankPullCollapsibleActivity
         return true;
 
       case R.id.action_user_profile:
-        if (userSessionRepository.get().isUserLoggedIn()) {
+        if (userSessionRepository.get().isUserLoggedIn() || !userSessionRepository.get().getAccounts().isEmpty()) {
           showUserProfileSheet();
         } else {
           startActivity(LoginActivity.intent(this));

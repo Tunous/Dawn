@@ -27,6 +27,7 @@ import me.saket.dank.data.InboxRepository;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.di.Dank;
 import me.saket.dank.ui.preferences.NetworkStrategy;
+import me.saket.dank.ui.user.UserSessionRepository;
 import me.saket.dank.ui.user.messages.InboxFolder;
 import me.saket.dank.utils.Arrays2;
 import me.saket.dank.utils.PersistableBundleUtils;
@@ -40,6 +41,7 @@ public class CheckUnreadMessagesJobService extends DankJobService {
 
   private static final String KEY_REFRESH_MESSAGES = "refreshMessages";
 
+  @Inject UserSessionRepository userSessionRepository;
   @Inject InboxRepository inboxRepository;
   @Inject ErrorResolver errorResolver;
   @Inject MessagesNotificationManager messagesNotifManager;
@@ -131,7 +133,7 @@ public class CheckUnreadMessagesJobService extends DankJobService {
 
   @Override
   public JobStartCallback onStartJob2(JobParameters params) {
-    displayDebugNotification("Checking for unread messages");
+    displayDebugNotification("Checking for unread messages for " + userSessionRepository.loggedInUserName());
 
     //Timber.i("Fetching unread messages. JobID: %s", params.getJobId());
     boolean shouldRefreshMessages = PersistableBundleUtils.getBoolean(params.getExtras(), KEY_REFRESH_MESSAGES);
@@ -200,7 +202,7 @@ public class CheckUnreadMessagesJobService extends DankJobService {
     return messagesNotifManager.filterUnseenMessages(unreadMessages)
         .flatMapCompletable(unseenMessages -> {
           if (unseenMessages.isEmpty()) {
-            displayDebugNotification("No unread messages found");
+            displayDebugNotification("No unread messages found for " + userSessionRepository.loggedInUserName() );
             return messagesNotifManager.dismissAllNotifications(getBaseContext());
           } else {
             removeDebugNotification();

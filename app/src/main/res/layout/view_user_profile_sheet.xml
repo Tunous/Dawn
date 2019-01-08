@@ -34,6 +34,24 @@
       android:indeterminateTint="@color/gray_700" />
   </LinearLayout>
 
+  <LinearLayout
+      android:id="@+id/userprofilesheet_accounts_container"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="vertical">
+
+  </LinearLayout>
+
+  <View style="@style/DankSeparator.VerticalContent" />
+
+  <me.saket.dank.widgets.TintableCompoundDrawableTextView
+      android:id="@+id/userprofilesheet_add_account"
+      style="@style/DankButton.UserProfileSheet"
+      android:drawableStart="@drawable/ic_add_circle_24dp"
+      android:text="@string/userprofile_add_account" />
+
+  <View style="@style/DankSeparator.VerticalContent" />
+
   <me.saket.dank.widgets.TintableCompoundDrawableTextView
     android:id="@+id/userprofilesheet_messages"
     style="@style/DankButton.UserProfileSheet"

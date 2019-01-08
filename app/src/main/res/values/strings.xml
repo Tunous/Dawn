@@ -155,6 +155,8 @@
   <string name="userprofile_unread_messages_count_single">%d new message</string>
   <string name="userprofile_unread_messages_count_99_or_less">%d new messages</string>
   <string name="userprofile_unread_messages_count_99_plus">99+ new messages</string>
+  <string name="userprofile_add_account">Add new account</string>
+  <string name="userprofile_account">U/ACCOUNT NAME</string>
 
   <!-- Submission -->
   <string name="submission_loading_comments">Loading comments…</string>
