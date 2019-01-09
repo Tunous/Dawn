@@ -1,0 +1,115 @@
+package me.saket.dank.ui.preferences.adapter
+
+import android.content.Context
+import com.f2prateek.rx.preferences2.Preference
+import me.saket.dank.BuildConfig
+import me.saket.dank.R
+import me.saket.dank.ui.preferences.MultiOptionPreferencePopup
+import me.saket.dank.ui.preferences.TypefaceResource
+import java.util.*
+import javax.inject.Inject
+import javax.inject.Named
+
+class LookAndFeelPreferencesConstructor @Inject constructor(
+  private val typefacePref: Preference<TypefaceResource>,
+  @Named("show_submission_thumbnails") private val showSubmissionThumbnails: Preference<Boolean>,
+  @Named("comment_count_in_submission_list_byline") private val showCommentCountInByline: Preference<Boolean>
+) : UserPreferencesConstructor.ChildConstructor {
+
+  override fun construct(c: Context): List<UserPreferencesScreenUiModel> {
+    val uiModels = ArrayList<UserPreferencesScreenUiModel>()
+
+    if (BuildConfig.DEBUG) {
+      val typefaceResource = typefacePref.get()
+
+      uiModels.add(UserPreferenceSectionHeader.UiModel.create("Text"))
+      uiModels.add(UserPreferenceButton.UiModel.create(
+        "Typeface",
+        typefaceResource.name()
+      ) { clickHandler, event ->
+        val builder = MultiOptionPreferencePopup.builder(typefacePref)
+        add(builder, TypefaceResource.create("Roboto", "roboto_regular.ttf"))
+        add(builder, TypefaceResource.create("Roboto condensed", "RobotoCondensed-Regular.ttf"))
+
+        add(builder, TypefaceResource.create("Bifocals", "bifocals.otf"))
+
+        add(builder, TypefaceResource.create("Transcript regular", "TranscriptTrial-Regular.otf"))
+
+        add(builder, TypefaceResource.create("Basis", "basis-grotesque-trial-regular.otf"))
+        add(builder, TypefaceResource.create("Basis medium", "basis-grotesque-trial-medium.otf"))
+
+        add(builder, TypefaceResource.create("Relative book", "relativetrial-book.otf"))
+        add(builder, TypefaceResource.create("Relative faux", "relativetrial-faux.otf"))
+        add(builder, TypefaceResource.create("Relative medium", "relativetrial-medium.otf"))
+        add(builder, TypefaceResource.create("Relative mono 12", "relativetrial-mono12pitch.otf"))
+
+        add(builder, TypefaceResource.create("LaFabrique", "LaFabriqueTrial-Regular.otf"))
+        add(builder, TypefaceResource.create("LaFabrique SemiBold", "LaFabriqueTrial-SemiBold.otf"))
+
+        add(builder, TypefaceResource.create("Reader", "readertrial-regular.otf"))
+        add(builder, TypefaceResource.create("Reader medium", "readertrial-medium.otf"))
+
+        add(builder, TypefaceResource.create("Inter", "Inter-UI-Regular.otf"))
+        add(builder, TypefaceResource.create("Inter medium", "Inter-UI-Medium.otf"))
+
+        add(builder, TypefaceResource.create("Visuelt", "visuelttrial-regular.otf"))
+
+        clickHandler.show(builder, event.itemViewHolder())
+      })
+    }
+
+    uiModels.add(UserPreferenceSectionHeader.UiModel.create(c.getString(R.string.userprefs_group_subreddit)))
+
+    uiModels.add(
+      UserPreferenceSwitch.UiModel.create(
+        c.getString(R.string.userprefs_submission_thumbnails),
+        if (showSubmissionThumbnails.get())
+          c.getString(R.string.userprefs_submission_thumbnail_summary_on)
+        else
+          c.getString(R.string.userprefs_submission_thumbnail_summary_off),
+        showSubmissionThumbnails.get(),
+        showSubmissionThumbnails
+      )
+    )
+
+    uiModels.add(
+      UserPreferenceSwitch.UiModel.create(
+        c.getString(R.string.userprefs_item_byline_comment_count),
+        if (showCommentCountInByline.get())
+          c.getString(R.string.userprefs_item_byline_comment_count_summary_on)
+        else
+          c.getString(R.string.userprefs_item_byline_comment_count_summary_off),
+        showCommentCountInByline.get(),
+        showCommentCountInByline
+      )
+    )
+
+    uiModels.add(UserPreferenceSectionHeader.UiModel.create(c.getString(R.string.userprefs_group_gestures)))
+
+    uiModels.add(UserPreferenceButton.UiModel.create(
+      c.getString(R.string.userprefs_customize_submission_gestures),
+      "Options and save. Upvote and downvote."
+    ) { clickHandler, event ->
+      clickHandler.expandNestedPage(
+        R.layout.view_user_preferences_submission_gestures,
+        event.itemViewHolder()
+      )
+    })
+
+    uiModels.add(UserPreferenceButton.UiModel.create(
+      c.getString(R.string.userprefs_customize_comment_gestures),
+      "Options and save. Upvote and downvote."
+    ) { clickHandler, event ->
+      clickHandler.expandNestedPage(
+        R.layout.view_user_preferences_comment_gestures,
+        event.itemViewHolder()
+      )
+    })
+
+    return uiModels
+  }
+
+  private fun add(builder: MultiOptionPreferencePopup.Builder<TypefaceResource>, resource: TypefaceResource) {
+    builder.addOption(resource, resource.name(), R.drawable.ic_text_fields_20dp)
+  }
+}
