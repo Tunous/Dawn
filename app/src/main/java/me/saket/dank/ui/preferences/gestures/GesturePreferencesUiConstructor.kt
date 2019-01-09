@@ -32,9 +32,9 @@ class GesturePreferencesUiConstructor @Inject constructor(
       }
 
     val startActionsHeader =
-      GesturePreferencesSectionHeader.UiModel(context.getString(R.string.userprefs_gestures_group_left))
+      GesturePreferencesSectionHeader.UiModel(context.getString(R.string.userprefs_gestures_group_swipe_start_to_end))
     val endActionsHeader =
-      GesturePreferencesSectionHeader.UiModel(context.getString(R.string.userprefs_gestures_group_right))
+      GesturePreferencesSectionHeader.UiModel(context.getString(R.string.userprefs_gestures_group_swipe_end_to_start))
 
     val startPlaceholder = GesturePreferencesSwipeActionPlaceholder.UiModel(true)
     val endPlaceholder = GesturePreferencesSwipeActionPlaceholder.UiModel(false)
