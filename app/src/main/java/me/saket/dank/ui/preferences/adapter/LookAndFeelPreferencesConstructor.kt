@@ -6,6 +6,7 @@ import me.saket.dank.BuildConfig
 import me.saket.dank.R
 import me.saket.dank.ui.preferences.MultiOptionPreferencePopup
 import me.saket.dank.ui.preferences.TypefaceResource
+import me.saket.dank.ui.subreddit.SubmissionSwipeAction
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -13,7 +14,9 @@ import javax.inject.Named
 class LookAndFeelPreferencesConstructor @Inject constructor(
   private val typefacePref: Preference<TypefaceResource>,
   @Named("show_submission_thumbnails") private val showSubmissionThumbnails: Preference<Boolean>,
-  @Named("comment_count_in_submission_list_byline") private val showCommentCountInByline: Preference<Boolean>
+  @Named("comment_count_in_submission_list_byline") private val showCommentCountInByline: Preference<Boolean>,
+  @Named("submission_start_swipe_actions") private val submissionStartSwipeActions: Preference<List<SubmissionSwipeAction>>,
+  @Named("submission_end_swipe_actions") private val submissionEndSwipeActions: Preference<List<SubmissionSwipeAction>>
 ) : UserPreferencesConstructor.ChildConstructor {
 
   override fun construct(c: Context): List<UserPreferencesScreenUiModel> {
@@ -88,7 +91,7 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
 
     uiModels.add(UserPreferenceButton.UiModel.create(
       c.getString(R.string.userprefs_customize_submission_gestures),
-      "Options and save. Upvote and downvote."
+      buildSubmissionGesturesSummary(c)
     ) { clickHandler, event ->
       clickHandler.expandNestedPage(
         R.layout.view_user_preferences_submission_gestures,
@@ -98,7 +101,7 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
 
     uiModels.add(UserPreferenceButton.UiModel.create(
       c.getString(R.string.userprefs_customize_comment_gestures),
-      "Options and save. Upvote and downvote."
+      "Reply and Options\nUpvote and Downvote"
     ) { clickHandler, event ->
       clickHandler.expandNestedPage(
         R.layout.view_user_preferences_comment_gestures,
@@ -111,5 +114,29 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
 
   private fun add(builder: MultiOptionPreferencePopup.Builder<TypefaceResource>, resource: TypefaceResource) {
     builder.addOption(resource, resource.name(), R.drawable.ic_text_fields_20dp)
+  }
+
+  private fun buildSubmissionGesturesSummary(c: Context): String {
+    fun buildSummaryForSingleSide(actions: List<SubmissionSwipeAction>): String {
+      if (actions.isEmpty()) {
+        return c.getString(R.string.userprefs_gestures_summary_disabled)
+      }
+
+      val separator = ", "
+      val joinedNames = actions.joinToString(separator = separator) { c.getString(it.displayNameRes) }
+      val indexOfLastSeparator = joinedNames.lastIndexOf(separator)
+      if (indexOfLastSeparator >= 0) {
+        return joinedNames.replaceRange(
+          indexOfLastSeparator,
+          indexOfLastSeparator + separator.length,
+          " ${c.getString(R.string.userprefs_gestures_summary_last_separator)} "
+        )
+      }
+      return joinedNames
+    }
+
+    val startActionsText = buildSummaryForSingleSide(submissionStartSwipeActions.get())
+    val endActionsText = buildSummaryForSingleSide(submissionEndSwipeActions.get())
+    return "$startActionsText\n$endActionsText"
   }
 }
