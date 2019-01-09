@@ -65,6 +65,6 @@ class GesturePreferencesUiConstructor @Inject constructor(
   }
 
   companion object {
-    private val submission = SyntheticSubmission(0)
+    private val submission = SyntheticSubmission(0, title = "Customize gesture actions and swipe on this submission to check the result")
   }
 }
