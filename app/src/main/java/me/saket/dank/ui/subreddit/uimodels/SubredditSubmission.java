@@ -14,18 +14,15 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
-import com.f2prateek.rx.preferences2.Preference;
 import com.google.auto.value.AutoValue;
 import com.jakewharton.rxrelay2.PublishRelay;
-
+import io.reactivex.Observable;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.VoteDirection;
 
 import java.util.List;
 import javax.inject.Inject;
-import javax.inject.Named;
 
-import io.reactivex.Observable;
 import me.saket.dank.R;
 import me.saket.dank.data.SpannableWithTextEquality;
 import me.saket.dank.data.SwipeEvent;
@@ -164,6 +161,11 @@ public interface SubredditSubmission {
       contentContainerConstraintLayout = itemView.findViewById(R.id.submission_item_content_container);
       originalConstraintSet.clone(contentContainerConstraintLayout);
       leftAlignedThumbnailConstraintSet.clone(itemView.getContext(), R.layout.list_item_submission_content_left);
+
+      // Fix problem with gone margin not being cloned from layouts
+      int thumbnailGoneMargin = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.subreddit_submission_padding);
+      leftAlignedThumbnailConstraintSet.setGoneMargin(R.id.submission_item_title, ConstraintSet.START, thumbnailGoneMargin);
+      originalConstraintSet.setGoneMargin(R.id.submission_item_title, ConstraintSet.END, thumbnailGoneMargin);
     }
 
     public void setUiModel(UiModel uiModel) {
@@ -262,8 +264,6 @@ public interface SubredditSubmission {
     private final PublishRelay<SubredditSubmissionClickEvent> submissionClicks = PublishRelay.create();
     private final PublishRelay<SubredditSubmissionThumbnailClickEvent> thumbnailClicks = PublishRelay.create();
     private final SubmissionSwipeActionsProvider swipeActionsProvider;
-
-    @Inject @Named("submission_thumbnails_position") Preference<Boolean> submissionThumbnailsPosition;
 
     @Inject
     public Adapter(SubmissionSwipeActionsProvider swipeActionsProvider) {

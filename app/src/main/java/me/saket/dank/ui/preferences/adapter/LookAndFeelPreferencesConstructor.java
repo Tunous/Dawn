@@ -26,8 +26,8 @@ public class LookAndFeelPreferencesConstructor implements UserPreferencesConstru
       Preference<TypefaceResource> typefacePref,
       @Named("show_submission_thumbnails") Preference<Boolean> showSubmissionThumbnails,
       @Named("comment_count_in_submission_list_byline") Preference<Boolean> showCommentCountInByline,
-      @Named("submission_thumbnails_position") Preference<Boolean> submissionThumbnailsPosition)
-  {
+      @Named("submission_thumbnails_position") Preference<Boolean> submissionThumbnailsPosition
+  ) {
     this.typefacePref = typefacePref;
     this.showSubmissionThumbnails = showSubmissionThumbnails;
     this.showCommentCountInByline = showCommentCountInByline;
@@ -92,7 +92,8 @@ public class LookAndFeelPreferencesConstructor implements UserPreferencesConstru
             ? c.getString(R.string.userprefs_submission_thumbnail_position_summary_on)
             : c.getString(R.string.userprefs_submission_thumbnail_position_summary_off),
         submissionThumbnailsPosition.get(),
-        submissionThumbnailsPosition));
+        submissionThumbnailsPosition,
+        showSubmissionThumbnails.get()));
 
     uiModels.add(new UserPreferenceSwitch.UiModel(
         c.getString(R.string.userprefs_item_byline_comment_count),

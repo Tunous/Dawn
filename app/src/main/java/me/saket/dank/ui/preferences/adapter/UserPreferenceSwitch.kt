@@ -17,11 +17,12 @@ import javax.inject.Inject
 
 interface UserPreferenceSwitch {
 
-  data class UiModel(
+  data class UiModel @JvmOverloads constructor(
     val title: String,
     val summary: String? = null,
     val isChecked: Boolean,
-    val preference: Preference<Boolean>
+    val preference: Preference<Boolean>,
+    val isEnabled: Boolean = true
   ) : UserPreferencesScreenUiModel {
     override fun adapterId() = preference.key().hashCode().toLong()
 
@@ -43,7 +44,9 @@ interface UserPreferenceSwitch {
     fun render() {
       titleSwitchView.text = uiModel.title
       titleSwitchView.isChecked = uiModel.isChecked
+      titleSwitchView.isEnabled = uiModel.isEnabled
       summaryView.text = uiModel.summary
+      summaryView.isEnabled = uiModel.isEnabled
 
       titleSwitchView.gravity = if (uiModel.summary != null) Gravity.TOP else Gravity.CENTER_VERTICAL
       summaryView.visibility = if (uiModel.summary != null) View.VISIBLE else View.GONE
