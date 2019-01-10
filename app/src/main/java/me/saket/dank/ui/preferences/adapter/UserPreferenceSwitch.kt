@@ -47,6 +47,7 @@ interface UserPreferenceSwitch {
       titleSwitchView.isEnabled = uiModel.isEnabled
       summaryView.text = uiModel.summary
       summaryView.isEnabled = uiModel.isEnabled
+      itemView.isEnabled = uiModel.isEnabled
 
       titleSwitchView.gravity = if (uiModel.summary != null) Gravity.TOP else Gravity.CENTER_VERTICAL
       summaryView.visibility = if (uiModel.summary != null) View.VISIBLE else View.GONE
