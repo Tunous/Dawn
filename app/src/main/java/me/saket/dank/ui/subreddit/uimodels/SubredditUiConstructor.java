@@ -50,7 +50,7 @@ public class SubredditUiConstructor {
   private final Preference<Boolean> showCommentCountInByline;
   private final Preference<Boolean> showNsfwContent;
   private final Preference<Boolean> showThumbnailsPref;
-  private final Preference<Boolean> submissionThumbnailsPosition;
+  private final Preference<Boolean> showSubmissionThumbnailsOnLeft;
   private final ErrorResolver errorResolver;
   private final Lazy<BookmarksRepository> bookmarksRepository;
 
@@ -63,7 +63,7 @@ public class SubredditUiConstructor {
       @Named("comment_count_in_submission_list_byline") Preference<Boolean> showCommentCountInByline,
       @Named("show_nsfw_content") Preference<Boolean> showNsfwContent,
       @Named("show_submission_thumbnails") Preference<Boolean> showThumbnailsPref,
-      @Named("submission_thumbnails_position") Preference<Boolean> submissionThumbnailsPosition)
+      @Named("show_submission_thumbnails_on_left") Preference<Boolean> showSubmissionThumbnailsOnLeft)
   {
     this.votingManager = votingManager;
     this.errorResolver = errorResolver;
@@ -72,7 +72,7 @@ public class SubredditUiConstructor {
     this.showCommentCountInByline = showCommentCountInByline;
     this.showNsfwContent = showNsfwContent;
     this.showThumbnailsPref = showThumbnailsPref;
-    this.submissionThumbnailsPosition = submissionThumbnailsPosition;
+    this.showSubmissionThumbnailsOnLeft = showSubmissionThumbnailsOnLeft;
   }
 
   @CheckResult
@@ -86,7 +86,7 @@ public class SubredditUiConstructor {
             showCommentCountInByline.asObservable(),
             showNsfwContent.asObservable(),
             showThumbnailsPref.asObservable(),
-            submissionThumbnailsPosition.asObservable()
+            showSubmissionThumbnailsOnLeft.asObservable()
         )
         .skip(1); // Skip initial values.
 
@@ -358,7 +358,7 @@ public class SubredditUiConstructor {
         .adapterId(JrawUtils2.generateAdapterId(submission))
         .thumbnail(thumbnail)
         .isThumbnailClickable(isThumbnailClickable)
-        .displayThumbnailOnLeftSide(submissionThumbnailsPosition.get())
+        .displayThumbnailOnLeftSide(showSubmissionThumbnailsOnLeft.get())
         .title(titleBuilder.build(), Pair.create(submissionScore, voteDirection))
         .byline(bylineBuilder.build(), postedAndPendingCommentCount)
         .backgroundDrawableRes(rowBackgroundResource)
@@ -367,7 +367,7 @@ public class SubredditUiConstructor {
   }
 
   private Optional<SubredditSubmission.UiModel.Thumbnail> emptyThumbnail(Context c) {
-    if (submissionThumbnailsPosition.get()) {
+    if (showSubmissionThumbnailsOnLeft.get()) {
       return Optional.of(
           thumbnailForStaticImage(c)
               .staticRes(Optional.of(R.drawable.ic_visibility_off_24dp))

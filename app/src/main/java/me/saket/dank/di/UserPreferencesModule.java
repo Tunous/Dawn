@@ -7,6 +7,9 @@ import android.preference.PreferenceManager;
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 import com.squareup.moshi.Moshi;
+import dagger.Module;
+import dagger.Provides;
+import io.reactivex.Observable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +17,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import dagger.Module;
-import dagger.Provides;
-import io.reactivex.Observable;
 import me.saket.dank.BuildConfig;
 import me.saket.dank.data.CachePreFillThing;
 import me.saket.dank.ui.preferences.DefaultWebBrowser;
@@ -107,9 +107,9 @@ public class UserPreferencesModule {
   }
 
   @Provides
-  @Named("submission_thumbnails_position")
+  @Named("show_submission_thumbnails_on_left")
   Preference<Boolean> submissionThumnailsPositionPref(@Named("user_prefs") RxSharedPreferences rxPrefs) {
-    return rxPrefs.getBoolean("submission_thumbnails_position", false);
+    return rxPrefs.getBoolean("show_submission_thumbnails_on_left", false);
   }
 
   @Provides

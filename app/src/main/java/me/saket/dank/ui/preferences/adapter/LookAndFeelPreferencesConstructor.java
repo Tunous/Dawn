@@ -19,19 +19,19 @@ public class LookAndFeelPreferencesConstructor implements UserPreferencesConstru
   private final Preference<TypefaceResource> typefacePref;
   private final Preference<Boolean> showSubmissionThumbnails;
   private final Preference<Boolean> showCommentCountInByline;
-  private final Preference<Boolean> submissionThumbnailsPosition;
+  private final Preference<Boolean> showSubmissionThumbnailsOnLeft;
 
   @Inject
   public LookAndFeelPreferencesConstructor(
       Preference<TypefaceResource> typefacePref,
       @Named("show_submission_thumbnails") Preference<Boolean> showSubmissionThumbnails,
       @Named("comment_count_in_submission_list_byline") Preference<Boolean> showCommentCountInByline,
-      @Named("submission_thumbnails_position") Preference<Boolean> submissionThumbnailsPosition
+      @Named("show_submission_thumbnails_on_left") Preference<Boolean> showSubmissionThumbnailsOnLeft
   ) {
     this.typefacePref = typefacePref;
     this.showSubmissionThumbnails = showSubmissionThumbnails;
     this.showCommentCountInByline = showCommentCountInByline;
-    this.submissionThumbnailsPosition = submissionThumbnailsPosition;
+    this.showSubmissionThumbnailsOnLeft = showSubmissionThumbnailsOnLeft;
   }
 
   public List<UserPreferencesScreenUiModel> construct(Context c) {
@@ -87,12 +87,12 @@ public class LookAndFeelPreferencesConstructor implements UserPreferencesConstru
         showSubmissionThumbnails));
 
     uiModels.add(new UserPreferenceSwitch.UiModel(
-        c.getString(R.string.userprefs_submission_thumbnails_position),
-        submissionThumbnailsPosition.get()
-            ? c.getString(R.string.userprefs_submission_thumbnail_position_summary_on)
-            : c.getString(R.string.userprefs_submission_thumbnail_position_summary_off),
-        submissionThumbnailsPosition.get(),
-        submissionThumbnailsPosition,
+        c.getString(R.string.userprefs_show_submission_thumbnails_on_left),
+        showSubmissionThumbnailsOnLeft.get()
+            ? c.getString(R.string.userprefs_show_submission_thumbnails_on_left_summary_on)
+            : c.getString(R.string.userprefs_show_submission_thumbnails_on_left_summary_off),
+        showSubmissionThumbnailsOnLeft.get(),
+        showSubmissionThumbnailsOnLeft,
         showSubmissionThumbnails.get()));
 
     uiModels.add(new UserPreferenceSwitch.UiModel(
