@@ -55,6 +55,7 @@ public class SubmissionItemDiffer extends SimpleDiffUtilsCallbacks<SubmissionRow
         return partialChanges;
 
       case PAGINATION_FOOTER:
+      case GESTURES_WALKTHROUGH:
         return super.getChangePayload(oldItem, newItem);
 
       default:
