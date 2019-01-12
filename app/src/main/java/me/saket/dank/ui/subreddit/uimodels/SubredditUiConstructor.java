@@ -280,7 +280,7 @@ public class SubredditUiConstructor {
       thumbnail = Optional.empty();
 
     } else if (thumbnailType == SubmissionThumbnailTypeMinusNsfw.NONE) {
-      thumbnail = emptyThumbnail(c);
+      thumbnail = Optional.empty();
 
     } else {
       if (submission.isNsfw() && !showNsfwContent.get()) {
@@ -317,7 +317,7 @@ public class SubredditUiConstructor {
             throw new AssertionError();
 
           case UNKNOWN:
-            thumbnail = emptyThumbnail(c);
+            thumbnail = Optional.empty();
             break;
 
           default:
@@ -364,17 +364,6 @@ public class SubredditUiConstructor {
         .backgroundDrawableRes(rowBackgroundResource)
         .isSaved(bookmarksRepository.get().isSaved(submission))
         .build();
-  }
-
-  private Optional<SubredditSubmission.UiModel.Thumbnail> emptyThumbnail(Context c) {
-    if (showSubmissionThumbnailsOnLeft.get()) {
-      return Optional.of(
-          thumbnailForStaticImage(c)
-              .staticRes(Optional.of(R.drawable.ic_visibility_off_24dp))
-              .contentDescription(c.getString(R.string.cd_subreddit_submission_item_no_thumbnail))
-              .build());
-    }
-    return Optional.empty();
   }
 
   private SubredditSubmission.UiModel.Thumbnail.Builder thumbnailForStaticImage(Context c) {
