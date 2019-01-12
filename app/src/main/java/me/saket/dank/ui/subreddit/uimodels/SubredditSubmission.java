@@ -211,6 +211,7 @@ public interface SubredditSubmission {
 
             case THUMBNAIL_POSITION:
               setConstraints(uiModel.displayThumbnailOnLeftSide());
+              setThumbnail(uiModel.thumbnail());
               break;
 
             default:
