@@ -9,7 +9,6 @@ import android.widget.Toast;
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
 
-import net.dean.jraw.models.Account;
 import net.dean.jraw.oauth.AccountHelper;
 
 import javax.inject.Inject;
@@ -25,7 +24,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import me.saket.dank.R;
 import me.saket.dank.reddit.Reddit;
-import me.saket.dank.ui.authentication.LoginActivity;
 import me.saket.dank.utils.Optional;
 import me.saket.dank.utils.Preconditions;
 import timber.log.Timber;
@@ -54,19 +52,12 @@ public class UserSessionRepository {
     savedSessions = rxSharedPreferences.getString(KEY_ACCOUNTS, EMPTY);
     this.accounts = new ArrayList<>();
 
-
     if (!TextUtils.isEmpty(savedSessions.get())) {
       try {
         JSONArray accountsJSON = new JSONArray(savedSessions.get());
         if (accountsJSON.length() > 0) {
           for (int i = 0; i < accountsJSON.length(); i++) {
-            try {
-                this.accounts.add(accountsJSON.get(i).toString());
-            } catch (Exception e) {
-              e.printStackTrace();
-              continue;
-            }
-
+              this.accounts.add(accountsJSON.get(i).toString());
           }
         }
       } catch (JSONException e) {
@@ -76,35 +67,49 @@ public class UserSessionRepository {
   }
 
   public void switchAccount(String username, Context ctx) {
-     this.createNewSession(username, ctx);
-  }
-
-  private void createNewSession(String username, Context ctx) {
-      Timber.i("creating new session");
-      try {
-          accountHelper.trySwitchToUser(username);
-          loggedInUsername.set(username);
-          Toast.makeText(ctx, ctx.getString(R.string.login_welcome_user, username), Toast.LENGTH_SHORT).show();
-      } catch (Exception e) {
-          Timber.e(e, "Error while switching users");
+    Timber.i("creating new session");
+    try {
+      if (username == null) {
+        accountHelper.switchToUserless();
+        loggedInUsername.set(EMPTY);
+      } else {
+        accountHelper.trySwitchToUser(username);
+        loggedInUsername.set(username);
+        Toast.makeText(ctx, ctx.getString(R.string.login_welcome_user, username), Toast.LENGTH_SHORT).show();
       }
+    } catch (Exception e) {
+      Timber.e(e, "Error while switching users");
+    }
   }
 
   public void setLoggedInUsername(String username) {
     Preconditions.checkNotNull(username, "username == null");
-
     if (!this.accounts.contains(username)) {
-        this.accounts.add(username);
+      this.accounts.add(username);
+      this.saveAccounts();
+    }
+    loggedInUsername.set(username);
+  }
 
-        JSONArray jsonArray = new JSONArray();
-        for (String s : this.accounts) {
-            jsonArray.put(s);
-        }
-
-        savedSessions.set(jsonArray.toString());
+  private void saveAccounts() {
+    JSONArray jsonArray = new JSONArray();
+    for (String s : this.accounts) {
+      jsonArray.put(s);
     }
 
-    loggedInUsername.set(username);
+    savedSessions.set(jsonArray.toString());
+  }
+
+  private void addUserNameToAccounts(String username) {
+
+  }
+
+  private void deleteUserNameFromAccounts(String username) {
+    if (this.accounts.contains(username)) {
+      this.accounts.remove(username);
+
+
+    }
   }
 
   public Completable logout() {
@@ -115,6 +120,11 @@ public class UserSessionRepository {
   }
 
   public void removeLoggedInUsername() {
+    String username = loggedInUsername.get();
+    if (!this.accounts.contains(username)) {
+      this.accounts.add(username);
+      this.saveAccounts();
+    }
     loggedInUsername.set(EMPTY);
   }
 

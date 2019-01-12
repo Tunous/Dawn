@@ -5,6 +5,7 @@ import static io.reactivex.schedulers.Schedulers.io;
 import static me.saket.dank.utils.RxUtils.applySchedulers;
 
 import android.content.Context;
+import android.opengl.Visibility;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,8 @@ import android.widget.TextView;
 import net.dean.jraw.models.Account;
 import net.dean.jraw.pagination.Paginator;
 
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
@@ -63,6 +66,7 @@ public class UserProfileSheetView extends FrameLayout {
   private Disposable logoutDisposable = Disposables.empty();
   private ToolbarExpandableSheet parentSheet;
   private LifecycleOwnerViews.Streams lifecycle;
+  private String USERLESS_USER = "USERLESS";
 
   public static UserProfileSheetView showIn(ToolbarExpandableSheet toolbarSheet) {
     UserProfileSheetView subredditPickerView = new UserProfileSheetView(toolbarSheet.getContext());
@@ -100,7 +104,6 @@ public class UserProfileSheetView extends FrameLayout {
             error -> {
               ResolvedError resolvedError = errorResolver.get().resolve(error);
               resolvedError.ifUnknown(() -> Timber.e(error, "Couldn't get logged in user's account"));
-
               karmaView.setText(R.string.userprofile_error_user_karma_load);
             });
 
@@ -157,36 +160,50 @@ public class UserProfileSheetView extends FrameLayout {
 
     String compactKarma = Strings.abbreviateScore(karmaCount);
     karmaView.setText(getResources().getString(R.string.userprofile_karma_count, compactKarma));
+
+    if (!loggedInUser.getName().equals("")) {
+      karmaView.setVisibility(VISIBLE);
+    }
   }
 
   private void populateUserAccounts() {
     LinearLayout layout = findViewById(R.id.userprofilesheet_accounts_container);
       String userLoggedIn = userSessionRepository.get().loggedInUserName();
+      ArrayList<String> _accounts = userSessionRepository.get().getAccounts();
 
-      for (String _account : userSessionRepository.get().getAccounts()) {
+      if (!userLoggedIn.isEmpty()) {
+        _accounts.add(USERLESS_USER);
+      }
+
+      for (String _account : _accounts) {
       // only display the others accounts based on which is logged in now
-
 
       if ( userLoggedIn.equals(_account) == false ) {
         View userTemplate = LayoutInflater.from(this.getContext()).inflate(R.layout.list_item_user_account, null);
         me.saket.dank.widgets.TintableCompoundDrawableTextView userEntry = userTemplate.findViewById(R.id.userprofilesheet_switch_account);
-        userEntry.setText("u/" + _account.toUpperCase());
+        userEntry.setText(_account.toUpperCase());
         userEntry.setTag(_account);
-        userEntry.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                karmaView.setText("");
-                parentSheet.collapse();
-                String newUser = v.getTag().toString();
-                Timber.i("Switching to user: " + newUser);
-                userSessionRepository.get().switchAccount(newUser, getContext());
-            }
+        userEntry.setOnClickListener(v -> {
+            String username = v.getTag().toString();
+            Timber.i("Switching to user: " + username);
+            parentSheet.collapse();
+            postDelayed(
+                () -> switchUser(username),
+                (long) (IndependentExpandablePageLayout.ANIMATION_DURATION_MILLIS * 1.6f)
+            );
         });
         layout.addView(userTemplate);
       }
     }
   }
 
+  private void switchUser(String username) {
+    if (username.equals(USERLESS_USER)) {
+      userSessionRepository.get().switchAccount(null, getContext());
+    } else {
+      userSessionRepository.get().switchAccount(username, getContext());
+    }
+  }
 
   private void populateUnreadMessageCount(int unreadMessageCount) {
     if (unreadMessageCount == 0) {

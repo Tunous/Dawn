@@ -37,6 +37,7 @@ import com.jakewharton.rxrelay2.Relay;
 import net.dean.jraw.models.Submission;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
@@ -345,6 +346,9 @@ public class SubredditActivity extends DankPullCollapsibleActivity
   @Override
   public void setTitle(CharSequence subredditName) {
     boolean isFrontpage = subscriptionRepository.isFrontpage(subredditName.toString());
+    if (subredditName.toString().toLowerCase(Locale.ENGLISH).equals("u/")) { // when userless is active, just show the app name instead of "u/"
+      subredditName = getString(R.string.app_name);
+    }
     toolbarTitleView.setText(isFrontpage ? getString(R.string.app_name) : subredditName);
   }
 
@@ -716,11 +720,7 @@ public class SubredditActivity extends DankPullCollapsibleActivity
         return true;
 
       case R.id.action_user_profile:
-        if (userSessionRepository.get().isUserLoggedIn() || !userSessionRepository.get().getAccounts().isEmpty()) {
-          showUserProfileSheet();
-        } else {
-          startActivity(LoginActivity.intent(this));
-        }
+        showUserProfileSheet();
         return true;
 
       case R.id.action_preferences:
