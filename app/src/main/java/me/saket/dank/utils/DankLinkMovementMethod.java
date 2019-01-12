@@ -15,6 +15,7 @@ import me.saket.dank.utils.markdown.markwon.SpoilerRevealClickListenerSpan;
 public class DankLinkMovementMethod extends BetterLinkMovementMethod {
 
   private Point clickedUrlCoordinates;
+  private Point touchCoordinates;
 
   public static DankLinkMovementMethod newInstance() {
     return new DankLinkMovementMethod();
@@ -24,11 +25,17 @@ public class DankLinkMovementMethod extends BetterLinkMovementMethod {
     return clickedUrlCoordinates;
   }
 
+  public Point getLastTouchCoordinates() {
+    return touchCoordinates;
+  }
+
   @Override
   public boolean onTouchEvent(TextView view, Spannable text, MotionEvent event) {
     if (event.getAction() == MotionEvent.ACTION_UP) {
       // A link is potentially going to be clicked.
       clickedUrlCoordinates = new Point((int) event.getRawX(), (int) event.getRawY());
+    } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+      touchCoordinates = new Point((int) event.getRawX(), (int) event.getRawY());
     }
     return super.onTouchEvent(view, text, event);
   }
