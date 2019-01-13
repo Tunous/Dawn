@@ -108,7 +108,7 @@ public class UserPreferencesModule {
 
   @Provides
   @Named("show_submission_thumbnails_on_left")
-  Preference<Boolean> submissionThumnailsPositionPref(@Named("user_prefs") RxSharedPreferences rxPrefs) {
+  Preference<Boolean> showSubmissionThumbnailsOnLeftPref(@Named("user_prefs") RxSharedPreferences rxPrefs) {
     return rxPrefs.getBoolean("show_submission_thumbnails_on_left", false);
   }
 

@@ -55,7 +55,7 @@ interface UserPreferenceSwitch {
   }
 
   class Adapter @Inject constructor() : UserPreferencesScreenUiModel.ChildAdapter<UiModel, ViewHolder> {
-    var itemClicks: PublishRelay<UserPreferenceSwitchToggleEvent> = PublishRelay.create()
+    val itemClicks: PublishRelay<UserPreferenceSwitchToggleEvent> = PublishRelay.create()
 
     override fun onCreateViewHolder(inflater: LayoutInflater, parent: ViewGroup): ViewHolder {
       val holder = ViewHolder(inflater.inflate(R.layout.list_item_preference_switch, parent, false))
