@@ -20,6 +20,7 @@
   </string-array>
 
   <string-array name="default_subreddits">
+    <item>All</item>
     <item>Frontpage</item>
     <item>Popular</item>
     <item>announcements</item>

@@ -57,6 +57,7 @@
   <string name="login_welcome_user">Welcome, %s!</string>
 
   <!-- Subreddit -->
+  <string name="all_subreddit_name">All</string>
   <string name="frontpage_subreddit_name">Frontpage</string>
   <string name="popular_subreddit_name">Popular</string>
   <string name="subreddit_emptystate_emoji" translatable="false">ლ(ಠ益ಠლ)</string>

@@ -113,9 +113,11 @@ public class SubscriptionRepository {
         })
         .map(filteredSubs -> {
           // Move Frontpage and Popular to the top.
+          String allSubName = appContext.get().getString(R.string.all_subreddit_name);
           String frontpageSubName = appContext.get().getString(R.string.frontpage_subreddit_name);
           String popularSubName = appContext.get().getString(R.string.popular_subreddit_name);
 
+          SubredditSubscription allSub = null;
           SubredditSubscription frontpageSub = null;
           SubredditSubscription popularSub = null;
 
@@ -129,11 +131,14 @@ public class SubscriptionRepository {
               reOrderedFilteredSubs.remove(i);
               popularSub = subscription;
               reOrderedFilteredSubs.add(0, popularSub);
-
             } else if (frontpageSub == null && subscription.name().equalsIgnoreCase(frontpageSubName)) {
               reOrderedFilteredSubs.remove(i);
               frontpageSub = subscription;
               reOrderedFilteredSubs.add(0, frontpageSub);
+            } else if (allSub == null && subscription.name().equalsIgnoreCase(allSubName)) {
+              reOrderedFilteredSubs.remove(i);
+              allSub = subscription;
+              reOrderedFilteredSubs.add(0, allSub);
             }
           }
 
@@ -369,13 +374,16 @@ public class SubscriptionRepository {
             remoteSubNames.add(subreddit.getName());
           }
 
-          // Add frontpage and /r/popular.
+          // Add frontpage, /r/popular and /r/all
+          String allSub = appContext.get().getString(R.string.all_subreddit_name);
+          remoteSubNames.add(0, allSub);
+
           String frontpageSub = appContext.get().getString(R.string.frontpage_subreddit_name);
-          remoteSubNames.add(0, frontpageSub);
+          remoteSubNames.add(1, frontpageSub);
 
           String popularSub = appContext.get().getString(R.string.popular_subreddit_name);
           if (!remoteSubNames.contains(popularSub) && !remoteSubNames.contains(popularSub.toLowerCase(Locale.ENGLISH))) {
-            remoteSubNames.add(1, popularSub);
+            remoteSubNames.add(2, popularSub);
           }
 
           return remoteSubNames;
