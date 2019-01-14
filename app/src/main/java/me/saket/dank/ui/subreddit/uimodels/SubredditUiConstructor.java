@@ -359,7 +359,7 @@ public class SubredditUiConstructor {
 
     if (submission.isStickied() && submission.isNsfw()) {
       rowBackgroundResource = Optional.of(R.drawable.background_subreddit_submission_sticky_nsfw);
-    }else if (submission.isStickied()) {
+    } else if (submission.isStickied()) {
       rowBackgroundResource = Optional.of(R.drawable.background_subreddit_submission_sticky);
     } else if (submission.isNsfw()) {
       rowBackgroundResource = Optional.of(R.drawable.background_subreddit_submission_nsfw);
