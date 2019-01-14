@@ -103,6 +103,8 @@ import me.saket.dank.widgets.InboxUI.IndependentExpandablePageLayout;
 import me.saket.dank.widgets.InboxUI.RxExpandablePage;
 import me.saket.dank.widgets.ToolbarExpandableSheet;
 import me.saket.dank.widgets.swipe.RecyclerSwipeListener;
+
+import net.dean.jraw.models.SubredditSort;
 import timber.log.Timber;
 
 public class SubredditActivity extends DankPullCollapsibleActivity
@@ -239,11 +241,16 @@ public class SubredditActivity extends DankPullCollapsibleActivity
       //noinspection ConstantConditions
       sortingChangesStream.accept(savedState.getParcelable(KEY_SORTING_AND_TIME_PERIOD));
     } else {
-      sortingChangesStream.accept(SortingAndTimePeriod.create(Reddit.Companion.getDEFAULT_SUBREDDIT_SORT()));
+      //load the last sort for this user/subreddit
+      this.loadLastSortingAndPeriod(subredditChangesStream.getValue());
     }
+
     sortingChangesStream
         .takeUntil(lifecycle().onDestroy())
         .subscribe(sortingAndTimePeriod -> {
+          // save this sort and period
+          userSessionRepository.get().saveSortingAndTimePeriodForSub(subredditChangesStream.getValue(), sortingAndTimePeriod);
+
           if (sortingAndTimePeriod.sortOrder().getRequiresTimePeriod()) {
             sortingModeButton.setText(getString(
                 R.string.subreddit_sorting_mode_with_time_period,
@@ -425,6 +432,14 @@ public class SubredditActivity extends DankPullCollapsibleActivity
     });
   }
 
+  private void loadLastSortingAndPeriod(String subredditName) {
+    SortingAndTimePeriod sort = userSessionRepository.get().getSortingAndTimePeriodForSub(subredditName);
+    if (sort == null)
+      sortingChangesStream.accept(SortingAndTimePeriod.create(Reddit.Companion.getDEFAULT_SUBREDDIT_SORT()));
+    else
+      sortingChangesStream.accept(SortingAndTimePeriod.create(sort.sortOrder(), sort.timePeriod()));
+  }
+
 // ======== SUBMISSION LIST ======== //
 
   private void setupSubmissionRecyclerView(@Nullable Bundle savedState) {
@@ -491,6 +506,7 @@ public class SubredditActivity extends DankPullCollapsibleActivity
     subredditChangesStream
         .observeOn(mainThread())
         .takeUntil(lifecycle().onDestroy())
+        .doAfterNext(subreddit -> loadLastSortingAndPeriod(subreddit))
         .subscribe(subreddit -> setTitle(subreddit));
 
     // Get frontpage (or retained subreddit's) submissions.

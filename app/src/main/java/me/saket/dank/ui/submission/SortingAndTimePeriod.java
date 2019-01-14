@@ -14,6 +14,7 @@ import net.dean.jraw.models.TimePeriod;
 import java.io.Serializable;
 
 import me.saket.dank.R;
+import me.saket.dank.reddit.Subreddit;
 
 @AutoValue
 public abstract class SortingAndTimePeriod implements Parcelable, Serializable {
@@ -33,6 +34,58 @@ public abstract class SortingAndTimePeriod implements Parcelable, Serializable {
 
   public static SortingAndTimePeriod create(SubredditSort sortOrder, TimePeriod timePeriod) {
     return new AutoValue_SortingAndTimePeriod(sortOrder, timePeriod);
+  }
+
+  public static SortingAndTimePeriod create(String sortOrderTimePeriod) {
+    String[] splittedString = sortOrderTimePeriod.split(SEPARATOR);
+
+    // default values
+    SubredditSort subredditSort = SubredditSort.BEST;
+    TimePeriod timePeriod = TimePeriod.DAY;
+
+    switch (splittedString[0]) {
+      case "HOT":
+        subredditSort = SubredditSort.HOT;
+        break;
+      case "BEST":
+        subredditSort = SubredditSort.BEST;
+        break;
+      case "NEW":
+        subredditSort = SubredditSort.NEW;
+        break;
+      case "RISING":
+        subredditSort = SubredditSort.RISING;
+        break;
+      case "CONTROVERSIAL":
+        subredditSort = SubredditSort.CONTROVERSIAL;
+        break;
+      case "TOP":
+        subredditSort = SubredditSort.TOP;
+        break;
+    }
+
+    switch (splittedString[1]) {
+      case "HOUR":
+        timePeriod = TimePeriod.HOUR;
+        break;
+      case "DAY":
+        timePeriod = TimePeriod.DAY;
+        break;
+      case "WEEK":
+        timePeriod = TimePeriod.WEEK;
+        break;
+      case "MONTH":
+        timePeriod = TimePeriod.MONTH;
+        break;
+      case "YEAR":
+        timePeriod = TimePeriod.YEAR;
+        break;
+      case "ALL":
+        timePeriod = TimePeriod.ALL;
+        break;
+    }
+
+    return new AutoValue_SortingAndTimePeriod(subredditSort, timePeriod);
   }
 
   public String serialize() {
