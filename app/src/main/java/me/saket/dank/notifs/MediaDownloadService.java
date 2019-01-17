@@ -588,6 +588,7 @@ public class MediaDownloadService extends Service {
         String mediaFileName = Urls.parseFileNameWithExtension(downloadedMediaLink.highQualityUrl());
         //noinspection LambdaParameterTypeCanBeSpecified,ConstantConditions
         File userAccessibleFile = Files2.INSTANCE.copyFileToPicturesDirectory(getResources(), downloadJobUpdate.downloadedFile(), mediaFileName);
+        sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(userAccessibleFile)));
         return MediaDownloadJob.downloaded(downloadedMediaLink, userAccessibleFile, downloadJobUpdate.timestamp());
 
       } else {
