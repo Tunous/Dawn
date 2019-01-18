@@ -357,7 +357,7 @@ public class MediaDownloadService extends Service {
 
     PendingIntent viewImagePendingIntent = PendingIntent.getActivity(this,
         createPendingIntentRequestId(REQUESTCODE_OPEN_IMAGE_PREFIX_, notificationId),
-        Intents.createForViewingMedia(this, mediaContentUri),
+        Intents.createForViewingMedia(this, mediaContentUri, completedDownloadJob.mediaLink().isVideo()),
         PendingIntent.FLAG_CANCEL_CURRENT
     );
 
