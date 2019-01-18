@@ -69,7 +69,8 @@ public class Intents {
         .addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
         .putExtra(Intent.EXTRA_STREAM, mediaContentUri)
         .setType(context.getContentResolver().getType(mediaContentUri))
-        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        .setDataAndType(mediaContentUri, "image/*");
   }
 
   public static Intent createForPlayStoreListing(Context context, String packageName) {
