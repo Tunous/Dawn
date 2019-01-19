@@ -4,10 +4,14 @@ import android.net.Uri;
 
 import timber.log.Timber;
 
+import java.util.Locale;
+
 /**
  * Utility methods for URLs.
  */
 public class Urls {
+
+  private static final String DASH_PLAYLIST_FILENAME = "DASHPlaylist.mpd";
 
   /**
    * Gets the domain name without any TLD. For example, this will return "nytimes.com" when
@@ -38,7 +42,12 @@ public class Urls {
 
   public static String parseFileNameWithExtension(String url) {
     String path = Uri.parse(url).getPath();
-    return path.substring(path.lastIndexOf('/') + 1);
+    String filename = path.substring(path.lastIndexOf('/') + 1);
+    if (filename.toLowerCase(Locale.ENGLISH).equals(DASH_PLAYLIST_FILENAME.toLowerCase(Locale.ENGLISH))) {
+      return path.replace("/", "-");
+    } else {
+      return filename;
+    }
   }
 
   public static Optional<String> subdomain(Uri URI) {
