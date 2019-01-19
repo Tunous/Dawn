@@ -357,9 +357,7 @@ public class SubredditUiConstructor {
     // Just in case I forget again. This == row background, not thumbnail background.
     Optional<Integer> rowBackgroundResource = Optional.empty();
 
-    if (submission.isStickied() && submission.isNsfw()) {
-      rowBackgroundResource = Optional.of(R.drawable.background_subreddit_submission_sticky_nsfw);
-    } else if (submission.isStickied()) {
+    if (submission.isStickied()) {
       rowBackgroundResource = Optional.of(R.drawable.background_subreddit_submission_sticky);
     } else if (submission.isNsfw()) {
       rowBackgroundResource = Optional.of(R.drawable.background_subreddit_submission_nsfw);
