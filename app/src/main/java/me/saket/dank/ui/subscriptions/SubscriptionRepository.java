@@ -11,8 +11,14 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.VisibleForTesting;
 
 import com.squareup.sqlbrite2.BriteDatabase;
-
+import dagger.Lazy;
+import io.reactivex.Completable;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import net.dean.jraw.models.Subreddit;
+import timber.log.Timber;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,18 +26,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import dagger.Lazy;
-import io.reactivex.Completable;
-import io.reactivex.Observable;
-import io.reactivex.Single;
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import me.saket.dank.R;
 import me.saket.dank.data.UserPreferences;
 import me.saket.dank.reddit.Reddit;
@@ -39,7 +38,6 @@ import me.saket.dank.ui.subreddit.SubredditSearchResult;
 import me.saket.dank.ui.subreddit.SubredditSearchResult.Success;
 import me.saket.dank.ui.subreddit.Subscribeable;
 import me.saket.dank.ui.user.UserSessionRepository;
-import timber.log.Timber;
 
 /**
  * Manages:
@@ -338,6 +336,10 @@ public class SubscriptionRepository {
             // Oh okay, we haven't been able to make the subscribe API call yet.
             //noinspection ResultOfMethodCallIgnored
             syncedListBuilder.add(localSub);
+
+          } else if (!reddit.get().subscriptions().needsRemoteSubscription(localSub.name())) {
+            // This subscription doesn't need to be on remote. Let's keep it.
+            syncedListBuilder.add(localSub);
           }
           // Else, sub has been removed on remote! Will not add this sub.
         }
@@ -368,16 +370,6 @@ public class SubscriptionRepository {
           for (Subreddit subreddit : remoteSubs) {
             remoteSubNames.add(subreddit.getName());
           }
-
-          // Add frontpage and /r/popular.
-          String frontpageSub = appContext.get().getString(R.string.frontpage_subreddit_name);
-          remoteSubNames.add(0, frontpageSub);
-
-          String popularSub = appContext.get().getString(R.string.popular_subreddit_name);
-          if (!remoteSubNames.contains(popularSub) && !remoteSubNames.contains(popularSub.toLowerCase(Locale.ENGLISH))) {
-            remoteSubNames.add(1, popularSub);
-          }
-
           return remoteSubNames;
         })
         .map(toImmutable());
