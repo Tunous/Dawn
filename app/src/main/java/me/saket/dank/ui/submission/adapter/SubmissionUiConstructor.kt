@@ -296,7 +296,7 @@ class SubmissionUiConstructor @Inject constructor(
       .title(crosspostParent.title)
       .titleMaxLines(2)
       .titleTextColorRes(R.color.submission_link_title)
-      .byline(context.getString(R.string.subreddit_name_r_prefix, crosspostParent.subreddit))
+      .byline(context.getString(R.string.submission_crosspost, crosspostParent.subreddit))
       .bylineTextColorRes(R.color.submission_link_byline)
       .icon(Optional.ofNullable(context.getDrawable(R.drawable.ic_subreddits_24dp)))
       .iconBackgroundRes(Optional.empty())
