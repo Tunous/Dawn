@@ -34,7 +34,6 @@ import me.saket.dank.ui.subreddit.events.SubredditSubmissionClickEvent;
 import me.saket.dank.ui.subreddit.events.SubredditSubmissionThumbnailClickEvent;
 import me.saket.dank.utils.Optional;
 import me.saket.dank.utils.Pair;
-import me.saket.dank.utils.glide.GlideCircularTransformation;
 import me.saket.dank.widgets.swipe.SwipeActions;
 import me.saket.dank.widgets.swipe.SwipeableLayout;
 import me.saket.dank.widgets.swipe.ViewHolderWithSwipeActions;
@@ -76,6 +75,8 @@ public interface SubredditSubmission {
 
     public abstract boolean displayThumbnailOnLeftSide();
 
+    public abstract SubredditSubmissionImageStyle imageStyle();
+
     public abstract SwipeActions swipeActions();
 
     public static Builder builder() {
@@ -109,6 +110,8 @@ public interface SubredditSubmission {
       public abstract Builder isSaved(boolean isSaved);
 
       public abstract Builder displayThumbnailOnLeftSide(boolean displayThumbnailOnLeftSide);
+
+      public abstract Builder imageStyle(SubredditSubmissionImageStyle imageStyle);
 
       public abstract Builder swipeActions(SwipeActions swipeActions);
 
@@ -263,14 +266,28 @@ public interface SubredditSubmission {
           thumbnailView.setImageResource(thumb.staticRes().get());
 
         } else {
-          if (uiModel.displayThumbnailOnLeftSide()) {
-            thumbnailView.setVisibility(View.GONE);
+          switch (uiModel.imageStyle()) {
+            case NONE:
+              imageView.setVisibility(View.GONE);
+              thumbnailView.setVisibility(View.GONE);
+              break;
+            case THUMBNAIL:
+              imageView.setVisibility(View.GONE);
+              Glide.with(itemView)
+                  .load(thumb.remoteUrl().get())
+                  .apply(RequestOptions.circleCropTransform())
+                  .transition(DrawableTransitionOptions.withCrossFade())
+                  .into(thumbnailView);
+              break;
+            case LARGE:
+              thumbnailView.setVisibility(View.GONE);
+              Glide.with(itemView)
+                  .load(thumb.remoteUrl().get())
+                  .apply(RequestOptions.centerCropTransform())
+                  .transition(DrawableTransitionOptions.withCrossFade())
+                  .into(imageView);
+              break;
           }
-          Glide.with(itemView)
-              .load(thumb.remoteUrl().get())
-              .apply(uiModel.displayThumbnailOnLeftSide() ? RequestOptions.centerCropTransform() : RequestOptions.circleCropTransform())
-              .transition(DrawableTransitionOptions.withCrossFade())
-              .into(uiModel.displayThumbnailOnLeftSide() ? imageView : thumbnailView);
         }
       });
     }
