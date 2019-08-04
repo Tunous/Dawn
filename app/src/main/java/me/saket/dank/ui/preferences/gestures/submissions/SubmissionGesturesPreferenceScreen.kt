@@ -8,14 +8,11 @@ import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MotionEvent
-import android.view.View
 import android.widget.RelativeLayout
 import butterknife.BindView
 import butterknife.ButterKnife
 import com.jakewharton.rxbinding2.view.RxView
 import io.reactivex.BackpressureStrategy
-import io.reactivex.android.schedulers.AndroidSchedulers.mainThread
-import io.reactivex.schedulers.Schedulers.io
 import me.saket.dank.R
 import me.saket.dank.di.Dank
 import me.saket.dank.ui.preferences.UserPreferenceNestedScreen
@@ -23,7 +20,6 @@ import me.saket.dank.ui.preferences.gestures.GesturePreferenceItemDiffer
 import me.saket.dank.ui.preferences.gestures.GesturePreferencesAdapter
 import me.saket.dank.ui.preferences.gestures.GesturePreferencesSwipeAction
 import me.saket.dank.ui.preferences.gestures.GesturePreferencesUiConstructor
-import me.saket.dank.ui.subreddit.SubmissionSwipeActions
 import me.saket.dank.ui.subreddit.SubmissionSwipeActionsProvider
 import me.saket.dank.utils.*
 import me.saket.dank.utils.itemanimators.SlideLeftAlphaAnimator
@@ -63,7 +59,7 @@ class SubmissionGesturesPreferenceScreen(context: Context, attrs: AttributeSet?)
     setupGestureList()
   }
 
-  override fun setNavigationOnClickListener(listener: View.OnClickListener) {
+  override fun setNavigationOnClickListener(listener: OnClickListener) {
     toolbar.setNavigationOnClickListener(listener)
   }
 
@@ -113,38 +109,13 @@ class SubmissionGesturesPreferenceScreen(context: Context, attrs: AttributeSet?)
         popup.showAtLocation(view, Gravity.TOP or Gravity.START, Views.locationOnScreen(view))
       }
 
-    val startSwipeActions = swipeActionsRepository.startSwipeActions
-      .subscribeOn(io())
-      .map { swipeActions ->
-        swipeActions.map {
-          GesturePreferencesSwipeAction.UiModel(
-            it,
-            true,
-            SubmissionSwipeActions.getSwipeActionIconRes(it)
-          )
-        }
-      }
-
-    val endSwipeActions = swipeActionsRepository.endSwipeActions
-      .subscribeOn(io())
-      .map { swipeActions ->
-        swipeActions.map {
-          GesturePreferencesSwipeAction.UiModel(
-            it,
-            false,
-            SubmissionSwipeActions.getSwipeActionIconRes(it)
-          )
-        }
-      }
-
-    uiConstructor.stream(context, startSwipeActions, endSwipeActions)
-      .observeOn(io())
+    uiConstructor.stream(context)
       .map { it.rowUiModels }
       .toFlowable(BackpressureStrategy.LATEST)
       .compose(RxDiffUtil.calculate(GesturePreferenceItemDiffer))
       .toObservable()
       .distinctUntilChanged { pair1, pair2 -> pair1.first() == pair2.first() }
-      .observeOn(mainThread())
+      .compose(RxUtils.applySchedulers())
       .takeUntil(RxView.detaches(this))
       .subscribe(swipeActionsAdapter)
   }

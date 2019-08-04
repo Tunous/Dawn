@@ -3,10 +3,10 @@ package me.saket.dank.ui.preferences.gestures
 import android.content.Context
 import android.support.annotation.CheckResult
 import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers.io
 import me.saket.dank.R
 import me.saket.dank.ui.preferences.gestures.submissions.GesturePreferencesSubmissionPreview
 import me.saket.dank.ui.preferences.gestures.submissions.SubmissionSwipeActionsRepository
+import me.saket.dank.ui.subreddit.SubmissionSwipeActions
 import me.saket.dank.ui.subreddit.uimodels.SubredditUiConstructor
 import me.saket.dank.utils.CombineLatestWithLog
 import me.saket.dank.utils.CombineLatestWithLog.O
@@ -18,13 +18,30 @@ class GesturePreferencesUiConstructor @Inject constructor(
   private val swipeActionsRepository: SubmissionSwipeActionsRepository
 ) {
   @CheckResult
-  fun stream(
-    context: Context,
-    startSwipeActionsObservable: Observable<List<GesturePreferencesSwipeAction.UiModel>>,
-    endSwipeActionsObservable: Observable<List<GesturePreferencesSwipeAction.UiModel>>
-  ): Observable<GesturePreferencesScreenUiModel> {
+  fun stream(context: Context): Observable<GesturePreferencesScreenUiModel> {
+    val startSwipeActionsObservable = swipeActionsRepository.startSwipeActions
+      .map { swipeActions ->
+        swipeActions.map {
+          GesturePreferencesSwipeAction.UiModel(
+            it,
+            true,
+            SubmissionSwipeActions.getSwipeActionIconRes(it)
+          )
+        }
+      }
+
+    val endSwipeActionsObservable = swipeActionsRepository.endSwipeActions
+      .map { swipeActions ->
+        swipeActions.map {
+          GesturePreferencesSwipeAction.UiModel(
+            it,
+            false,
+            SubmissionSwipeActions.getSwipeActionIconRes(it)
+          )
+        }
+      }
+
     val submissionObservable = swipeActionsRepository.swipeActions
-      .subscribeOn(io())
       .map { swipeActions ->
         GesturePreferencesSubmissionPreview.UiModel(
           uiConstructor.submissionUiModel(context, submission, 0, "Android", swipeActions)
