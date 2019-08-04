@@ -406,7 +406,7 @@ public class SubredditUiConstructor {
 
   private SubredditSubmission.UiModel.Thumbnail thumbnailForRemoteImage(Context c, SubmissionPreview preview) {
     ImageWithMultipleVariants redditThumbnails = ImageWithMultipleVariants.Companion.of(preview);
-    String optimizedThumbnailUrl = redditThumbnails.findNearestFor(c.getResources().getDimensionPixelSize(R.dimen.subreddit_submission_thumbnail));
+    String optimizedThumbnailUrl = redditThumbnails.findNearestFor(c.getResources().getDisplayMetrics().widthPixels);
 
     return SubredditSubmission.UiModel.Thumbnail.builder()
         .staticRes(Optional.empty())
