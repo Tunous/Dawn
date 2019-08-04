@@ -203,7 +203,8 @@ class PreferenceGroupsScreen(context: Context, attrs: AttributeSet) :
 
     val nestedPageView = LayoutInflater.from(context).inflate(nestedLayoutRes, nestedPage, false)
     val nestedPageScreen = nestedPageView as UserPreferenceNestedScreen
-    nestedPageScreen.setNavigationOnClickListener { o -> preferenceRecyclerView.collapse() }
+    nestedPageScreen.setNavigationOnClickListener { preferenceRecyclerView.collapse() }
+    nestedPage.setPullToCollapseIntercepter(nestedPageScreen)
     nestedPage.addView(nestedPageView)
   }
 

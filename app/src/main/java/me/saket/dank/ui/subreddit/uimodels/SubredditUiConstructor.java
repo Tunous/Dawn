@@ -16,6 +16,7 @@ import net.dean.jraw.models.SubmissionPreview;
 import net.dean.jraw.models.VoteDirection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.inject.Inject;
@@ -105,7 +106,7 @@ public class SubredditUiConstructor {
     Observable<Boolean> sharedFullscreenProgressVisibilities = fullscreenProgressVisibilities(cachedSubmissionLists, paginationResults)
         .share();
 
-    return Observable.combineLatest(
+    return Observable.combineLatest(Arrays.asList(
         sharedFullscreenProgressVisibilities.distinctUntilChanged(),
         fullscreenErrors(cachedSubmissionLists, paginationResults).distinctUntilChanged(),
         fullscreenEmptyStates(cachedSubmissionLists, paginationResults).distinctUntilChanged(),
@@ -114,42 +115,41 @@ public class SubredditUiConstructor {
         gesturesWalkthrough.get().walkthroughRows(),
         cachedSubmissionLists,
         submissionFolderStream,
-        externalChanges,
         swipeActionsRepository.get().getSwipeActions().distinctUntilChanged(),
-        (fullscreenProgressVisible,
-            optFullscreenError,
-            optEmptyState,
-            toolbarRefreshVisible,
-            optPagination,
-            optWalkthroughRow,
-            optCachedSubs,
-            folder,
-            o,
-            swipeActions) ->
-        {
-          int rowCount = optPagination.map(p -> 1).orElse(0) + optCachedSubs.map(subs -> subs.size()).orElse(0);
-          List<SubredditScreenUiModel.SubmissionRowUiModel> rowUiModels = new ArrayList<>(rowCount);
+        externalChanges
+    ), (data) -> {
+      Boolean fullscreenProgressVisible = (Boolean) data[0];
+      Optional<ErrorState> optFullscreenError = (Optional<ErrorState>) data[1];
+      Optional<EmptyState> optEmptyState = (Optional<EmptyState>) data[2];
+      Boolean toolbarRefreshVisible = (Boolean) data[3];
+      Optional<SubredditSubmissionPagination.UiModel> optPagination = (Optional<SubredditSubmissionPagination.UiModel>) data[4];
+      Optional<SubmissionGesturesWalkthrough.UiModel> optWalkthroughRow = (Optional<SubmissionGesturesWalkthrough.UiModel>) data[5];
+      Optional<List<Submission>> optCachedSubs = (Optional<List<Submission>>) data[6];
+      CachedSubmissionFolder folder = (CachedSubmissionFolder) data[7];
+      SwipeActions swipeActions = (SwipeActions) data[8];
+      int rowCount = optPagination.map(p -> 1).orElse(0) + optCachedSubs.map(subs -> subs.size()).orElse(0);
+      List<SubredditScreenUiModel.SubmissionRowUiModel> rowUiModels = new ArrayList<>(rowCount);
 
-          optCachedSubs.ifPresent(cachedSubs -> {
-            optWalkthroughRow.ifPresent(walkthroughUiModel -> {
-              rowUiModels.add(walkthroughUiModel);
-            });
-
-            for (Submission submission : cachedSubs) {
-              int pendingSyncReplyCount = 0;  // TODO v2:  Get this from database.
-              rowUiModels.add(submissionUiModel(context, submission, pendingSyncReplyCount, folder.subredditName(), swipeActions));
-            }
-          });
-          optPagination.ifPresent(pagination -> rowUiModels.add(pagination));
-
-          return SubredditScreenUiModel.builder()
-              .fullscreenProgressVisible(fullscreenProgressVisible)
-              .fullscreenError(optFullscreenError)
-              .emptyState(optEmptyState)
-              .toolbarRefreshVisible(toolbarRefreshVisible)
-              .rowUiModels(rowUiModels)
-              .build();
+      optCachedSubs.ifPresent(cachedSubs -> {
+        optWalkthroughRow.ifPresent(walkthroughUiModel -> {
+          rowUiModels.add(walkthroughUiModel);
         });
+
+        for (Submission submission : cachedSubs) {
+          int pendingSyncReplyCount = 0;  // TODO v2:  Get this from database.
+          rowUiModels.add(submissionUiModel(context, submission, pendingSyncReplyCount, folder.subredditName(), swipeActions));
+        }
+      });
+      optPagination.ifPresent(pagination -> rowUiModels.add(pagination));
+
+      return SubredditScreenUiModel.builder()
+          .fullscreenProgressVisible(fullscreenProgressVisible)
+          .fullscreenError(optFullscreenError)
+          .emptyState(optEmptyState)
+          .toolbarRefreshVisible(toolbarRefreshVisible)
+          .rowUiModels(rowUiModels)
+          .build();
+    });
   }
 
   private Observable<Boolean> fullscreenProgressVisibilities(

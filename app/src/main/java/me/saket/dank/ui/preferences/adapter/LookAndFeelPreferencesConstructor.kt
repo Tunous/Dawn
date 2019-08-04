@@ -7,7 +7,6 @@ import me.saket.dank.R
 import me.saket.dank.ui.preferences.MultiOptionPreferencePopup
 import me.saket.dank.ui.preferences.TypefaceResource
 import me.saket.dank.ui.subreddit.SubmissionSwipeAction
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -15,12 +14,13 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
   private val typefacePref: Preference<TypefaceResource>,
   @Named("show_submission_thumbnails") private val showSubmissionThumbnails: Preference<Boolean>,
   @Named("comment_count_in_submission_list_byline") private val showCommentCountInByline: Preference<Boolean>,
+  @Named("show_submission_thumbnails_on_left") private val showSubmissionThumbnailsOnLeft: Preference<Boolean>,
   @Named("submission_start_swipe_actions") private val submissionStartSwipeActions: Preference<List<SubmissionSwipeAction>>,
   @Named("submission_end_swipe_actions") private val submissionEndSwipeActions: Preference<List<SubmissionSwipeAction>>
 ) : UserPreferencesConstructor.ChildConstructor {
 
   override fun construct(c: Context): List<UserPreferencesScreenUiModel> {
-    val uiModels = ArrayList<UserPreferencesScreenUiModel>()
+    val uiModels = mutableListOf<UserPreferencesScreenUiModel>()
 
     if (BuildConfig.DEBUG) {
       val typefaceResource = typefacePref.get()
@@ -64,7 +64,7 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
     uiModels.add(UserPreferenceSectionHeader.UiModel.create(c.getString(R.string.userprefs_group_subreddit)))
 
     uiModels.add(
-      UserPreferenceSwitch.UiModel.create(
+      UserPreferenceSwitch.UiModel(
         c.getString(R.string.userprefs_submission_thumbnails),
         if (showSubmissionThumbnails.get())
           c.getString(R.string.userprefs_submission_thumbnail_summary_on)
@@ -76,7 +76,20 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
     )
 
     uiModels.add(
-      UserPreferenceSwitch.UiModel.create(
+      UserPreferenceSwitch.UiModel(
+        c.getString(R.string.userprefs_show_submission_thumbnails_on_left),
+        if (showSubmissionThumbnailsOnLeft.get())
+          c.getString(R.string.userprefs_show_submission_thumbnails_on_left_summary_on)
+        else
+          c.getString(R.string.userprefs_show_submission_thumbnails_on_left_summary_off),
+        showSubmissionThumbnailsOnLeft.get(),
+        showSubmissionThumbnailsOnLeft,
+        showSubmissionThumbnails.get()
+      )
+    )
+
+    uiModels.add(
+      UserPreferenceSwitch.UiModel(
         c.getString(R.string.userprefs_item_byline_comment_count),
         if (showCommentCountInByline.get())
           c.getString(R.string.userprefs_item_byline_comment_count_summary_on)

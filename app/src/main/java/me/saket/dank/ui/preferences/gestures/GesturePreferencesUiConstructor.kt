@@ -27,7 +27,7 @@ class GesturePreferencesUiConstructor @Inject constructor(
       .subscribeOn(io())
       .map { swipeActions ->
         GesturePreferencesSubmissionPreview.UiModel(
-          uiConstructor.submissionUiModel(context, submission, 0, swipeActions)
+          uiConstructor.submissionUiModel(context, submission, 0, "Android", swipeActions)
         )
       }
 

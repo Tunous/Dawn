@@ -2,7 +2,6 @@ package me.saket.dank.ui.subreddit.uimodels
 
 import android.support.v7.util.DiffUtil
 import me.saket.dank.ui.subreddit.uimodels.SubredditScreenUiModel.SubmissionRowUiModel
-import java.util.*
 
 object SubmissionItemDiffer : DiffUtil.ItemCallback<SubmissionRowUiModel>() {
 
@@ -21,6 +20,9 @@ object SubmissionItemDiffer : DiffUtil.ItemCallback<SubmissionRowUiModel>() {
         val newSubmission = newItem as SubredditSubmission.UiModel
 
         val partialChanges = mutableListOf<SubredditSubmission.PartialChange>()
+        if (oldSubmission.displayThumbnailOnLeftSide() != newSubmission.displayThumbnailOnLeftSide()) {
+          partialChanges.add(SubredditSubmission.PartialChange.THUMBNAIL_POSITION)
+        }
         if (oldSubmission.title() != newSubmission.title()) {
           partialChanges.add(SubredditSubmission.PartialChange.TITLE)
         }
@@ -39,7 +41,8 @@ object SubmissionItemDiffer : DiffUtil.ItemCallback<SubmissionRowUiModel>() {
         partialChanges
       }
 
-      SubmissionRowUiModel.Type.PAGINATION_FOOTER -> {
+      SubmissionRowUiModel.Type.PAGINATION_FOOTER,
+      SubmissionRowUiModel.Type.GESTURES_WALKTHROUGH -> {
         super.getChangePayload(oldItem, newItem)
       }
 
