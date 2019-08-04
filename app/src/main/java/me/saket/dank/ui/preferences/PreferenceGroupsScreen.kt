@@ -85,13 +85,12 @@ class PreferenceGroupsScreen(context: Context, attrs: AttributeSet) :
   override fun onSaveInstanceState(): Parcelable? {
     val values = Bundle()
 
-    val optionalGroup = groupChanges.value
-    optionalGroup.ifPresent { group ->
+    groupChanges.value.ifPresent { group ->
       values.putSerializable(KEY_ACTIVE_PREFERENCE_GROUP, group)
     }
 
-    if (expandedPageLayoutRes != null) {
-      values.putInt(KEY_EXPANDED_PAGE_LAYOUT_RES, expandedPageLayoutRes!!)
+    expandedPageLayoutRes?.let {
+      values.putInt(KEY_EXPANDED_PAGE_LAYOUT_RES, it)
     }
     preferenceRecyclerView.saveExpandableState(values)
 
@@ -188,7 +187,6 @@ class PreferenceGroupsScreen(context: Context, attrs: AttributeSet) :
   // ======== EXPANDABLE PAGE ======== //
 
   override fun expandNestedPage(@LayoutRes nestedLayoutRes: Int, viewHolderToExpand: RecyclerView.ViewHolder) {
-    expandedPageLayoutRes = nestedLayoutRes
     inflateNestedPageLayout(nestedLayoutRes)
 
     val itemViewPosition = preferenceRecyclerView.indexOfChild(viewHolderToExpand.itemView)
@@ -197,6 +195,8 @@ class PreferenceGroupsScreen(context: Context, attrs: AttributeSet) :
   }
 
   private fun inflateNestedPageLayout(@LayoutRes nestedLayoutRes: Int) {
+    expandedPageLayoutRes = nestedLayoutRes
+
     if (nestedPage.childCount > 0) {
       nestedPage.removeAllViews()
     }
