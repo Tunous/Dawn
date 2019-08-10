@@ -165,4 +165,6 @@ public interface RootComponent {
   void inject(UserManagementActivity target);
   
   void inject(IndentedLayout target);
+  
+  void inject(UserManagementActivity target);
 }

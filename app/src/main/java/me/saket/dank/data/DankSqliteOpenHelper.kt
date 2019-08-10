@@ -18,6 +18,7 @@ class DankSqliteOpenHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME
     db.execSQL(CachedMessage.QUERY_CREATE_TABLE)
     db.execSQL(PendingSyncReply.QUERY_CREATE_TABLE)
     db.execSQL(AppShortcut.QUERY_CREATE_TABLE)
+    db.execSQL(UserManagement.QUERY_CREATE_TABLE)
   }
 
   override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

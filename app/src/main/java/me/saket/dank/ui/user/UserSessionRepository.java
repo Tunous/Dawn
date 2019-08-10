@@ -1,7 +1,12 @@
 package me.saket.dank.ui.user;
 
-import androidx.annotation.CheckResult;
-import androidx.annotation.Nullable;
+import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
+import static io.reactivex.schedulers.Schedulers.io;
+
+import android.content.Context;
+import android.support.annotation.CheckResult;
+import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.f2prateek.rx.preferences2.RxSharedPreferences;
@@ -20,6 +25,8 @@ import me.saket.dank.ui.usermanagement.UserManagement;
 import me.saket.dank.ui.usermanagement.UserManagementRepository;
 import me.saket.dank.utils.Optional;
 import me.saket.dank.utils.Preconditions;
+import me.saket.dank.utils.RxUtils;
+import me.saket.dank.R;
 
 /**
  * TODO: Merge with {@link UserProfileRepository}.
