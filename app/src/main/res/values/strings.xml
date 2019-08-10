@@ -52,6 +52,7 @@
   <!-- Login -->
   <string name="login">Login</string>
   <string name="login_logout">Logout</string>
+  <string name="login_switch_account">Accounts</string>
   <string name="login_error_oauth_permission_rejected">You must press \'allow\' to log in with this account</string>
   <string name="login_error_oauth_failed">Failed to login. Please try again.</string>
   <string name="login_welcome_user">Welcome, %s!</string>
@@ -370,4 +371,15 @@
   <!-- Gesture preferences -->
   <string name="gesturepreferences_cd_reorder_swipeaction">Re-order swipe action</string>
   <string name="gesturepreferences_add_new_action">Add action</string>
+
+  <!-- User Management -->
+  <string name="user_management_title">Accounts</string>
+  <string name="user_management_message">Add a new one or swipe left to switch or delete an existing account.</string>
+  <string name="user_management_done">Done</string>
+  <string name="user_management_logout">Logout</string>
+  <string name="user_management_swipe_action_delete">Delete</string>
+  <string name="user_management_swipe_action_switch">Switch</string>
+  <string name="user_management_cd_add_new_up_button">Add</string>
+  <string name="user_management_cd_reorder_shortcut">Re-order user account</string>
+  <string name="user_management_add_new_user">Add Account</string>
 </resources>

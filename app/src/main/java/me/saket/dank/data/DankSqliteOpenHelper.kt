@@ -8,6 +8,7 @@ import me.saket.dank.reply.PendingSyncReply
 import me.saket.dank.ui.appshortcuts.AppShortcut
 import me.saket.dank.ui.subscriptions.SubredditSubscription
 import me.saket.dank.ui.user.messages.CachedMessage
+import me.saket.dank.ui.usermanagement.UserManagement
 import timber.log.Timber
 
 class DankSqliteOpenHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
@@ -17,6 +18,7 @@ class DankSqliteOpenHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME
     db.execSQL(CachedMessage.QUERY_CREATE_TABLE)
     db.execSQL(PendingSyncReply.QUERY_CREATE_TABLE)
     db.execSQL(AppShortcut.QUERY_CREATE_TABLE)
+    db.execSQL(UserManagement.QUERY_CREATE_TABLE)
   }
 
   override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

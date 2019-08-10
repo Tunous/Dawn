@@ -84,6 +84,8 @@ import me.saket.dank.ui.subreddit.uimodels.SubredditUiConstructor;
 import me.saket.dank.ui.subscriptions.SubredditPickerSheetView;
 import me.saket.dank.ui.subscriptions.SubscriptionRepository;
 import me.saket.dank.ui.user.UserSessionRepository;
+import me.saket.dank.ui.usermanagement.UserManagementActivity;
+import me.saket.dank.ui.usermanagement.UserManagementRepository;
 import me.saket.dank.urlparser.RedditSubredditLink;
 import me.saket.dank.urlparser.UrlParser;
 import me.saket.dank.utils.Animations;
@@ -148,6 +150,7 @@ public class SubredditActivity extends DankPullCollapsibleActivity
   @Inject Lazy<VotingManager> votingManager;
   @Inject Lazy<SubredditController> subredditController;
   @Inject Lazy<UserSessionRepository> userSessionRepository;
+  @Inject Lazy<UserManagementRepository> userManagementRepository;
   @Inject Lazy<OnLoginRequireListener> loginRequireListener;
 
   private BehaviorRelay<String> subredditChangesStream = BehaviorRelay.create();
@@ -719,7 +722,8 @@ public class SubredditActivity extends DankPullCollapsibleActivity
         if (userSessionRepository.get().isUserLoggedIn()) {
           showUserProfileSheet();
         } else {
-          startActivity(LoginActivity.intent(this));
+          Intent intent = new Intent(this, UserManagementActivity.class);
+          startActivity(intent);
         }
         return true;
 

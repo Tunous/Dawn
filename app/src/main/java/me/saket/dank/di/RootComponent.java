@@ -49,6 +49,7 @@ import me.saket.dank.ui.user.UserProfilePopup;
 import me.saket.dank.ui.user.messages.InboxActivity;
 import me.saket.dank.ui.user.messages.InboxFolderFragment;
 import me.saket.dank.ui.user.messages.PrivateMessageThreadActivity;
+import me.saket.dank.ui.usermanagement.UserManagementActivity;
 import me.saket.dank.utils.NestedOptionsPopupMenu;
 import me.saket.dank.utils.markdown.MarkdownModule;
 import me.saket.dank.vote.VoteJobService;
@@ -159,4 +160,6 @@ public interface RootComponent {
   void inject(SubmissionGesturesPreferenceScreen target);
 
   void inject(SubmissionSwipeActionPreferenceChoicePopup target);
+
+  void inject(UserManagementActivity target);
 }

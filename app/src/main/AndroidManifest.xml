@@ -114,6 +114,11 @@
       android:launchMode="singleTask"
       android:theme="@style/DankTheme.DialogLikeActivity"
       android:windowSoftInputMode="adjustNothing" />
+    <activity
+      android:name=".ui.usermanagement.UserManagementActivity"
+      android:launchMode="singleTask"
+      android:theme="@style/DankTheme.DialogLikeActivity"
+      android:windowSoftInputMode="adjustNothing" />
 
     <activity
       android:name=".deeplinks.DeepLinkHandlingActivity"

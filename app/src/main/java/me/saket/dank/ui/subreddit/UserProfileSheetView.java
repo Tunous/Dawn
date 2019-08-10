@@ -2,9 +2,9 @@ package me.saket.dank.ui.subreddit;
 
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
-import static me.saket.dank.utils.RxUtils.applySchedulers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -15,7 +15,6 @@ import net.dean.jraw.models.Account;
 import net.dean.jraw.pagination.Paginator;
 
 import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import butterknife.BindColor;
@@ -31,6 +30,7 @@ import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.data.InboxRepository;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.di.Dank;
+import me.saket.dank.ui.usermanagement.UserManagementActivity;
 import me.saket.dank.ui.user.UserProfileRepository;
 import me.saket.dank.ui.user.UserSessionRepository;
 import me.saket.dank.ui.user.messages.InboxActivity;
@@ -56,8 +56,6 @@ public class UserProfileSheetView extends FrameLayout {
   @Inject Lazy<ErrorResolver> errorResolver;
   @Inject Lazy<UserSessionRepository> userSessionRepository;
 
-  private Disposable confirmLogoutTimer = Disposables.disposed();
-  private Disposable logoutDisposable = Disposables.empty();
   private ToolbarExpandableSheet parentSheet;
   private LifecycleOwnerViews.Streams lifecycle;
 
@@ -80,6 +78,8 @@ public class UserProfileSheetView extends FrameLayout {
   @Override
   protected void onAttachedToWindow() {
     super.onAttachedToWindow();
+
+    karmaView.setText("");
 
     Timber.i("Fetching user profile for user profile sheet");
     Observable<Account> replayedUserAccount = userProfileRepository.get()
@@ -173,7 +173,6 @@ public class UserProfileSheetView extends FrameLayout {
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    logoutDisposable.dispose();
   }
 
   public void setParentSheet(ToolbarExpandableSheet parentSheet) {
@@ -199,32 +198,11 @@ public class UserProfileSheetView extends FrameLayout {
   void onClickSubmissions() {
   }
 
-  @OnClick(R.id.userprofilesheet_logout)
-  void onClickLogout(TextView logoutButton) {
-    if (confirmLogoutTimer.isDisposed()) {
-      logoutButton.setText(R.string.userprofile_confirm_logout);
-      confirmLogoutTimer = Observable.timer(5, TimeUnit.SECONDS)
-          .compose(applySchedulers())
-          .subscribe(o -> logoutButton.setText(R.string.login_logout));
+  @OnClick(R.id.userprofilesheet_manage_accounts)
+  void onClickManageAccounts() {
+    Intent intent = new Intent(getContext(), UserManagementActivity.class);
+    this.getContext().startActivity(intent);
 
-    } else {
-      // Confirm logout was visible when this button was clicked. Logout the user for real.
-      confirmLogoutTimer.dispose();
-      logoutDisposable.dispose();
-      logoutButton.setText(R.string.userprofile_logging_out);
-
-      logoutDisposable = userSessionRepository.get().logout()
-          .subscribeOn(io())
-          .observeOn(mainThread())
-          .subscribe(
-              () -> parentSheet.collapse(),
-              error -> {
-                logoutButton.setText(R.string.login_logout);
-
-                ResolvedError resolvedError = errorResolver.get().resolve(error);
-                resolvedError.ifUnknown(() -> Timber.e(error, "Logout failure"));
-              }
-          );
-    }
+    parentSheet.collapse();
   }
 }
