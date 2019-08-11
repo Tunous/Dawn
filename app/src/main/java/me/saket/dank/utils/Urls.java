@@ -4,7 +4,10 @@ import android.net.Uri;
 
 import timber.log.Timber;
 
+import java.security.MessageDigest;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Utility methods for URLs.
@@ -41,13 +44,18 @@ public class Urls {
   }
 
   public static String parseFileNameWithExtension(String url) {
+    Pattern pattern = Pattern.compile("\\/([^\\/]+?)\\/([^\\/]+)\\/?(.+)");
+    Matcher matcher = pattern.matcher(url);
+
     String path = Uri.parse(url).getPath();
-    String filename = path.substring(path.lastIndexOf('/') + 1);
-    if (filename.toLowerCase(Locale.ENGLISH).equals(DASH_PLAYLIST_FILENAME.toLowerCase(Locale.ENGLISH))) {
-      return path.replace("/", "-");
-    } else {
-      return filename;
+
+    while (matcher.find()) {
+      if (matcher.group(3).equals("DASHPlaylist.mpd")) {
+        return matcher.group(2) + ".mp4";
+      }
     }
+
+    return path.substring(path.lastIndexOf('/') + 1);
   }
 
   public static Optional<String> subdomain(Uri URI) {
