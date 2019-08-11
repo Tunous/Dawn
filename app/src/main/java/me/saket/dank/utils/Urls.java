@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
  */
 public class Urls {
 
-  private static final String DASH_PLAYLIST_FILENAME = "DASHPlaylist.mpd";
+  private static final String URL_PARSE_REGEX = "\\/([^\\/]+?)\\/([^\\/]+)\\/?(.+)";
 
   /**
    * Gets the domain name without any TLD. For example, this will return "nytimes.com" when
@@ -44,7 +44,7 @@ public class Urls {
   }
 
   public static String parseFileNameWithExtension(String url) {
-    Pattern pattern = Pattern.compile("\\/([^\\/]+?)\\/([^\\/]+)\\/?(.+)");
+    Pattern pattern = Pattern.compile(URL_PARSE_REGEX);
     Matcher matcher = pattern.matcher(url);
 
     String path = Uri.parse(url).getPath();
