@@ -98,5 +98,5 @@
   <!-- User Management -->
   <color name="user_management_background">@color/blue_gray_50</color>
   <color name="user_management_swipe_delete">@color/red_300</color>
-  <color name="user_management_swipe_switch">@color/blue_300</color>
+  <color name="user_management_swipe_switch">@color/green_500</color>
 </resources>

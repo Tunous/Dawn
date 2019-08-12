@@ -152,7 +152,9 @@
   <string name="userprofile_loading_karma">Loading karma…</string>
   <string name="userprofile_error_user_karma_load">Couldn\'t get karma</string>
   <string name="userprofile_confirm_logout">Confirm logout?</string>
+  <string name="userprofile_confirm_delete">Confirm delete?</string>
   <string name="userprofile_logging_out">Logging out…</string>
+  <string name="userprofile_deleting_account"></string>
   <string name="userprofile_messages">Messages</string>
   <string name="userprofile_unread_messages_count_single">%d new message</string>
   <string name="userprofile_unread_messages_count_99_or_less">%d new messages</string>
@@ -374,7 +376,7 @@
 
   <!-- User Management -->
   <string name="user_management_title">Accounts</string>
-  <string name="user_management_message">Add a new one or swipe left to switch or delete an existing account.</string>
+  <string name="user_management_message">Swipe right to delete or left to switch account</string>
   <string name="user_management_done">Done</string>
   <string name="user_management_logout">Logout</string>
   <string name="user_management_swipe_action_delete">Delete</string>
