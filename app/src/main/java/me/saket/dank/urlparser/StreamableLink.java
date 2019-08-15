@@ -29,7 +29,7 @@ public abstract class StreamableLink extends MediaLink implements Parcelable {
 
   @Override
   public String cacheKey() {
-    return cacheKeyWithClassName(Urls.parseFileNameWithExtension(highQualityUrl()));
+    return cacheKeyWithClassName(Urls.createFileNameWithExtension(highQualityUrl()));
   }
 
   public static StreamableLink create(String unparsedUrl, String highQualityVideoUrl, String lowQualityVideoUrl) {

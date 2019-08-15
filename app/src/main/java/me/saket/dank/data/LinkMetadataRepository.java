@@ -41,7 +41,7 @@ public class LinkMetadataRepository {
       @Override
       protected String resolveIn64Letters(Link key) {
         String url = key.unparsedUrl();
-        return url.hashCode() + "_" + Urls.parseDomainName(url) + "_" + Urls.parseFileNameWithExtension(url);
+        return url.hashCode() + "_" + Urls.parseDomainName(url) + "_" + Urls.createFileNameWithExtension(url);
       }
     };
     StoreFilePersister.JsonParser<LinkMetadata> jsonParser = new MoshiStoreJsonParser<>(moshi, LinkMetadata.class);
