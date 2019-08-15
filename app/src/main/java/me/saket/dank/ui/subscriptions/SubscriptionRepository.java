@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
@@ -370,6 +371,16 @@ public class SubscriptionRepository {
           for (Subreddit subreddit : remoteSubs) {
             remoteSubNames.add(subreddit.getName());
           }
+
+          // Add frontpage and /r/popular.
+          String frontpageSub = appContext.get().getString(R.string.frontpage_subreddit_name);
+          remoteSubNames.add(0, frontpageSub);
+
+          String popularSub = appContext.get().getString(R.string.popular_subreddit_name);
+          if (!remoteSubNames.contains(popularSub) && !remoteSubNames.contains(popularSub.toLowerCase(Locale.ENGLISH))) {
+            remoteSubNames.add(1, popularSub);
+          }
+
           return remoteSubNames;
         })
         .map(toImmutable());
