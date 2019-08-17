@@ -29,7 +29,7 @@ public abstract class GfycatLink extends MediaLink implements Parcelable {
 
   @Override
   public String cacheKey() {
-    return cacheKeyWithClassName(Urls.createFileNameWithExtension(highQualityUrl()));
+    return cacheKeyWithClassName(Urls.parseFileNameWithExtension(highQualityUrl()));
   }
 
   @Override

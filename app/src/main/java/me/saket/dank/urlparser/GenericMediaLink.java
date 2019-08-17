@@ -32,7 +32,7 @@ public abstract class GenericMediaLink extends MediaLink implements Parcelable {
 
   @Override
   public String cacheKey() {
-    return cacheKeyWithClassName(Urls.createFileNameWithExtension(unparsedUrl()));
+    return cacheKeyWithClassName(Urls.parseFileNameWithExtension(unparsedUrl()));
   }
 
   public static GenericMediaLink create(String unparsedUrl, Link.Type type) {

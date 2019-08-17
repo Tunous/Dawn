@@ -545,7 +545,7 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
               .map(imageFile -> {
                 // Glide uses random file names, without any extensions. Certain apps like Messaging
                 // fail to parse images if there's no file format, so we'll have to create a copy.
-                String imageNameWithExtension = Urls.createFileNameWithExtension(activeMediaItem.mediaLink().highQualityUrl());
+                String imageNameWithExtension = Urls.parseFileNameWithExtension(activeMediaItem.mediaLink().highQualityUrl());
                 File imageFileWithExtension = new File(imageFile.getParent(), imageNameWithExtension);
                 Files2.INSTANCE.copy(imageFile, imageFileWithExtension);
                 return imageFileWithExtension;

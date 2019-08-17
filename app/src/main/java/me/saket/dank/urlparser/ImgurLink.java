@@ -33,7 +33,7 @@ public abstract class ImgurLink extends MediaLink implements Parcelable {
 
   @Override
   public String cacheKey() {
-    return cacheKeyWithClassName(Urls.createFileNameWithExtension(highQualityUrl()));
+    return cacheKeyWithClassName(Urls.parseFileNameWithExtension(highQualityUrl()));
   }
 
   public static ImgurLink create(String unparsedUrl, Type type, @Nullable String title, @Nullable String description, String imageUrl) {

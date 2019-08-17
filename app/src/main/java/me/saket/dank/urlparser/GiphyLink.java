@@ -30,7 +30,7 @@ public abstract class GiphyLink extends MediaLink implements Parcelable {
 
   @Override
   public String cacheKey() {
-    return cacheKeyWithClassName(Urls.createFileNameWithExtension(highQualityUrl()));
+    return cacheKeyWithClassName(Urls.parseFileNameWithExtension(highQualityUrl()));
   }
 
   public static GiphyLink create(String unparsedUrl, String gifVideoUrl) {

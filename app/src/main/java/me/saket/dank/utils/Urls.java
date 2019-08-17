@@ -38,7 +38,7 @@ public class Urls {
     }
   }
 
-  public static String createFileNameWithExtension(String url) {
+  public static String parseFileNameWithExtension(String url) {
     Uri uri = Uri.parse(url);
 
     if ("v.redd.it".equals(uri.getHost())) {

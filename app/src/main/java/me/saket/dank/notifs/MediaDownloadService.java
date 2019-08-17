@@ -556,7 +556,7 @@ public class MediaDownloadService extends Service {
           }
 
           // Write to a temporary file, that will later get replaced by moveFileToUserSpaceOnDownload().
-          File videoTempFile = new File(getCacheDir(), Urls.createFileNameWithExtension(highQualityUrl));
+          File videoTempFile = new File(getCacheDir(), Urls.parseFileNameWithExtension(highQualityUrl));
           //noinspection ConstantConditions
           try (BufferedSource bufferedSource = responseWithProgressListener.body().source()) {
             BufferedSink bufferedSink = Okio.buffer(Okio.sink(videoTempFile));
@@ -587,7 +587,7 @@ public class MediaDownloadService extends Service {
 
       if (downloadJobUpdate.progressState() == DOWNLOADED) {
         MediaLink downloadedMediaLink = downloadJobUpdate.mediaLink();
-        String mediaFileName = Urls.createFileNameWithExtension(downloadedMediaLink.highQualityUrl());
+        String mediaFileName = Urls.parseFileNameWithExtension(downloadedMediaLink.highQualityUrl());
         //noinspection LambdaParameterTypeCanBeSpecified,ConstantConditions
         File userAccessibleFile = Files2.INSTANCE.copyFileToPicturesDirectory(getResources(), downloadJobUpdate.downloadedFile(), mediaFileName);
 
