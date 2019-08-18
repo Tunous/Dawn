@@ -11,6 +11,7 @@ import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 import com.f2prateek.rx.preferences2.Preference;
+import io.reactivex.Observable;
 
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -38,38 +39,40 @@ public class IndentedLayout extends LinearLayout {
   private int originalPaddingStart;
 
   private static final String[] INDENTATION_COLORS = {
-      "#FFB300",    // Vivid Yellow
-      "#803E75",    // Strong Purple
-      "#FF6800",    // Vivid Orange
-      "#A6BDD7",    // Very Light Blue
-      "#C10020",    // Vivid Red
-      "#CEA262",    // Grayish Yellow
-      "#817066",    // Medium Gray
-      "#007D34",    // Vivid Green
-      "#F6768E",    // Strong Purplish Pink
-      "#00538A",    // Strong Blue
-      "#FF7A5C",    // Strong Yellowish Pink
-      "#53377A",    // Strong Violet
-      "#FF8E00",    // Vivid Orange Yellow
-      "#B32851",    // Strong Purplish Red
-      "#F4C800",    // Vivid Greenish Yellow
-      "#7F180D",    // Strong Reddish Brown
-      "#93AA00",    // Vivid Yellowish Green
-      "#593315",    // Deep Yellowish Brown
-      "#F13A13",    // Vivid Reddish Orange
-      "#232C16",    // Dark Olive Green
+      "#FFC40D", // Yellow
+      "#2D89EF", // Blue
+      "#B91D47", // Dark Red
+      "#00ABA9", // Teal
+      "#E3A21A", // Orange
+      "#99B433", // Light Green
+      "#7E3878", // Purple
+      "#FFB300", // Vivid Yellow
+      "#FFFFFF", // White
+      "#00A300", // Green
+      "#2B5797", // Dark Blue
+      "#9F00A7", // Light Purple
+      "#603CBA", // Dark Purple
+      "#EE1111", // Red
+      "#EFF4FF", // Light Blue
+      "#DA532C", // Dark Orange
+      "#FF0097", // Magenta
+      "#1E7145", // Dark Green
   };
 
   private List<ColoredTree> trees = new ArrayList<>();
-
   @Inject @Named("show_colored_comments_tree") Preference<Boolean> coloredDepthPreference;
-  private boolean showColoredCommentsTree;
 
   public IndentedLayout(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
     setWillNotDraw(false);
 
     Dank.dependencyInjector().inject(this);
+
+    coloredDepthPreference.asObservable()
+        .subscribe(o -> {
+          this.coloredDepthPreference.set(o.booleanValue());
+          invalidate();
+        });
 
     indentationLinePaint = new Paint();
     originalPaddingStart = getPaddingStart();
@@ -94,11 +97,8 @@ public class IndentedLayout extends LinearLayout {
     for (int i = 0; i < indentationDepth; i++) {
       float lineStartX = spacePerDepthPx * (i + 1) + indentationLinePaint.getStrokeWidth();
 
-      Path linePath = new Path();
-      linePath.moveTo(lineStartX, 0);
-      linePath.lineTo(lineStartX, getHeight());
-
-      trees.add(new ColoredTree((this.showColoredCommentsTree ? Color.parseColor(INDENTATION_COLORS[i]) : defaultIndentationLineColor), linePath));
+      this.trees.get(i).path.moveTo(lineStartX, 0);
+      this.trees.get(i).path.lineTo(lineStartX, getHeight());
     }
   }
 
@@ -115,13 +115,21 @@ public class IndentedLayout extends LinearLayout {
   public void setIndentationDepth(@IntRange(from = 0, to = 1) int depth) {
     indentationDepth = depth;
 
-    this.showColoredCommentsTree = coloredDepthPreference.get();
-    trees = new ArrayList<>();
+    this.setupDepthLines(depth);
 
     int indentationSpacing = (int) (indentationDepth * spacePerDepthPx + indentationLinePaint.getStrokeWidth());
     setPaddingRelative(originalPaddingStart + indentationSpacing, getPaddingTop(), getPaddingEnd(), getPaddingBottom());
 
     invalidate();
+  }
+
+  private void setupDepthLines(int depth) {
+    trees = new ArrayList<>();
+
+    for (int i = 0; i < depth; i++) {
+      Path linePath = new Path();
+      trees.add(new ColoredTree((this.coloredDepthPreference.get() ? Color.parseColor(INDENTATION_COLORS[(i > INDENTATION_COLORS.length ? INDENTATION_COLORS.length : i)]) : defaultIndentationLineColor), linePath));
+    }
   }
 
   @Px
