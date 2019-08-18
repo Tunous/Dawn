@@ -10,6 +10,7 @@ import android.graphics.Path;
 import androidx.annotation.IntRange;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
+import com.f2prateek.rx.preferences2.Preference;
 
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -18,7 +19,11 @@ import android.widget.LinearLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import me.saket.dank.R;
+import me.saket.dank.di.Dank;
 
 public class IndentedLayout extends LinearLayout {
   private static final int DEFAULT_SPACING_PER_DEPTH_DP = 10;
@@ -28,9 +33,9 @@ public class IndentedLayout extends LinearLayout {
   private final int spacePerDepthPx;
   private Paint indentationLinePaint;
   private int indentationLineWidth;
+  private int defaultIndentationLineColor;
 
   private int originalPaddingStart;
-  private boolean coloredDepth = true; // read for preferences ...
 
   private static final String[] INDENTATION_COLORS = {
       "#FFB300",    // Vivid Yellow
@@ -55,29 +60,16 @@ public class IndentedLayout extends LinearLayout {
       "#232C16",    // Dark Olive Green
   };
 
-  public class ColoredTree {
-    private int color;
-    private Path path;
-
-    public ColoredTree(int color, Path path) {
-      this.color = color;
-      this.path = path;
-    }
-
-    public int getColor() {
-      return color;
-    }
-
-    public Path getPath() {
-      return path;
-    }
-  }
-
   private List<ColoredTree> trees = new ArrayList<>();
+
+  @Inject @Named("show_colored_comments_tree") Preference<Boolean> coloredDepthPreference;
+  private boolean showColoredCommentsTree;
 
   public IndentedLayout(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
     setWillNotDraw(false);
+
+    Dank.dependencyInjector().inject(this);
 
     indentationLinePaint = new Paint();
     originalPaddingStart = getPaddingStart();
@@ -85,6 +77,7 @@ public class IndentedLayout extends LinearLayout {
     TypedArray attributes = context.obtainStyledAttributes(attrs, R.styleable.IndentedLayout);
     spacePerDepthPx = attributes.getDimensionPixelSize(R.styleable.IndentedLayout_spacePerDepth, dpToPx(DEFAULT_SPACING_PER_DEPTH_DP, context));
     indentationLineWidth = attributes.getDimensionPixelSize(R.styleable.IndentedLayout_indentationLineWidth, dpToPx(DEFAULT_LINE_WIDTH, context));
+    defaultIndentationLineColor = attributes.getColor(R.styleable.IndentedLayout_indentationLineColor, Color.LTGRAY);
     attributes.recycle();
 
     // Using a Path so that dashes can be rendered
@@ -98,17 +91,14 @@ public class IndentedLayout extends LinearLayout {
   protected void onLayout(boolean changed, int l, int t, int r, int b) {
     super.onLayout(changed, l, t, r, b);
 
-    trees = new ArrayList<ColoredTree>();
-    Path linePath;
-
     for (int i = 0; i < indentationDepth; i++) {
       float lineStartX = spacePerDepthPx * (i + 1) + indentationLinePaint.getStrokeWidth();
 
-      linePath = new Path();
+      Path linePath = new Path();
       linePath.moveTo(lineStartX, 0);
       linePath.lineTo(lineStartX, getHeight());
 
-      trees.add(new ColoredTree((this.coloredDepth == true ? Color.parseColor(INDENTATION_COLORS[i]) : Color.LTGRAY), linePath));
+      trees.add(new ColoredTree((this.showColoredCommentsTree ? Color.parseColor(INDENTATION_COLORS[i]) : defaultIndentationLineColor), linePath));
     }
   }
 
@@ -116,16 +106,17 @@ public class IndentedLayout extends LinearLayout {
   public void draw(Canvas canvas) {
     super.draw(canvas);
 
-    for(ColoredTree tree : trees) {
-      indentationLinePaint.setColor(tree.getColor());
-      canvas.drawPath(tree.getPath(), indentationLinePaint);
+    for (ColoredTree tree : trees) {
+      indentationLinePaint.setColor(tree.color);
+      canvas.drawPath(tree.path, indentationLinePaint);
     }
-
-    invalidate();
   }
 
   public void setIndentationDepth(@IntRange(from = 0, to = 1) int depth) {
     indentationDepth = depth;
+
+    this.showColoredCommentsTree = coloredDepthPreference.get();
+    trees = new ArrayList<>();
 
     int indentationSpacing = (int) (indentationDepth * spacePerDepthPx + indentationLinePaint.getStrokeWidth());
     setPaddingRelative(originalPaddingStart + indentationSpacing, getPaddingTop(), getPaddingEnd(), getPaddingBottom());
@@ -136,5 +127,16 @@ public class IndentedLayout extends LinearLayout {
   @Px
   public static int dpToPx(float dpValue, Context context) {
     return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+  }
+
+  /** For storing each path and its color. */
+  private static class ColoredTree {
+    public final int color;
+    public final Path path;
+
+    public ColoredTree(int color, Path path) {
+      this.color = color;
+      this.path = path;
+    }
   }
 }
