@@ -67,9 +67,9 @@ public class UserManagementActivity extends DankActivity {
   private UserManagement selectedAccount = null;
 
   @BindView(R.id.user_management_root) ViewGroup rootViewGroup;
-  @BindView(R.id.user_management_content_flipper) ViewFlipper contentViewFlipper;
   @BindView(R.id.user_management_users_recyclerview) RecyclerView usersRecyclerView;
   @BindView(R.id.user_management_logout) Button logoutButton;
+  @BindView(R.id.accounts_progress) View fullscreenProgressView;
 
   @Inject Lazy<UserSessionRepository> userSessionRepository;
   @Inject Lazy<SubscriptionRepository> subscriptionRepository;
@@ -229,6 +229,8 @@ public class UserManagementActivity extends DankActivity {
     usersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     usersRecyclerView.setAdapter(usersAdapter.get());
 
+    fullscreenProgressView.setVisibility(View.VISIBLE);
+
     Observable<List<UserManagement>> storedUsers = userRepository.get().users()
         .subscribeOn(io())
         .replay()
@@ -242,12 +244,13 @@ public class UserManagementActivity extends DankActivity {
           // add a "add account" before listing the others
           uiModels.add(UserManagementPlaceholderUiModel.create());
           uiModels.addAll(users);
+          fullscreenProgressView.setVisibility(View.GONE);
           return uiModels;
         })
         .compose(RxDiffUtil.calculateDiff(UserManagementUiModelDiffer::create))
         .observeOn(mainThread())
         .takeUntil(lifecycle().onDestroyFlowable())
-        .subscribe(usersAdapter.get());
+        .subscribe(x -> usersAdapter.get());
 
     // Add new.
     usersAdapter.get().streamAddClicks()
