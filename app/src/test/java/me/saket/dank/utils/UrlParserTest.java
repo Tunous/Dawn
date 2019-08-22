@@ -2,6 +2,8 @@ package me.saket.dank.utils;
 
 import static com.google.common.truth.Truth.assertThat;
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.AdditionalMatchers.or;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
@@ -25,6 +27,7 @@ import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -69,21 +72,20 @@ public class UrlParserTest {
     PowerMockito.mockStatic(Uri.class);
 
     PowerMockito.mockStatic(TextUtils.class);
-    PowerMockito.when(TextUtils.isEmpty(any(CharSequence.class))).thenAnswer(invocation -> {
-      CharSequence text = (CharSequence) invocation.getArguments()[0];
+    PowerMockito.when(TextUtils.isEmpty(or(any(CharSequence.class), isNull()))).thenAnswer(invocation -> {
+      CharSequence text = invocation.getArgument(0);
       return text == null || text.length() == 0;
     });
 
     PowerMockito.mockStatic(Html.class);
-    //noinspection deprecation
     PowerMockito.when(Html.fromHtml(any(String.class))).thenAnswer(invocation -> {
       Spannable spannable = mock(Spannable.class);
-      PowerMockito.when(spannable.toString()).thenReturn(invocation.getArgumentAt(0, String.class));
+      PowerMockito.when(spannable.toString()).thenReturn(invocation.getArgument(0));
       return spannable;
     });
 
     PowerMockito.when(Uri.parse(anyString())).thenAnswer(invocation -> {
-      String url = invocation.getArgumentAt(0, String.class);
+      String url = invocation.getArgument(0);
       return createMockUriFor(url);
     });
   }
@@ -495,10 +497,14 @@ public class UrlParserTest {
         throw new UnsupportedOperationException("Unknown tld");
       }
 
-      when(mockUri.getPath()).thenReturn(url.substring(url.indexOf(domainTld) + domainTld.length()));
-      when(mockUri.getHost()).thenReturn(url.substring(url.indexOf("://") + "://".length(), url.indexOf(domainTld) + domainTld.length()));
+      int pathStartIndex = url.indexOf(domainTld) + domainTld.length();
+      String path = url.substring(pathStartIndex);
+      when(mockUri.getPath()).thenReturn(path);
+      when(mockUri.getHost()).thenReturn(url.substring(url.indexOf("://") + "://".length(), pathStartIndex));
       when(mockUri.getScheme()).thenReturn(url.substring(0, url.indexOf("://")));
       when(mockUri.toString()).thenReturn(url);
+      when(mockUri.getLastPathSegment()).thenReturn(url.substring(url.lastIndexOf('/') + 1));
+      when(mockUri.getPathSegments()).thenReturn(Arrays.asList(path.substring(1).split("/")));
 
       Map<String, String> queryAndArgs = new HashMap<>();
 
@@ -508,7 +514,10 @@ public class UrlParserTest {
           String[] queryAndArg = queryAndArgParam.split("=");
           queryAndArgs.put(queryAndArg[0], queryAndArg[1]);
         }
-        when(mockUri.getQueryParameter(anyString())).thenAnswer(invocation -> queryAndArgs.get(invocation.getArgumentAt(0, String.class)));
+        when(mockUri.getQueryParameter(anyString())).thenAnswer(invocation -> {
+          String parameter = invocation.getArgument(0);
+          return queryAndArgs.get(parameter);
+        });
       }
     }
     return mockUri;

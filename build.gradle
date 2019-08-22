@@ -1,9 +1,11 @@
+import org.gradle.api.tasks.wrapper.Wrapper.DistributionType
+
 buildscript {
   ext.versions = [
       minSdk          : 21,
       compileSdk      : 28,
       supportLib      : '28.0.0',
-      glide           : '4.9.0',
+      glide           : '4.8.0',
       autoValue       : '1.4',
       autoValueMoshi  : '0.4.3',
       moshi           : '1.6.0',
@@ -30,7 +32,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.4.2'
+    classpath 'com.android.tools.build:gradle:3.5.0'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
   }
 }
@@ -41,6 +43,11 @@ allprojects {
     maven { url 'https://jitpack.io' }
     jcenter()
   }
+}
+
+tasks.wrapper {
+  gradleVersion = "5.6"
+  distributionType = DistributionType.ALL
 }
 
 task clean(type: Delete) {

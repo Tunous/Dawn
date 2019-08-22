@@ -6,10 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - Subscribing to /r/all ([#28](https://github.com/Tunous/Dank/pull/28))
+- View parent submission of crosspost ([#29](https://github.com/Tunous/Dank/pull/29))
+- Links to repository and changelog in about screen ([#42](https://github.com/Tunous/Dank/pull/42))
 - Colored comments depth level ([#49](https://github.com/Tunous/Dank/pull/49))
 
 ### Fixed
 - Clicking on notification doesn't open downloaded image ([#35](https://github.com/Tunous/Dank/pull/35))
+- Notifications for downloaded videos show incorrect thumbnails ([#41](https://github.com/Tunous/Dank/pull/41))
+- Video cache is not working ([#50](https://github.com/Tunous/Dank/pull/50))
+- Trying to download the same picture twice crashes app ([#57](https://github.com/Tunous/Dank/pull/57))
 
 ## [0.7.2] - 2019-09-09
 ### Added
