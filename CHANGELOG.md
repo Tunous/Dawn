@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 ### Added
 - Subscribing to /r/all ([#28](https://github.com/Tunous/Dank/pull/28))
+- Colored comments depth level ([#49](https://github.com/Tunous/Dank/pull/49))
 
 ### Fixed
 - Clicking on notification doesn't open downloaded image ([#35](https://github.com/Tunous/Dank/pull/35))
