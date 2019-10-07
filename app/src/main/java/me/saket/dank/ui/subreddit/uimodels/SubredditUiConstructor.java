@@ -407,7 +407,8 @@ public class SubredditUiConstructor {
 
   private SubredditSubmission.UiModel.Thumbnail thumbnailForRemoteImage(Context c, SubmissionPreview preview) {
     ImageWithMultipleVariants redditThumbnails = ImageWithMultipleVariants.Companion.of(preview);
-    String optimizedThumbnailUrl = redditThumbnails.findNearestFor(c.getResources().getDisplayMetrics().widthPixels);
+    int preferredWidth = getPreferredWidthForThumbnail(c);
+    String optimizedThumbnailUrl = redditThumbnails.findNearestFor(preferredWidth);
 
     return SubredditSubmission.UiModel.Thumbnail.builder()
         .staticRes(Optional.empty())
@@ -417,5 +418,12 @@ public class SubredditUiConstructor {
         .tintColor(Optional.empty())
         .backgroundRes(Optional.empty())
         .build();
+  }
+
+  private int getPreferredWidthForThumbnail(Context c) {
+    if (subredditSubmissionImageStyle.get().equals(SubredditSubmissionImageStyle.LARGE)) {
+      return c.getResources().getDisplayMetrics().widthPixels;
+    }
+    return c.getResources().getDimensionPixelSize(R.dimen.subreddit_submission_thumbnail);
   }
 }
