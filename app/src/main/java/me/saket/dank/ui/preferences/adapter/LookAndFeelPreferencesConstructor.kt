@@ -66,13 +66,13 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
     uiModels.add(UserPreferenceSectionHeader.UiModel.create(c.getString(R.string.userprefs_group_subreddit)))
 
     uiModels.add(UserPreferenceButton.UiModel.create(
-      "Submission image style",
-      subredditSubmissionImageStyle.get().name.toLowerCase().capitalize()
+      c.getString(R.string.userprefs_submission_image_style),
+      c.getString(subredditSubmissionImageStyle.get().userVisibleName)
     ) { clickHandler, event ->
       val builder = MultiOptionPreferencePopup.builder(subredditSubmissionImageStyle)
-      builder.addOption(SubredditSubmissionImageStyle.NONE, "Disabled", R.drawable.ic_block_20dp)
-      builder.addOption(SubredditSubmissionImageStyle.THUMBNAIL, "Thumbnails", R.drawable.ic_link_20dp)
-      builder.addOption(SubredditSubmissionImageStyle.LARGE, "Large", R.drawable.ic_smartphone_20dp)
+      builder.addOption(SubredditSubmissionImageStyle.NONE, R.string.image_style_disabled, R.drawable.ic_block_20dp)
+      builder.addOption(SubredditSubmissionImageStyle.THUMBNAIL, R.string.image_style_thumbnail, R.drawable.ic_link_20dp)
+      builder.addOption(SubredditSubmissionImageStyle.LARGE, R.string.image_style_large, R.drawable.ic_smartphone_20dp)
       clickHandler.show(builder, event.itemViewHolder())
     })
 
@@ -81,7 +81,7 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
         if (subredditSubmissionImageStyle.get() == SubredditSubmissionImageStyle.THUMBNAIL)
           c.getString(R.string.userprefs_show_submission_thumbnails_on_left)
         else
-          "Submission type indicator position",
+          c.getString(R.string.userprefs_show_submission_type_indicator_on_left),
         if (showSubmissionThumbnailsOnLeft.get())
           c.getString(R.string.userprefs_show_submission_thumbnails_on_left_summary_on)
         else
