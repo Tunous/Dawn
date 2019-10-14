@@ -71,8 +71,8 @@ class LookAndFeelPreferencesConstructor @Inject constructor(
     ) { clickHandler, event ->
       val builder = MultiOptionPreferencePopup.builder(subredditSubmissionImageStyle)
       builder.addOption(SubredditSubmissionImageStyle.NONE, R.string.image_style_disabled, R.drawable.ic_block_20dp)
-      builder.addOption(SubredditSubmissionImageStyle.THUMBNAIL, R.string.image_style_thumbnail, R.drawable.ic_link_20dp)
-      builder.addOption(SubredditSubmissionImageStyle.LARGE, R.string.image_style_large, R.drawable.ic_smartphone_20dp)
+      builder.addOption(SubredditSubmissionImageStyle.THUMBNAIL, R.string.image_style_thumbnail, R.drawable.ic_image_style_thumbnail_20dp)
+      builder.addOption(SubredditSubmissionImageStyle.LARGE, R.string.image_style_large, R.drawable.ic_image_style_large_20dp)
       clickHandler.show(builder, event.itemViewHolder())
     })
 
