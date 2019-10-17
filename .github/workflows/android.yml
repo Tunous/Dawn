@@ -1,15 +1,19 @@
 name: Android CI
-
 on: [push]
-
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v1
-    - name: setup-android
-      uses: msfjarvis/setup-android@0.2
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Download dependencies
+      run: ./gradlew dependencies
+    - name: Assemble debug APK
+      run: ./gradlew :app:assembleDebug
+    - name: Upload debug APK
+      uses: actions/upload-artifact@master
       with:
-        gradleTasks: :app:assembleDebug
+        name: Dawn Debug APK
+        path: app/build/outputs/apk/debug/app-debug.apk
+    - name: Run tests
+      run: ./gradlew check
