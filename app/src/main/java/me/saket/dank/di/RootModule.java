@@ -34,6 +34,7 @@ import me.saket.dank.data.DankSqliteOpenHelper;
 import me.saket.dank.data.OnLoginRequireListener;
 import me.saket.dank.reply.ReplyRepository;
 import me.saket.dank.ui.UrlRouter;
+import me.saket.dank.ui.accountmanager.AccountManagerActivity;
 import me.saket.dank.ui.authentication.LoginActivity;
 import me.saket.dank.ui.submission.DraftStore;
 import me.saket.dank.ui.submission.LinkOptionsPopup;
@@ -190,8 +191,8 @@ public class RootModule {
   @Provides
   OnLoginRequireListener provideOnLoginRequireListener(Application appContext) {
     return () -> {
-      Intent loginIntent = LoginActivity.intent(appContext);
-      loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+      Intent loginIntent = new Intent(appContext, AccountManagerActivity.class);
+      loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       appContext.startActivity(loginIntent);
     };
   }

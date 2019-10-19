@@ -48,6 +48,7 @@
   <!-- Login -->
   <string name="login">Login</string>
   <string name="login_logout">Logout</string>
+  <string name="login_switch_account">Accounts</string>
   <string name="login_error_oauth_permission_rejected">You must press \'allow\' to log in with this account</string>
   <string name="login_error_oauth_failed">Failed to login. Please try again.</string>
   <string name="login_welcome_user">Welcome, %s!</string>
@@ -146,7 +147,9 @@
   <string name="userprofile_karma_count">%s karma</string>
   <string name="userprofile_loading_karma">Loading karma…</string>
   <string name="userprofile_error_user_karma_load">Couldn\'t get karma</string>
+  <string name="userprofile_deleting_account"></string>
   <string name="userprofile_confirm_logout">Confirm logout?</string>
+  <string name="userprofile_confirm_delete">Confirm delete?</string>
   <string name="userprofile_logging_out">Logging out…</string>
   <string name="userprofile_messages">Messages</string>
   <string name="userprofile_unread_messages_count_single">%d new message</string>
@@ -372,4 +375,15 @@
   <string name="image_style_thumbnail">Thumbnail</string>
   <string name="image_style_large">Large</string>
   <string name="image_style_full_height">Full height</string>
+
+  <!-- Account Manager -->
+  <string name="account_manager_title">Accounts</string>
+  <string name="account_manager_message">Swipe right to delete or left to switch account</string>
+  <string name="account_manager_done">Done</string>
+  <string name="account_manager_logout">Logout</string>
+  <string name="account_manager_swipe_action_delete">Delete</string>
+  <string name="account_manager_swipe_action_switch">Switch</string>
+  <string name="account_manager_cd_add_new_up_button">Add</string>
+  <string name="account_manager_cd_reorder_shortcut">Re-order account</string>
+  <string name="account_manager_add_new_user">Add New Reddit Account</string>
 </resources>

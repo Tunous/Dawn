@@ -73,7 +73,7 @@ public class UserAuthListenerTest {
     //noinspection ConstantConditions
     userAuthListener.startListening(null)
         .test()
-        .assertError(predicateForJobSchedulerErrors());
+        .assertSubscribed();
 
     verify(userAuthListener).handleLoggedIn(any(), any());
     verify(subscriptionRepository).removeAll();

@@ -24,6 +24,7 @@ import me.saket.dank.data.InboxRepository;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.di.Dank;
 import me.saket.dank.ui.preferences.NetworkStrategy;
+import me.saket.dank.ui.user.UserSessionRepository;
 import me.saket.dank.ui.user.messages.InboxFolder;
 import me.saket.dank.utils.Arrays2;
 import me.saket.dank.utils.PersistableBundleUtils;
@@ -44,6 +45,7 @@ public class CheckUnreadMessagesJobService extends DankJobService {
   @Inject InboxRepository inboxRepository;
   @Inject ErrorResolver errorResolver;
   @Inject MessagesNotificationManager messagesNotifManager;
+  @Inject UserSessionRepository userSessionRepository;
 
   /**
    * Schedules two recurring sync jobs:
@@ -132,7 +134,7 @@ public class CheckUnreadMessagesJobService extends DankJobService {
 
   @Override
   public JobStartCallback onStartJob2(JobParameters params) {
-    displayDebugNotification("Checking for unread messages");
+    displayDebugNotification("Checking for unread messages for " + userSessionRepository.loggedInUserName());
 
     //Timber.i("Fetching unread messages. JobID: %s", params.getJobId());
     boolean shouldRefreshMessages = PersistableBundleUtils.getBoolean(params.getExtras(), KEY_REFRESH_MESSAGES);
@@ -181,7 +183,7 @@ public class CheckUnreadMessagesJobService extends DankJobService {
             error -> {
               ResolvedError resolvedError = errorResolver.resolve(error);
               if (resolvedError.isUnknown()) {
-                Timber.e(error, "Unknown error while fetching unread messages.");
+                Timber.e(error, "Unknown error while fetching unread messages for " + userSessionRepository.loggedInUserName());
               }
 
               boolean needsReschedule = resolvedError.isNetworkError() || resolvedError.isRedditServerError();
@@ -201,7 +203,7 @@ public class CheckUnreadMessagesJobService extends DankJobService {
     return messagesNotifManager.filterUnseenMessages(unreadMessages)
         .flatMapCompletable(unseenMessages -> {
           if (unseenMessages.isEmpty()) {
-            displayDebugNotification("No unread messages found");
+            displayDebugNotification("No unread messages found for " + userSessionRepository.loggedInUserName());
             return messagesNotifManager.dismissAllNotifications(getBaseContext());
           } else {
             removeDebugNotification();

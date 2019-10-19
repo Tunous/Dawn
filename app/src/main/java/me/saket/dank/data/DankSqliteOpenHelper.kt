@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 import me.saket.dank.reply.PendingSyncReply
+import me.saket.dank.ui.accountmanager.AccountManager
 import me.saket.dank.ui.appshortcuts.AppShortcut
 import me.saket.dank.ui.subscriptions.SubredditSubscription
 import me.saket.dank.ui.user.messages.CachedMessage
@@ -17,6 +18,7 @@ class DankSqliteOpenHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME
     db.execSQL(CachedMessage.QUERY_CREATE_TABLE)
     db.execSQL(PendingSyncReply.QUERY_CREATE_TABLE)
     db.execSQL(AppShortcut.QUERY_CREATE_TABLE)
+    db.execSQL(AccountManager.QUERY_CREATE_TABLE)
   }
 
   override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -26,11 +28,16 @@ class DankSqliteOpenHelper(context: Context) : SQLiteOpenHelper(context, DB_NAME
       Timber.d("Resetting cached-message rows")
       // JRAW was bumped to v1.0.
       db.execSQL("DELETE FROM ${CachedMessage.TABLE_NAME}")
+      db.execSQL(AccountManager.QUERY_CREATE_TABLE)
+    }
+
+    if (oldVersion == 2 && newVersion == 3) {
+      db.execSQL(AccountManager.QUERY_CREATE_TABLE)
     }
   }
 
   companion object {
-    private const val DB_VERSION = 2
+    private const val DB_VERSION = 3
     private const val DB_NAME = "Dank"
   }
 }

@@ -258,6 +258,16 @@ public class InboxRepository {
     });
   }
 
+  @CheckResult
+  public Completable clearMessages() {
+    return Completable.fromAction(() -> {
+      try (BriteDatabase.Transaction transaction = briteDatabase.newTransaction()) {
+        briteDatabase.delete(CachedMessage.TABLE_NAME, "");
+        transaction.markSuccessful();
+      }
+    });
+  }
+
 // ======== READ STATUS ======== //
 
   /**

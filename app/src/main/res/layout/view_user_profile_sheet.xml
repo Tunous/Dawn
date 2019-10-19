@@ -59,9 +59,9 @@
   <View style="@style/DankSeparator.VerticalContent" />
 
   <me.saket.dank.widgets.TintableCompoundDrawableTextView
-    android:id="@+id/userprofilesheet_logout"
+    android:id="@+id/userprofilesheet_manage_accounts"
     style="@style/DankButton.UserProfileSheet"
-    android:drawableStart="@drawable/ic_logout_24dp"
+    android:drawableStart="@drawable/ic_account_24dp"
     android:paddingBottom="@dimen/spacing16"
-    android:text="@string/login_logout" />
+    android:text="@string/login_switch_account" />
 </LinearLayout>

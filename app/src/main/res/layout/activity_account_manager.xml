@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout android:id="@+id/account_manager_root"
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:fitsSystemWindows="true">
+
+  <me.saket.dank.widgets.ViewFlipperWithDebugPreview
+    android:id="@+id/account_manager_content_flipper"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:layout_margin="@dimen/spacing48"
+    android:background="@drawable/background_popup_window"
+    android:clickable="true"
+    android:elevation="@dimen/elevation_nested_expandable_sheet"
+    android:focusable="true"
+    android:translationZ="60dp"
+    app:debug_displayedChild="0"
+    tools:ignore="UselessParent">
+
+    <LinearLayout
+      android:id="@+id/account_manager_flipper_accounts_screen"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <me.saket.dank.widgets.DankToolbar
+        style="@style/DankToolbar"
+        android:background="@null"
+        app:title="@string/account_manager_title" />
+
+      <TextView
+        android:id="@+id/account_manager_main_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="@dimen/spacing2"
+        android:paddingBottom="@dimen/spacing4"
+        android:paddingEnd="@dimen/spacing24"
+        android:paddingStart="@dimen/spacing16"
+        android:text="@string/account_manager_message"
+        android:textColor="@color/white_opacity_50"
+        android:textIsSelectable="false" />
+
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/account_manager_accounts_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        tools:layoutManager="com.google.android.flexbox.FlexboxLayoutManager"
+        tools:listitem="@layout/list_item_account" />
+
+      <me.saket.dank.widgets.AnimatedProgressBar
+        android:id="@+id/account_progressbar"
+        style="@style/DankProgressBar.Horizontal.TopAligned"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+        <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+
+          <Button
+            android:id="@+id/account_manager_logout"
+            style="?attr/buttonBarPositiveButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="start|center_vertical"
+            android:layout_marginBottom="@dimen/spacing8"
+            android:layout_marginEnd="@dimen/spacing8"
+            android:text="@string/account_manager_logout" />
+
+          <Button
+            android:id="@+id/account_manager_done"
+            style="?attr/buttonBarPositiveButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="end|center_vertical"
+            android:layout_marginBottom="@dimen/spacing8"
+            android:layout_marginEnd="@dimen/spacing8"
+            android:text="@string/account_manager_done" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+  </me.saket.dank.widgets.ViewFlipperWithDebugPreview>
+</FrameLayout>

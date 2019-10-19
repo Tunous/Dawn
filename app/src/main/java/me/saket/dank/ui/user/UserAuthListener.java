@@ -17,6 +17,7 @@ import dagger.Lazy;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import me.saket.dank.analytics.CrashReporter;
+import me.saket.dank.data.InboxRepository;
 import me.saket.dank.notifs.CheckUnreadMessagesJobService;
 import me.saket.dank.ui.preferences.NetworkStrategy;
 import me.saket.dank.ui.subscriptions.SubredditSubscriptionsSyncJob;
@@ -32,6 +33,7 @@ public class UserAuthListener {
 
   private final Lazy<SubscriptionRepository> subscriptionRepository;
   private final Lazy<UserSessionRepository> userSessionRepository;
+  private final Lazy<InboxRepository> inboxRepository;
   private Lazy<CrashReporter> crashReporter;
   private final Lazy<Preference<Boolean>> unreadMessagesPollEnabledPref;
   private final Lazy<Preference<TimeInterval>> unreadMessagesPollInterval;
@@ -41,6 +43,7 @@ public class UserAuthListener {
   public UserAuthListener(
       Lazy<SubscriptionRepository> subscriptionRepository,
       Lazy<UserSessionRepository> userSessionRepository,
+      Lazy<InboxRepository> inboxRepository,
       Lazy<CrashReporter> crashReporter,
       @Named("unread_messages") Lazy<Preference<Boolean>> unreadMessagesPollEnabledPref,
       @Named("unread_messages") Lazy<Preference<TimeInterval>> unreadMessagesPollInterval,
@@ -52,6 +55,7 @@ public class UserAuthListener {
     this.unreadMessagesPollInterval = unreadMessagesPollInterval;
     this.subscriptionRepository = subscriptionRepository;
     this.userSessionRepository = userSessionRepository;
+    this.inboxRepository = inboxRepository;
     this.unreadMessagesPollNetworkStrategy = unreadMessagesPollNetworkStrategy;
   }
 
@@ -98,6 +102,10 @@ public class UserAuthListener {
     // This code is not supposed to fail :/
     subscriptionRepository.get().removeAll()
         .andThen(subscriptionRepository.get().refreshAndSaveSubscriptions())
+        .subscribeOn(io())
+        .subscribe();
+
+    inboxRepository.get().clearMessages()
         .subscribeOn(io())
         .subscribe();
 

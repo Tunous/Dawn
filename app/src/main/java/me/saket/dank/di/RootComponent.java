@@ -19,6 +19,7 @@ import me.saket.dank.notifs.MessagesNotificationManager;
 import me.saket.dank.reddit.RedditModule;
 import me.saket.dank.reply.RetryReplyJobService;
 import me.saket.dank.ui.PlaygroundActivity;
+import me.saket.dank.ui.accountmanager.AccountManagerActivity;
 import me.saket.dank.ui.appshortcuts.AppShortcutRepository;
 import me.saket.dank.ui.appshortcuts.ConfigureAppShortcutsActivity;
 import me.saket.dank.ui.authentication.LoginActivity;
@@ -162,4 +163,6 @@ public interface RootComponent {
   void inject(SubmissionSwipeActionPreferenceChoicePopup target);
 
   void inject(IndentedLayout target);
+
+  void inject(AccountManagerActivity target);
 }

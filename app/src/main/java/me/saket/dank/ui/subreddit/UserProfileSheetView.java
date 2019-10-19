@@ -1,6 +1,7 @@
 package me.saket.dank.ui.subreddit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -28,6 +29,7 @@ import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.data.InboxRepository;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.di.Dank;
+import me.saket.dank.ui.accountmanager.AccountManagerActivity;
 import me.saket.dank.ui.user.UserProfileRepository;
 import me.saket.dank.ui.user.UserSessionRepository;
 import me.saket.dank.ui.user.messages.InboxActivity;
@@ -200,32 +202,11 @@ public class UserProfileSheetView extends FrameLayout {
   void onClickSubmissions() {
   }
 
-  @OnClick(R.id.userprofilesheet_logout)
-  void onClickLogout(TextView logoutButton) {
-    if (confirmLogoutTimer.isDisposed()) {
-      logoutButton.setText(R.string.userprofile_confirm_logout);
-      confirmLogoutTimer = Observable.timer(5, TimeUnit.SECONDS)
-          .compose(applySchedulers())
-          .subscribe(o -> logoutButton.setText(R.string.login_logout));
+  @OnClick(R.id.userprofilesheet_manage_accounts)
+  void onClickManageAccounts() {
+    parentSheet.collapse();
 
-    } else {
-      // Confirm logout was visible when this button was clicked. Logout the user for real.
-      confirmLogoutTimer.dispose();
-      logoutDisposable.dispose();
-      logoutButton.setText(R.string.userprofile_logging_out);
-
-      logoutDisposable = userSessionRepository.get().logout()
-          .subscribeOn(io())
-          .observeOn(mainThread())
-          .subscribe(
-              () -> parentSheet.collapse(),
-              error -> {
-                logoutButton.setText(R.string.login_logout);
-
-                ResolvedError resolvedError = errorResolver.get().resolve(error);
-                resolvedError.ifUnknown(() -> Timber.e(error, "Logout failure"));
-              }
-          );
-    }
+    Intent intent = new Intent(getContext(), AccountManagerActivity.class);
+    this.getContext().startActivity(intent);
   }
 }
