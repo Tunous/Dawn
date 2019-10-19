@@ -17,3 +17,10 @@ jobs:
         path: app/build/outputs/apk/debug/app-debug.apk
     - name: Run tests
       run: ./gradlew check
+    - name: Upload lint results
+      uses: actions/upload-artifact@master
+      if: always()
+      with:
+        name: Lint results
+        path: markdownhints/build/reports/lint-results.html
+      
