@@ -9,6 +9,7 @@
     android:id="@+id/submission_item_image"
     android:layout_width="0dp"
     android:layout_height="160dp"
+    android:layout_marginTop="@dimen/spacing16"
     android:layout_marginBottom="@dimen/spacing16"
     android:foreground="@drawable/touchindicator_submission_image"
     app:layout_constraintEnd_toEndOf="parent"
