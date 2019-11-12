@@ -16,8 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.FrameLayout; 
 
 import timber.log.Timber;
 
@@ -141,8 +140,7 @@ public class SwipeableLayout extends FrameLayout {
   @Override
   public boolean onInterceptTouchEvent(MotionEvent event) {
     if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP  || event.getAction() == MotionEvent.ACTION_MOVE){
-      valueY = (int)event.getY();
-      Timber.w("ACTION_DOWN "+"X: "+event.getX()+" Y: "+event.getY());
+      valueY = (int)event.getY(); 
     }
     return true;
   }
