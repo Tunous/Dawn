@@ -140,9 +140,9 @@ public class SwipeableLayout extends FrameLayout {
   @Override
   public boolean onInterceptTouchEvent(MotionEvent event) {
     if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_UP  || event.getAction() == MotionEvent.ACTION_MOVE){
-      valueY = (int)event.getY(); 
+      valueY = (int)event.getY();
     }
-    return true;
+    return false;
   }
 
   public void setSwipeTranslation(float translationX) {
