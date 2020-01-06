@@ -3,22 +3,30 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
-  android:layout_height="wrap_content">
+  android:layout_height="wrap_content"
+  android:elevation="2dp"
+  android:foreground="?attr/selectableItemBackground">
 
   <me.saket.dank.ImageViewWithStackTraceName
     android:id="@+id/submission_item_image"
     android:layout_width="0dp"
     android:layout_height="160dp"
     android:layout_marginTop="@dimen/spacing16"
-    android:layout_marginBottom="@dimen/spacing16"
     android:foreground="@drawable/touchindicator_submission_image"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintVertical_bias="0"
     tools:ignore="ContentDescription"
     tools:scaleType="centerCrop"
     tools:src="@tools:sample/backgrounds/scenic" />
+
+  <View
+    android:id="@+id/submission_item_separator"
+    style="@style/DankSeparator.VerticalContent"
+    android:layout_width="0dp"
+    app:layout_constraintBottom_toTopOf="@+id/submission_item_image"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent" />
 
   <TextView
     android:id="@+id/submission_item_title"
