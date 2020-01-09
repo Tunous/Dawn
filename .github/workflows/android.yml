@@ -54,6 +54,13 @@ jobs:
       - name: Run tests
         run: ./gradlew testDebug
 
+      - name: Upload build reports
+        if: always()
+        uses: actions/upload-artifact@v1
+        with:
+          name: build-reports
+          path: app/build/reports
+
       - name: Copy test results
         if: always()
         run: |
