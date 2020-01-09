@@ -53,7 +53,7 @@ public class SubscriptionRepositoryTest {
     List<SubredditSubscription> expectedMergedList = new ArrayList<>();
     expectedMergedList.add(SubredditSubscription.create("A", SubredditSubscription.PendingState.NONE, false));
     expectedMergedList.add(SubredditSubscription.create("B", SubredditSubscription.PendingState.NONE, true));
-    expectedMergedList.add(SubredditSubscription.create("GH", SubredditSubscription.PendingState.PENDING_SUBSCRIBE, false));
+    expectedMergedList.add(SubredditSubscription.create("D", SubredditSubscription.PendingState.PENDING_SUBSCRIBE, false));
     expectedMergedList.add(SubredditSubscription.create("E", SubredditSubscription.PendingState.PENDING_UNSUBSCRIBE, false));
     expectedMergedList.add(SubredditSubscription.create("G", SubredditSubscription.PendingState.NONE, false));
     expectedMergedList.add(SubredditSubscription.create("H", SubredditSubscription.PendingState.NONE, false));
