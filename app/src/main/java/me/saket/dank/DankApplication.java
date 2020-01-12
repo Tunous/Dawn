@@ -27,6 +27,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import me.saket.dank.di.Dank;
+import me.saket.dank.ui.appshortcuts.AppShortcutRepository;
 import timber.log.Timber;
 
 public class DankApplication extends Application {
@@ -51,7 +52,9 @@ public class DankApplication extends Application {
     }
 
     if (BuildConfig.DEBUG) {
-      Stetho.initializeWithDefaults(this);
+      if (!isRoboUnitTest()) {
+        Stetho.initializeWithDefaults(this);
+      }
       Traceur.enableLogging();  // Throws an exception in every operator, so better enable only on debug builds
 
       StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
@@ -94,15 +97,18 @@ public class DankApplication extends Application {
         initialDelayStream
             .filter(o -> Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1)
             .map(o -> Dank.dependencyInjector().shortcutRepository())
-            .flatMapCompletable(repository -> repository.updateInstalledShortcuts())
+            .flatMapCompletable(AppShortcutRepository::updateInstalledShortcuts)
             .subscribe());
+  }
+
+  private boolean isRoboUnitTest() {
+    return "robolectric".equals(Build.FINGERPRINT);
   }
 
   @TargetApi(Build.VERSION_CODES.O)
   private void registerNotificationChannels() {
     NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-    //noinspection ConstantConditions
     if (notificationManager.getNotificationChannel(getString(R.string.notification_channel_unread_messages_id)) != null) {
       // Channels already exist. Abort mission.
       return;
@@ -185,7 +191,7 @@ public class DankApplication extends Application {
     private final Thread.UncaughtExceptionHandler defaultHandler;
     private boolean crashing;
 
-    public LoggingUncaughtExceptionHandler(Thread.UncaughtExceptionHandler defaultHandler) {
+    LoggingUncaughtExceptionHandler(Thread.UncaughtExceptionHandler defaultHandler) {
       this.defaultHandler = defaultHandler;
     }
 
