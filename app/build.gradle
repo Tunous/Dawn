@@ -186,7 +186,7 @@ dependencies {
   implementation 'com.bugsnag:bugsnag-android:4.22.2'
 
   implementation 'com.github.saketme:markwon:b68d3058ca'
-  implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.13.0'
+  implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.13.1'
 
   // TODO: Replace all Date4J usages with ThreeTenAbp.
   implementation 'com.darwinsys:hirondelle-date4j:1.5.1'
