@@ -168,7 +168,7 @@
   <style name="DankUserPreferenceButton">
     <item name="android:clickable">true</item>
     <item name="android:foreground">?attr/selectableItemBackground</item>
-    <item name="android:background">@color/gray_850</item>
+    <item name="android:background">@color/dank_pref_button</item>
     <item name="android:translationZ">1dp</item>
     <item name="android:paddingTop">@dimen/userprefs_item_padding</item>
   </style>

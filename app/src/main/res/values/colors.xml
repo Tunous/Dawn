@@ -19,8 +19,8 @@
       100% = FF H
   -->
 
-  <color name="color_primary">#202020</color>
-  <color name="color_primary_dark">#1b1b1b</color>
+  <color name="color_primary">@color/gray_900</color>
+  <color name="color_primary_dark">@color/gray_950</color>
   <color name="color_accent">@color/teal_A400</color>
   <color name="color_accent_light">@color/teal_A100</color>
   <color name="color_accent_dark">@color/teal_A700</color>
@@ -28,8 +28,8 @@
   <color name="dialog_background">#393a3c</color>
   <color name="dialog_like_activity_window_background">@color/black_opacity_40</color>
 
-  <color name="toolbar">@color/gray_900</color>
-  <color name="navigation_bar">@color/gray_950</color>
+  <color name="toolbar">@color/color_primary</color>
+  <color name="navigation_bar">@color/color_primary_dark</color>
 
   <color name="upvote">@color/deep_orange_300</color>   <!-- Picked from the material palette. Slightly varies from what Reddit uses. -->
   <color name="downvote">#9494FF</color>                <!-- This is what Reddit uses. Couldn't find anything close in the material palette. -->
@@ -57,8 +57,8 @@
   <!-- Subreddit -->
   <color name="subreddit_submission_item_byline">@color/gray_600</color>
   <color name="subreddit_subscribe">@color/color_accent</color>
-  <color name="subredditpicker_subreddit_button_tint_normal">#1b1b1b</color>
-  <color name="subredditpicker_subreddit_button_tint_selected">#0b0b0b</color>
+  <color name="subredditpicker_subreddit_button_tint_normal">@color/gray_950</color>
+  <color name="subredditpicker_subreddit_button_tint_selected">#0e0e0e</color>
   <color name="subredditpicker_subreddit_button_text_normal">@color/gray_400</color>
   <color name="subredditpicker_subreddit_button_text_hidden">@color/gray_700</color>
 
@@ -94,6 +94,45 @@
   <!-- Text -->
   <color name="text_primary">@color/gray_200</color>
   <color name="text_secondary">@color/gray_500</color>
+  <color name="text_tertiary">@color/gray_300</color>
+  <color name="text_light">@color/gray_100</color>
+  <color name="text_dark">@color/gray_600</color>
+
+  <!-- One use codes -->
+  <color name="comment_threads">@color/cyan_400</color>
+  <color name="title_background">@color/yellow_600</color>
+  <color name="title_text">@color/black_opacity_75</color>
+  <color name="static_thumbnail">@color/gray_100</color>
+  <color name="popup_menu_title_background">@color/black_opacity_10</color>
+  <color name="popup_menu_button_text">@color/gray_200</color>
+  <color name="walkthrough_title_text">@color/amber_200</color>
+  <color name="nsfw">@color/pink_A100</color>
+  <color name="sticky">@color/green_A100</color>
+
+  <color name="subreddit_background_tint">@color/gray_800</color>
+  <color name="progress_bar">@color/gray_600</color>
+  <color name="dialog_image">@color/gray_700</color>
+  <color name="image_album_viewer">@color/blue_gray_700</color>
+  <color name="video_album_viewer">@color/blue_gray_800</color>
+  <color name="list_item_drag_tint">@color/gray_500</color>
+  <color name="list_item_comment_tint">@color/gray_400</color>
+  <color name="list_item_submission_tint">@color/gray_200</color>
+  <color name="floating_action_button_ripple">@color/gray_500</color>
+  <color name="search_drawable_tint">@color/gray_700</color>
+  <color name="subreddit_picker_text_hint">@color/gray_700</color>
+  <color name="subreddit_picker_progress_bar">@color/gray_600</color>
+  <color name="profile_indeterminateTint">@color/gray_700</color>
+  <color name="dank_pref_button">@color/gray_850</color>
+  <color name="error_state_emoji_text">@color/gray_400</color>
+  <color name="subreddit_search_field_control_normal">@color/gray_800</color>
+  <color name="subreddit_search_field_control_activated">@color/gray_500</color>
+  <color name="submit_comment_item">@color/gray_850</color>
+  <color name="byline_text">@color/gray_500</color>
+  <color name="message_body_threaded">@color/gray_400</color>
+  <color name="dankbutton_sorting_mode_text">@color/gray_800</color>
+  <color name="dank_fab_tint">@color/teal_900</color>
+
+  <color name="album_viewer_background">@color/black_opacity_30</color>
 
   <!-- Indentation Colors / Comments Depth Level -->
   <array name="indentation_colors">
