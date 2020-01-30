@@ -2,7 +2,7 @@
 
   <!--<string name="dank_default_font_family">@fsans-serif-condensed</string>-->
 
-  <style name="DankTheme" parent="Theme.AppCompat.NoActionBar">
+  <style name="DankTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
     <item name="colorPrimary">@color/color_primary</item>
     <item name="colorPrimaryDark">@color/color_primary_dark</item>
     <item name="colorAccent">@color/color_accent</item>
@@ -77,7 +77,7 @@
   </style>
 
   <style name="DankSeparator">
-    <item name="android:background">@color/white_opacity_05</item>
+    <item name="android:background">@color/separator</item>
   </style>
 
   <style name="DankSeparator.VerticalContent">
