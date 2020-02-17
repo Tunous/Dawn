@@ -114,8 +114,8 @@
   <color name="popup_menu_title_background">@color/white_opacity_10</color>
   <color name="popup_menu_button_text">@color/gray_800</color>
   <color name="walkthrough_title_text">@color/light_blue_800</color>
-  <color name="nsfw">@color/pink_A100</color>
-  <color name="sticky">@color/green_A100</color>
+  <color name="nsfw">@color/text_tertiary</color>
+  <color name="sticky">@color/color_accent</color>
 
   <color name="subreddit_background_tint">@color/gray_200</color>
   <color name="progress_bar">@color/gray_300</color>
@@ -123,8 +123,8 @@
   <color name="image_album_viewer">@color/teal_400</color>
   <color name="video_album_viewer">@color/teal_300</color>
   <color name="floating_action_button_ripple">@color/gray_500</color>
-  <color name="search_drawable_tint">@color/gray_300</color>
-  <color name="subreddit_picker_text_hint">@color/gray_300</color>
+  <color name="search_drawable_tint">@color/gray_700</color>
+  <color name="subreddit_picker_text_hint">@color/text_secondary</color>
   <color name="subreddit_picker_progress_bar">@color/gray_400</color>
   <color name="profile_indeterminateTint">@color/gray_300</color>
   <color name="error_state_emoji_text">@color/gray_600</color>
@@ -136,6 +136,8 @@
   <color name="dankbutton_sorting_mode_text">@color/gray_200</color>
   <color name="dank_fab_tint">@color/teal_100</color>
   <color name="album_viewer_background">@color/black_opacity_30</color>
+  <color name="background_subreddit_submission_sticky">#CC00FFCC</color>
+  <color name="background_subreddit_submission_nsfw">@color/pink_100</color>
 
   <color name="drawable">@color/black</color>
   <color name="drawable_inverse">@color/white</color>

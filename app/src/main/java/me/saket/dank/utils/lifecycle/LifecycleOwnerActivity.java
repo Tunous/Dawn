@@ -19,7 +19,7 @@ public abstract class LifecycleOwnerActivity extends AppCompatActivity implement
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     AppCompatDelegate.setDefaultNightMode(
-        AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        AppCompatDelegate.MODE_NIGHT_NO);
     super.onCreate(savedInstanceState);
     lifecycleStreams = new ActivityLifecycleStreams();
   }

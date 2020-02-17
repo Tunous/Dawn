@@ -118,6 +118,8 @@
   <color name="dankbutton_sorting_mode_text">@color/gray_800</color>
   <color name="dank_fab_tint">@color/teal_900</color>
   <color name="album_viewer_background">@color/black_opacity_30</color>
+  <color name="background_subreddit_submission_sticky">#283028</color>
+  <color name="background_subreddit_submission_nsfw">#33262D</color>
 
   <color name="drawable">#FFFFFF</color>
   <color name="drawable_opacity_80">@color/white_opacity_80</color>
