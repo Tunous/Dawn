@@ -225,6 +225,21 @@ public interface SubmissionCommentsHeader {
 
     @SuppressLint("ClickableViewAccessibility")
     public void setupSelectionRelatedListeners() {
+      selfTextView.setOnTouchListener((o, event) -> {
+        if (movementMethod.onTouchEvent(selfTextView, (Spannable) selfTextView.getText(), event)) {
+          // handled by link movement method, stop event propagation
+          return true;
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+          // Workaround for "TextView does not support text selection"
+          selfTextView.setEnabled(false);
+          selfTextView.setEnabled(true);
+        }
+
+        return selfTextView.onTouchEvent(event);
+      });
+
       bylineView.setOnClickListener(o -> {
         // remove title selection for better UX
         Selection.removeSelection((Spannable) titleView.getText());
@@ -252,6 +267,10 @@ public interface SubmissionCommentsHeader {
 
       uiModel.optionalSelfText().ifPresent(selfTextView::setText);
       selfTextViewContainer.setVisibility(uiModel.optionalSelfText().isPresent() ? View.VISIBLE : View.GONE);
+
+      // If selection is allowed in layout, 'TextView doesn't support selection'
+      // keeps popping up, so it's probably necessary to set it in code
+      selfTextView.setTextIsSelectable(true);
       selfTextView.setMovementMethod(movementMethod);
 
       // limit selection to title
