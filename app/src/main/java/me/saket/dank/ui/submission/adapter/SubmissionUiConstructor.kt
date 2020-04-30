@@ -254,7 +254,7 @@ class SubmissionUiConstructor @Inject constructor(
         .append(Strings.abbreviateScore(vote.toFloat()))
         .popSpan()
         .append("  ")
-        .pushSpan(SubmissionTitleSpan())
+        .pushSpan(SubmissionTitleSpan)
         .append(Html.fromHtml(submission.title))
         .popSpan()
 
