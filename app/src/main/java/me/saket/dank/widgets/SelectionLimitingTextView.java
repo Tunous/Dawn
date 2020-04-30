@@ -5,19 +5,19 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.util.AttributeSet;
 
-public class TextViewLimitSelection extends androidx.appcompat.widget.AppCompatTextView {
+public class SelectionLimitingTextView extends androidx.appcompat.widget.AppCompatTextView {
   int limitStart = -1;
   int limitEnd = -1;
 
-  public TextViewLimitSelection(Context context) {
+  public SelectionLimitingTextView(Context context) {
     super(context);
   }
 
-  public TextViewLimitSelection(Context context, AttributeSet attrs) {
+  public SelectionLimitingTextView(Context context, AttributeSet attrs) {
     super(context, attrs);
   }
 
-  public TextViewLimitSelection(Context context, AttributeSet attrs, int defStyleAttr) {
+  public SelectionLimitingTextView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
   }
 

@@ -6,7 +6,6 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.text.Selection;
 import android.text.Spannable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +24,7 @@ import com.jakewharton.rxrelay2.Relay;
 
 import me.saket.dank.ui.submission.SubmissionTitleSpan;
 import me.saket.dank.utils.*;
-import me.saket.dank.widgets.TextViewLimitSelection;
+import me.saket.dank.widgets.SelectionLimitingTextView;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.VoteDirection;
 
@@ -149,7 +148,7 @@ public interface SubmissionCommentsHeader {
   }
 
   class ViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithSwipeActions {
-    private final TextViewLimitSelection titleView;
+    private final SelectionLimitingTextView titleView;
     public final TextView bylineView;
     private final TextView selfTextView;
     private final ViewGroup selfTextViewContainer;

@@ -32,7 +32,7 @@
     <!--android:textSize="@dimen/textsize12" />-->
 
     <!-- TODO: Merge these three TextViews and use spans instead -->
-    <me.saket.dank.widgets.TextViewLimitSelection
+    <me.saket.dank.widgets.SelectionLimitingTextView
       android:id="@+id/submission_title"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
