@@ -8,7 +8,7 @@ class SubmissionTitleSpan {
   companion object {
     @JvmStatic fun limitSelectionForTextView(view: SelectionLimitingTextView) {
       val title = view.text as Spannable
-      title.getSpans(0, title.length, SubmissionTitleSpan::class.java).take(1).forEach {
+      title.getSpans(0, title.length, SubmissionTitleSpan::class.java).firstOrNull()?.let {
         view.setSelectionLimits(title.getSpanStart(it), title.getSpanEnd(it))
       }
     }
