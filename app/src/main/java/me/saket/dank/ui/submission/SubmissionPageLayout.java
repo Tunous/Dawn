@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -269,6 +270,9 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
 
     // LayoutManager needs to be set before onRestore() gets called to retain scroll position.
     commentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
+      final Rect parentRect = new Rect();
+      final Rect childRect = new Rect();
+
       @Override
       public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
         // Bug workaround: when smooth-scrolling to a position, if the target View is already visible,
@@ -277,6 +281,32 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
         LinearSmoothScroller linearSmoothScroller = new LinearSmoothScrollerWithVerticalSnapPref(getContext(), LinearSmoothScroller.SNAP_TO_START);
         linearSmoothScroller.setTargetPosition(position);
         startSmoothScroll(linearSmoothScroller);
+      }
+
+      // Workaround to keep arrow keys navigation working
+      private boolean intersects(View parent, View child) {
+        parent.getHitRect(parentRect);
+        child.getHitRect(childRect);
+        return Rect.intersects(parentRect, childRect);
+      }
+
+      // Disable RecyclerView automatic scroll on focus change
+      @Override
+      public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate) {
+        if (intersects(parent, child)) {
+          return false;
+        }
+
+        return super.requestChildRectangleOnScreen(parent, child, rect, immediate);
+      }
+
+      @Override
+      public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate, boolean focusedChildVisible) {
+        if (intersects(parent, child)) {
+          return false;
+        }
+
+        return super.requestChildRectangleOnScreen(parent, child, rect, immediate, focusedChildVisible);
       }
     });
 
