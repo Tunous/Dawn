@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 - Occasional crash when entering login screen ([#103](https://github.com/Tunous/Dawn/pull/103))
 - Crash when navigating to user profile ([#109](https://github.com/Tunous/Dawn/pull/109))
+- Image loading issues due to http urls ([#183](https://github.com/Tunous/Dawn/pull/183))
 
 ## [0.8.0] - 2019-08-22
 ### Added
