@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Large image previews ([#87](https://github.com/Tunous/Dawn/pull/87))
 - Inline text selection ([#177](https://github.com/Tunous/Dawn/pull/177))
 - Submission title selection ([#182](https://github.com/Tunous/Dawn/pull/182))
+- Selftext selection ([#178](https://github.com/Tunous/Dawn/pull/178))
 
 ### Changed
 - Renamed application to "Dawn" ([#74](https://github.com/Tunous/Dawn/pull/74))
