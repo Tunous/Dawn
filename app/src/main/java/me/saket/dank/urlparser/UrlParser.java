@@ -213,7 +213,12 @@ public class UrlParser {
       return GenericMediaLink.create(httpsUrl, getMediaUrlType(urlPath));
 
     } else if (isImageOrGifUrlPath(urlPath) || isVideoPath(urlPath)) {
-      return GenericMediaLink.create(url, getMediaUrlType(urlPath));
+      if (Objects.equals(linkURI.getScheme(), "https")) {
+        return GenericMediaLink.create(url, getMediaUrlType(urlPath));
+      } else {
+        // show non-https media in WebView
+        return ExternalLink.create(url);
+      }
 
     } else {
       return ExternalLink.create(url);
