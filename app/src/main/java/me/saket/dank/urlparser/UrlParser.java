@@ -161,8 +161,9 @@ public class UrlParser {
   private Link parseNonRedditUrl(String url) {
     Uri linkURI = Uri.parse(url);
 
-    String urlDomain = linkURI.getHost() != null ? linkURI.getHost() : "";
-    String urlPath = linkURI.getPath() != null ? linkURI.getPath() : "";
+    final String urlScheme = linkURI.getScheme() != null ? linkURI.getScheme() : "";
+    final String urlDomain = linkURI.getHost() != null ? linkURI.getHost() : "";
+    final String urlPath = linkURI.getPath() != null ? linkURI.getPath() : "";
 
     if ((urlDomain.contains("imgur.com") || urlDomain.contains("bildgur.de"))) {
       if (isUnsupportedImgurLink(urlPath)) {
@@ -197,6 +198,11 @@ public class UrlParser {
       //noinspection deprecation
       String htmlUnescapedUrl = org.jsoup.parser.Parser.unescapeEntities(url, true);
       return GenericMediaLink.create(htmlUnescapedUrl, Link.Type.SINGLE_IMAGE);
+
+    } else if (urlDomain.endsWith("redd.it") && urlScheme.equals("http")) {
+      // force https for *redd.it links to avoid problems with networkSecurityConfig
+      Uri httpsUrl = linkURI.buildUpon().scheme("https").build();
+      return GenericMediaLink.create(httpsUrl.toString(), getMediaUrlType(urlPath));
 
     } else if (isImageOrGifUrlPath(urlPath) || isVideoPath(urlPath)) {
       return GenericMediaLink.create(url, getMediaUrlType(urlPath));
