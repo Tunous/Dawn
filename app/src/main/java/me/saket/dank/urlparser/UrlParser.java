@@ -9,6 +9,7 @@ import com.nytimes.android.external.cache3.Cache;
 
 import net.dean.jraw.models.Submission;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 
@@ -158,10 +159,17 @@ public class UrlParser {
     return parsedLink;
   }
 
+  private String rewriteAsHttps(String link) {
+    Uri uri = Uri.parse(link);
+    if (Objects.equals(uri.getScheme(), "http")) {
+      return uri.buildUpon().scheme("https").build().toString();
+    }
+    return link;
+  }
+
   private Link parseNonRedditUrl(String url) {
     Uri linkURI = Uri.parse(url);
 
-    final String urlScheme = linkURI.getScheme() != null ? linkURI.getScheme() : "";
     final String urlDomain = linkURI.getHost() != null ? linkURI.getHost() : "";
     final String urlPath = linkURI.getPath() != null ? linkURI.getPath() : "";
 
@@ -196,13 +204,13 @@ public class UrlParser {
     } else if (urlDomain.contains("reddituploads.com") || urlDomain.contains("redditmedia.com")) {
       // Reddit sends HTML-escaped URLs for reddituploads.com. Decode them again.
       //noinspection deprecation
-      String htmlUnescapedUrl = org.jsoup.parser.Parser.unescapeEntities(url, true);
+      String htmlUnescapedUrl = rewriteAsHttps(org.jsoup.parser.Parser.unescapeEntities(url, true));
       return GenericMediaLink.create(htmlUnescapedUrl, Link.Type.SINGLE_IMAGE);
 
-    } else if (urlDomain.endsWith("redd.it") && urlScheme.equals("http")) {
+    } else if (urlDomain.endsWith("redd.it")) {
       // force https for *redd.it links to avoid problems with networkSecurityConfig
-      Uri httpsUrl = linkURI.buildUpon().scheme("https").build();
-      return GenericMediaLink.create(httpsUrl.toString(), getMediaUrlType(urlPath));
+      String httpsUrl = rewriteAsHttps(url);
+      return GenericMediaLink.create(httpsUrl, getMediaUrlType(urlPath));
 
     } else if (isImageOrGifUrlPath(urlPath) || isVideoPath(urlPath)) {
       return GenericMediaLink.create(url, getMediaUrlType(urlPath));
