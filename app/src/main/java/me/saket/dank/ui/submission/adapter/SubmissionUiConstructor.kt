@@ -254,7 +254,9 @@ class SubmissionUiConstructor @Inject constructor(
         .append(Strings.abbreviateScore(vote.toFloat()))
         .popSpan()
         .append("  ")
+        .pushSpan(SubmissionTitleSpan)
         .append(Html.fromHtml(submission.title))
+        .popSpan()
 
     val byline = context.getString(
         R.string.submission_byline,

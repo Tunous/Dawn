@@ -1,9 +1,13 @@
 package me.saket.dank.ui.submission.adapter;
 
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.text.Selection;
+import android.text.Spannable;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +22,9 @@ import com.google.auto.value.AutoValue;
 import com.jakewharton.rxrelay2.PublishRelay;
 import com.jakewharton.rxrelay2.Relay;
 
+import me.saket.dank.ui.submission.SubmissionTitleSpan;
+import me.saket.dank.utils.*;
+import me.saket.dank.widgets.SelectionLimitingTextView;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.VoteDirection;
 
@@ -32,11 +39,6 @@ import me.saket.dank.data.SpannableWithTextEquality;
 import me.saket.dank.data.SwipeEvent;
 import me.saket.dank.ui.submission.events.SubmissionContentLinkClickEvent;
 import me.saket.dank.ui.subreddit.SubmissionSwipeActionsProvider;
-import me.saket.dank.utils.Animations;
-import me.saket.dank.utils.Colors;
-import me.saket.dank.utils.DankLinkMovementMethod;
-import me.saket.dank.utils.Optional;
-import me.saket.dank.utils.Pair;
 import me.saket.dank.utils.lifecycle.LifecycleStreams;
 import me.saket.dank.widgets.AnimatedProgressBar;
 import me.saket.dank.widgets.swipe.SwipeActions;
@@ -146,7 +148,7 @@ public interface SubmissionCommentsHeader {
   }
 
   class ViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithSwipeActions {
-    private final TextView titleView;
+    private final SelectionLimitingTextView titleView;
     public final TextView bylineView;
     private final TextView selfTextView;
     private final ViewGroup selfTextViewContainer;
@@ -191,6 +193,8 @@ public interface SubmissionCommentsHeader {
 
       contentLinkView.setClipToOutline(true);
       contentLinkBackgroundColor = ContextCompat.getColor(itemView.getContext(), R.color.submission_link_background);
+
+      titleView.setTextIsSelectable(true);
     }
 
     public void setupGestures(SubmissionSwipeActionsProvider swipeActionsProvider) {
@@ -219,6 +223,39 @@ public interface SubmissionCommentsHeader {
       });
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    public void setupSelectionRelatedListeners() {
+      selfTextView.setOnTouchListener((o, event) -> {
+        if (movementMethod.onTouchEvent(selfTextView, (Spannable) selfTextView.getText(), event)) {
+          // handled by link movement method, stop event propagation
+          return true;
+        }
+
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+          // Workaround for "TextView does not support text selection"
+          selfTextView.setEnabled(false);
+          selfTextView.setEnabled(true);
+        }
+
+        return selfTextView.onTouchEvent(event);
+      });
+
+      bylineView.setOnClickListener(o -> {
+        // remove title selection for better UX
+        Selection.removeSelection((Spannable) titleView.getText());
+      });
+
+      titleView.setOnTouchListener((o, event) -> {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+          // Workaround for "TextView does not support text selection"
+          titleView.setEnabled(false);
+          titleView.setEnabled(true);
+        }
+
+        return titleView.onTouchEvent(event);
+      });
+    }
+
     public void setUiModel(UiModel uiModel) {
       this.uiModel = uiModel;
     }
@@ -230,7 +267,14 @@ public interface SubmissionCommentsHeader {
 
       uiModel.optionalSelfText().ifPresent(selfTextView::setText);
       selfTextViewContainer.setVisibility(uiModel.optionalSelfText().isPresent() ? View.VISIBLE : View.GONE);
+
+      // If selection is allowed in layout, 'TextView doesn't support selection'
+      // keeps popping up, so it's probably necessary to set it in code
+      selfTextView.setTextIsSelectable(true);
       selfTextView.setMovementMethod(movementMethod);
+
+      // limit selection to title
+      SubmissionTitleSpan.limitSelectionForTextView(titleView);
     }
 
     private void setSubmissionByline(UiModel uiModel) {
@@ -431,6 +475,7 @@ public interface SubmissionCommentsHeader {
       ViewHolder holder = ViewHolder.create(inflater, parent, headerClickStream, linkMovementMethod);
       holder.setupGestures(swipeActionsProvider);
       holder.setupContentLinkClicks(contentLinkClicks, contentLinkLongClicks);
+      holder.setupSelectionRelatedListeners();
       return holder;
     }
 
