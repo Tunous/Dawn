@@ -45,7 +45,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.7.1] - 2019-08-09
 ### Fixed
-- YouTube links not opening when YouTube application is not installed ([upstream#17](https://github.com/saket/Dawn/pull/17))
+- YouTube links not opening when YouTube application is not installed ([upstream#17](https://github.com/saket/Dank/pull/17))
 - Login not working when user has enabled 2FA ([#32](https://github.com/Tunous/Dawn/pull/32))
 - Login screen not closing when user declines reddit access ([#34](https://github.com/Tunous/Dawn/pull/34))
 
