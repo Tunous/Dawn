@@ -13,6 +13,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -114,8 +115,17 @@ public class WebViewActivity extends DankPullCollapsibleActivity {
         return true;
 
       case R.id.action_open_in_external_browser:
-        startActivity(Intents.createForOpeningUrl(webView.getUrl()));
-        finish();
+        try {
+          startActivity(Intents.createForOpeningUrl(webView.getUrl()));
+          finish();
+        } catch (Exception exception) {
+          /*
+            The catch uses a generic exception since there are many exceptions that can occur while
+            launching a Intent with Intent.ACTION_VIEW.
+            There can be ActivityNotFoundException, SecurityException etc
+           */
+          Toast.makeText(this, "Unable to find a browser :(", Toast.LENGTH_SHORT).show();
+        }
         return true;
 
       default:
