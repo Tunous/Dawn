@@ -29,7 +29,7 @@ android {
     applicationId "me.thanel.dank"
     minSdkVersion versions.minSdk
     targetSdkVersion versions.compileSdk
-    versionCode 17
+    versionCode 16
     versionName "0.9.0"
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
