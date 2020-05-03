@@ -44,7 +44,7 @@ class SelectionLimitingTextView : AppCompatTextView {
     if (deselect) {
       start = -1; end = -1
       Selection.removeSelection(this.text as Spannable)
-    } else if (modified) {
+    } else if (modified && start > -1 && end > -1) {
       Selection.setSelection(this.text as Spannable, start, end)
     }
     super.onSelectionChanged(start, end)
