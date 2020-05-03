@@ -1,8 +1,8 @@
 name: Release
 on:
   push:
-#    tags:
-#      - '[0-9]+.[0-9]+.[0-9]+'
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
 jobs:
   build:
     name: Build
@@ -97,8 +97,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: TEST #${{ github.ref }}
-          release_name: TEST #${{ github.ref }}
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
           draft: false
           prerelease: false
 
@@ -109,7 +109,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/app-release.apk
-          asset_name: Dawn_TEST.apk #${{ github.ref }}.apk
+          asset_name: Dawn_${{ github.ref }}.apk
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload Release Bundle
@@ -119,5 +119,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/app-release.aab
-          asset_name: Dawn_TEST.aab #${{ github.ref }}.apk
+          asset_name: Dawn_${{ github.ref }}.aab
           asset_content_type: application/octet-stream
