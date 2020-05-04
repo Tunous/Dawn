@@ -33,6 +33,7 @@ class SelectionLimitingTextView : AppCompatTextView {
         deselect = true
       }
     }
+
     if (end > -1 && limitEnd > -1) {
       if (end > limitEnd) {
         end = limitEnd
@@ -41,12 +42,18 @@ class SelectionLimitingTextView : AppCompatTextView {
         deselect = true
       }
     }
+
+    if (modified && (start < 0 || end < 0)) {
+      deselect = true
+    }
+
     if (deselect) {
       start = -1; end = -1
       Selection.removeSelection(this.text as Spannable)
     } else if (modified) {
       Selection.setSelection(this.text as Spannable, start, end)
     }
+
     super.onSelectionChanged(start, end)
   }
 }

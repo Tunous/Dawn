@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Handle exceptions while opening a browser ([#193](https://github.com/Tunous/Dawn/pull/193))
+- Crash when selecting submission title ([#194](https://github.com/Tunous/Dawn/pull/194))
 
 ## [0.9.0] - 2020-05-03
 ### Added
