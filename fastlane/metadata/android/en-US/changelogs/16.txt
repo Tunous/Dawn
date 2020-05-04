@@ -1,0 +1,15 @@
+Added
+
+- Large image previews
+- Inline text selection
+- Submission title selection
+- Selftext selection
+
+Changed
+- Renamed application to "Dawn"
+- Wrap comment byline when it is too long to fit in one line
+
+Fixed
+- Occasional crash when entering login screen
+- Crash when navigating to user profile
+- Image loading issues due to http urls
