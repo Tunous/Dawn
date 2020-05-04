@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+- Crash when selecting submission title ([#194](https://github.com/Tunous/Dawn/pull/194))
 
 ## [0.9.0] - 2020-05-03
 ### Added
