@@ -45,7 +45,7 @@ public class ChromeCustomTabsForwardingActivity extends DankActivity {
     try {
       customTabsIntent.launchUrl(this, Uri.parse(url));
     } catch (ActivityNotFoundException exception) {
-      Toast.makeText(this, R.string.common_error_no_app_found_to_handle_url, Toast.LENGTH_SHORT).show();
+      Toast.makeText(this, String.format(getString(R.string.common_error_no_app_found_to_handle_url), url), Toast.LENGTH_SHORT).show();
     }
 
     finish();
