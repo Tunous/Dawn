@@ -124,7 +124,7 @@ public class WebViewActivity extends DankPullCollapsibleActivity {
             launching a Intent with Intent.ACTION_VIEW.
             There can be ActivityNotFoundException, SecurityException etc
            */
-          Toast.makeText(this, "Unable to find a browser :(", Toast.LENGTH_SHORT).show();
+          Toast.makeText(this, R.string.common_error_no_app_found_to_handle_url, Toast.LENGTH_SHORT).show();
         }
         return true;
 
