@@ -91,6 +91,13 @@ jobs:
           name: Dawn Release Bundle
           path: artifacts
 
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v1.1.0
+        with:
+          version: ${{ github.ref }}
+          path: ./CHANGELOG.md
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -99,8 +106,13 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
+          body: ${{ steps.changelog_reader.outputs.log_entry }}
           draft: false
           prerelease: false
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
 
       - name: Upload Release Apk
         uses: actions/upload-release-asset@v1
@@ -109,7 +121,7 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/app-release.apk
-          asset_name: Dawn_${{ github.ref }}.apk
+          asset_name: Dawn_${{ steps.get_version.outputs.VERSION }}.apk
           asset_content_type: application/vnd.android.package-archive
 
       - name: Upload Release Bundle
@@ -119,5 +131,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./artifacts/app-release.aab
-          asset_name: Dawn_${{ github.ref }}.aab
+          asset_name: Dawn_${{ steps.get_version.outputs.VERSION }}.aab
           asset_content_type: application/octet-stream
