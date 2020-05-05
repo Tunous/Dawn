@@ -9,8 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+
+## [0.9.1] - 2020-05-05
+### Fixed
 - Handle exceptions while opening a browser ([#193](https://github.com/Tunous/Dawn/pull/193))
 - Crash when selecting submission title ([#194](https://github.com/Tunous/Dawn/pull/194))
+- Problem with API permissions ([#196](https://github.com/Tunous/Dawn/pull/196))
 
 ## [0.9.0] - 2020-05-03
 ### Added
@@ -86,7 +90,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [0.6.2] and earlier
 Changes before the fork has been made.
 
-[Unreleased]: https://github.com/Tunous/Dawn/compare/0.9.0...HEAD
+[Unreleased]: https://github.com/Tunous/Dawn/compare/0.9.1...HEAD
+[0.9.1]: https://github.com/Tunous/Dawn/compare/0.9.0...0.9.1
 [0.9.0]: https://github.com/Tunous/Dawn/compare/0.8.0...0.9.0
 [0.8.0]: https://github.com/Tunous/Dawn/compare/0.7.2...0.8.0
 [0.7.2]: https://github.com/Tunous/Dawn/compare/0.7.1...0.7.2
