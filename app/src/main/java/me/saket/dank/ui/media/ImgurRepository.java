@@ -162,12 +162,14 @@ public class ImgurRepository {
   private Consumer<Response> saveImgurApiRateLimits() {
     return response -> {
       Headers responseHeaders = response.headers();
-      saveApiRequestLimit(parseInt(responseHeaders.get("X-RateLimit-Requests-Limit")));
-      saveRemainingApiRequests(parseInt(responseHeaders.get("X-RateLimit-Requests-Remaining")));
-      saveApiUploadLimit(parseInt(responseHeaders.get("X-RateLimit-Uploads-Limit")));
-      saveRemainingApiUploads(parseInt(responseHeaders.get("X-RateLimit-Uploads-Remaining")));
+      try {
+        saveApiRequestLimit(parseInt(responseHeaders.get("X-RateLimit-Requests-Limit")));
+        saveRemainingApiRequests(parseInt(responseHeaders.get("X-RateLimit-Requests-Remaining")));
+        saveApiUploadLimit(parseInt(responseHeaders.get("X-RateLimit-Uploads-Limit")));
+        saveRemainingApiUploads(parseInt(responseHeaders.get("X-RateLimit-Uploads-Remaining")));
 
-      saveRateLimitsLastCheckedAt(responseHeaders.getDate("Date").getTime());
+        saveRateLimitsLastCheckedAt(responseHeaders.getDate("Date").getTime());
+      } catch (NumberFormatException ignored) {} // Do not save rate limits if they're not present
     };
   }
 
