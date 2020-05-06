@@ -31,10 +31,6 @@ public interface DankApi {
 
 // ======== IMGUR ======== //
 
-  /**
-   * Get images in an Imgur album. This is a paid API so we try to minimize its usage. The response
-   * is wrapped in {@link Response} so that the headers can be extracted for checking Imgur rate-limits.
-   */
   @CheckResult
   @GET("https://api.imgur.com/3/album/{albumId}")
   @Headers({ HEADER_IMGUR_AUTH })
