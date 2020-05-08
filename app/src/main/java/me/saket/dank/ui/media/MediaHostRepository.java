@@ -27,8 +27,6 @@ import me.saket.dank.cache.DiskLruCachePathResolver;
 import me.saket.dank.cache.StoreFilePersister;
 import me.saket.dank.data.CachedResolvedLinkInfo;
 import me.saket.dank.data.FileUploadProgressEvent;
-import me.saket.dank.data.exceptions.ImgurApiRequestRateLimitReachedException;
-import me.saket.dank.data.exceptions.ImgurApiUploadRateLimitReachedException;
 import me.saket.dank.ui.giphy.GiphyGif;
 import me.saket.dank.ui.giphy.GiphyRepository;
 import me.saket.dank.ui.media.gfycat.GfycatRepository;
@@ -154,9 +152,6 @@ public class MediaHostRepository {
         .subscribe();
   }
 
-  /**
-   * Remember to handle {@link ImgurApiRequestRateLimitReachedException}.
-   */
   public Observable<MediaLink> resolveActualLinkIfNeeded(MediaLink unresolvedLink) {
     return incorrectMediaUrlParsingData.get()
         .isFlagged(unresolvedLink)
@@ -215,9 +210,6 @@ public class MediaHostRepository {
     return imgurImageLinks;
   }
 
-  /**
-   * Remember to handle {@link ImgurApiUploadRateLimitReachedException}.
-   */
   @CheckResult
   public Observable<FileUploadProgressEvent<ImgurUploadResponse>> uploadImage(File image, String mimeType) {
     return imgurRepository.uploadImage(image, mimeType);

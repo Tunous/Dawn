@@ -75,7 +75,6 @@ import me.saket.dank.data.OnLoginRequireListener;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.data.StatusBarTint;
 import me.saket.dank.data.UserPreferences;
-import me.saket.dank.data.exceptions.ImgurApiRequestRateLimitReachedException;
 import me.saket.dank.di.Dank;
 import me.saket.dank.reply.Reply;
 import me.saket.dank.reply.ReplyRepository;
@@ -126,7 +125,6 @@ import me.saket.dank.ui.subreddit.SubredditActivity;
 import me.saket.dank.ui.subreddit.events.SubmissionOpenInNewTabSwipeEvent;
 import me.saket.dank.ui.subreddit.events.SubmissionOptionSwipeEvent;
 import me.saket.dank.ui.user.UserSessionRepository;
-import me.saket.dank.urlparser.ExternalLink;
 import me.saket.dank.urlparser.ImgurAlbumLink;
 import me.saket.dank.urlparser.Link;
 import me.saket.dank.urlparser.MediaLink;
@@ -1377,14 +1375,9 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
               })
               .observeOn(mainThread())
               .onErrorResumeNext(error -> {
-                // Open this album in browser if Imgur rate limits have reached.
-                if (error instanceof ImgurApiRequestRateLimitReachedException) {
-                  return Observable.just(ExternalLink.create(parsedLink.unparsedUrl()));
-                } else {
-                  uiEvents.accept(SubmissionContentResolvingFailed.create());
-                  showMediaLoadError(error);
-                  return Observable.never();
-                }
+                uiEvents.accept(SubmissionContentResolvingFailed.create());
+                showMediaLoadError(error);
+                return Observable.never();
               });
         })
         .flatMapSingle(link -> {

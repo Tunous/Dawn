@@ -47,10 +47,6 @@ public abstract class ResolvedError {
     return type() == Type.REDDIT_IS_DOWN;
   }
 
-  public boolean isImgurRateLimitError() {
-    return type() == Type.IMGUR_RATE_LIMIT_REACHED;
-  }
-
   public static ResolvedError create(Type type, @StringRes int errorEmoji, @StringRes int errorMessage) {
     return new AutoValue_ResolvedError(type, errorEmoji, errorMessage);
   }
