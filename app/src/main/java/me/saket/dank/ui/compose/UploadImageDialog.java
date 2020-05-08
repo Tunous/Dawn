@@ -236,13 +236,11 @@ public class UploadImageDialog extends DankDialogFragment {
         String emoji = getResources().getString(resolvedError.errorEmojiRes());
         String errorMessage = getResources().getString(resolvedError.errorMessageRes());
 
-        if (!resolvedError.isImgurRateLimitError()) {
-          String tapToRetryText = getResources().getString(R.string.composereply_uploadimage_tap_to_retry);
-          if (!errorMessage.endsWith(getResources().getString(R.string.composereply_uploadimage_error_message_period))) {
-            errorMessage += getResources().getString(R.string.composereply_uploadimage_error_message_period);
-          }
-          errorMessage += " " + tapToRetryText;
+        String tapToRetryText = getResources().getString(R.string.composereply_uploadimage_tap_to_retry);
+        if (!errorMessage.endsWith(getResources().getString(R.string.composereply_uploadimage_error_message_period))) {
+          errorMessage += getResources().getString(R.string.composereply_uploadimage_error_message_period);
         }
+        errorMessage += " " + tapToRetryText;
 
         errorView.setText(String.format("%s\n\n%s", emoji, errorMessage));
       }
