@@ -30,6 +30,7 @@
   <dimen name="subreddit_submission_padding">@dimen/spacing16</dimen>
   <dimen name="subreddit_submission_thumbnail_padding">@dimen/spacing24</dimen>
   <dimen name="subreddit_submission_thumbnail">52dp</dimen>
+  <dimen name="subreddit_submission_large_image">160dp</dimen>
 
   <dimen name="popup_menu_horizontal_offset_for_button">4dp</dimen>    <!-- Adjustments required to align with a button -->
   <dimen name="popup_menu_vertical_offset_for_button">6dp</dimen> <!-- that includes padding to make space for shadow. -->

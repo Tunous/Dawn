@@ -164,6 +164,7 @@ public interface SubredditSubmission {
     private UiModel uiModel;
     private final ConstraintSet originalConstraintSet = new ConstraintSet();
     private final ConstraintSet leftAlignedThumbnailConstraintSet = new ConstraintSet();
+    private final int largeImageHeight;
 
     protected ViewHolder(View itemView) {
       super(itemView);
@@ -180,6 +181,8 @@ public interface SubredditSubmission {
       int thumbnailGoneMargin = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.subreddit_submission_padding);
       leftAlignedThumbnailConstraintSet.setGoneMargin(R.id.submission_item_title, ConstraintSet.START, thumbnailGoneMargin);
       originalConstraintSet.setGoneMargin(R.id.submission_item_title, ConstraintSet.END, thumbnailGoneMargin);
+
+      largeImageHeight = itemView.getContext().getResources().getDimensionPixelSize(R.dimen.subreddit_submission_large_image);
     }
 
     public void setUiModel(UiModel uiModel) {
@@ -273,23 +276,33 @@ public interface SubredditSubmission {
               break;
             case THUMBNAIL:
               imageView.setVisibility(View.GONE);
-              Glide.with(itemView)
-                  .load(thumb.remoteUrl().get())
-                  .apply(RequestOptions.circleCropTransform())
-                  .transition(DrawableTransitionOptions.withCrossFade())
-                  .into(thumbnailView);
+              loadThumbnail(thumb, RequestOptions.circleCropTransform(), thumbnailView);
               break;
             case LARGE:
-              thumbnailView.setVisibility(View.GONE);
-              Glide.with(itemView)
-                  .load(thumb.remoteUrl().get())
-                  .apply(RequestOptions.centerCropTransform())
-                  .transition(DrawableTransitionOptions.withCrossFade())
-                  .into(imageView);
+              setLargeImage(thumb, largeImageHeight);
+              break;
+            case FULL_HEIGHT:
+              setLargeImage(thumb, ViewGroup.LayoutParams.WRAP_CONTENT);
               break;
           }
         }
       });
+    }
+
+    private void setLargeImage(UiModel.Thumbnail thumb, int height) {
+      ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+      layoutParams.height = height;
+      imageView.setLayoutParams(layoutParams);
+      thumbnailView.setVisibility(View.GONE);
+      loadThumbnail(thumb, RequestOptions.centerCropTransform(), imageView);
+    }
+
+    private void loadThumbnail(UiModel.Thumbnail thumb, RequestOptions requestOptions, ImageView imageView) {
+      Glide.with(itemView)
+          .load(thumb.remoteUrl().get())
+          .apply(requestOptions)
+          .transition(DrawableTransitionOptions.withCrossFade())
+          .into(imageView);
     }
 
     @Override

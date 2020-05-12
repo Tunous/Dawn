@@ -421,9 +421,9 @@ public class SubredditUiConstructor {
   }
 
   private int getPreferredWidthForThumbnail(Context c) {
-    if (subredditSubmissionImageStyle.get().equals(SubredditSubmissionImageStyle.LARGE)) {
-      return c.getResources().getDisplayMetrics().widthPixels;
+    if (subredditSubmissionImageStyle.get().equals(SubredditSubmissionImageStyle.THUMBNAIL)) {
+      return c.getResources().getDimensionPixelSize(R.dimen.subreddit_submission_thumbnail);
     }
-    return c.getResources().getDimensionPixelSize(R.dimen.subreddit_submission_thumbnail);
+    return c.getResources().getDisplayMetrics().widthPixels;
   }
 }

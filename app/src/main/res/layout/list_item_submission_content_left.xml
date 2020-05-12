@@ -10,8 +10,7 @@
   <me.saket.dank.ImageViewWithStackTraceName
     android:id="@+id/submission_item_image"
     android:layout_width="0dp"
-    android:layout_height="160dp"
-    android:layout_marginTop="@dimen/spacing16"
+    android:layout_height="@dimen/subreddit_submission_large_image"
     android:foreground="@drawable/touchindicator_submission_image"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +23,7 @@
     android:id="@+id/submission_item_separator"
     style="@style/DankSeparator.VerticalContent"
     android:layout_width="0dp"
-    app:layout_constraintBottom_toTopOf="@+id/submission_item_image"
+    app:layout_constraintBottom_toBottomOf="parent"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent" />
 
