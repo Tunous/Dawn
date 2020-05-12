@@ -383,7 +383,7 @@ public class SubmissionContentLinkUiConstructor {
         .flatMap(hasRedditSuppliedImages -> {
           if (hasRedditSuppliedImages) {
             int thumbnailWidth = SubmissionCommentsHeader.getWidthForAlbumContentLinkThumbnail(context);
-            return Observable.just(redditSuppliedThumbnails.findNearestFor(thumbnailWidth));
+            return Observable.just(redditSuppliedThumbnails.findNearestUrlFor(thumbnailWidth));
           } else {
             return fallbackThumbnailUrlStream
                 .flatMap(optionalUrl -> optionalUrl.isPresent() ? Observable.just(optionalUrl.get()) : Observable.empty());

@@ -1366,7 +1366,7 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
                 if (resolvedLink instanceof ImgurAlbumLink) {
                   ImageWithMultipleVariants redditSuppliedImages = ImageWithMultipleVariants.Companion.of(submission.getPreview());
                   int albumContentLinkThumbnailWidth = SubmissionCommentsHeader.getWidthForAlbumContentLinkThumbnail(getContext());
-                  String albumCoverImageUrl = redditSuppliedImages.findNearestFor(
+                  String albumCoverImageUrl = redditSuppliedImages.findNearestUrlFor(
                       albumContentLinkThumbnailWidth,
                       ((ImgurAlbumLink) resolvedLink).coverImageUrl()
                   );

@@ -397,18 +397,20 @@ public class SubredditUiConstructor {
   }
 
   private SubredditSubmission.UiModel.Thumbnail.Builder thumbnailForStaticImage(Context c) {
-    //noinspection ConstantConditions
     return SubredditSubmission.UiModel.Thumbnail.builder()
         .remoteUrl(Optional.empty())
         .scaleType(ImageView.ScaleType.CENTER_INSIDE)
         .tintColor(Optional.of(ContextCompat.getColor(c, R.color.gray_100)))
-        .backgroundRes(Optional.of(R.drawable.background_submission_self_thumbnail));
+        .backgroundRes(Optional.of(R.drawable.background_submission_self_thumbnail))
+        .height(Optional.empty());
   }
 
   private SubredditSubmission.UiModel.Thumbnail thumbnailForRemoteImage(Context c, SubmissionPreview preview) {
     ImageWithMultipleVariants redditThumbnails = ImageWithMultipleVariants.Companion.of(preview);
     int preferredWidth = getPreferredWidthForThumbnail(c);
-    String optimizedThumbnailUrl = redditThumbnails.findNearestFor(preferredWidth);
+    SubmissionPreview.Variation optimizedThumbnail = redditThumbnails.findNearestFor(preferredWidth);
+    String optimizedThumbnailUrl = Html.fromHtml(optimizedThumbnail.getUrl()).toString();
+    int thumbnailFullHeight = getFullHeightForThumbnail(preferredWidth, optimizedThumbnail);
 
     return SubredditSubmission.UiModel.Thumbnail.builder()
         .staticRes(Optional.empty())
@@ -417,7 +419,15 @@ public class SubredditUiConstructor {
         .scaleType(ImageView.ScaleType.CENTER_CROP)
         .tintColor(Optional.empty())
         .backgroundRes(Optional.empty())
+        .height(Optional.of(thumbnailFullHeight))
         .build();
+  }
+
+  private int getFullHeightForThumbnail(int preferredWidth, SubmissionPreview.Variation optimizedThumbnail) {
+    int widthDifference = preferredWidth - optimizedThumbnail.getWidth();
+    float aspectRatio = optimizedThumbnail.getWidth() / ((float) optimizedThumbnail.getHeight());
+    int heightDifference = aspectRatio != 0 ? Math.round(widthDifference / aspectRatio) : 0;
+    return optimizedThumbnail.getHeight() + heightDifference;
   }
 
   private int getPreferredWidthForThumbnail(Context c) {

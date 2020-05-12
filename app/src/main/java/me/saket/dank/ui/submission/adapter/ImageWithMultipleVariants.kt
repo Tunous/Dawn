@@ -34,8 +34,9 @@ class ImageWithMultipleVariants private constructor(private val optionalRedditPr
     for (variation in redditPreviews.resolutions) {
       val differenceAbs = abs(preferredWidth - variation.width)
       if (differenceAbs < abs(closestDifference)
-          // If another image is found with the same difference, choose the higher-res image.
-          || differenceAbs == closestDifference && variation.width > closestImage.width) {
+        // If another image is found with the same difference, choose the higher-res image.
+        || differenceAbs == closestDifference && variation.width > closestImage.width
+      ) {
         closestDifference = preferredWidth - variation.width
         closestImage = variation
       }

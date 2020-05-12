@@ -248,7 +248,7 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
             optimizedQualityUrl = activeMediaItem.mediaLink().lowQualityUrl();
           } else {
             ImageWithMultipleVariants imageVariants = ImageWithMultipleVariants.Companion.of(redditSuppliedImages);
-            optimizedQualityUrl = imageVariants.findNearestFor(
+            optimizedQualityUrl = imageVariants.findNearestUrlFor(
                 getResources().getDisplayMetrics().widthPixels,
                 ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
                 activeMediaItem.mediaLink().lowQualityUrl() /* defaultValue */

@@ -228,7 +228,7 @@ public class CachePreFiller {
           Single<Drawable> firstImageLoad = submissionImageLoader.get().load(appContext, firstImage, imageLoadOptions);
 
           ImageWithMultipleVariants redditSuppliedImages = ImageWithMultipleVariants.Companion.of(submission.getPreview());
-          String optimizedCoverImageUrl = redditSuppliedImages.findNearestFor(submissionAlbumLinkThumbnailWidth, albumLink.coverImageUrl());
+          String optimizedCoverImageUrl = redditSuppliedImages.findNearestUrlFor(submissionAlbumLinkThumbnailWidth, albumLink.coverImageUrl());
           Single<Drawable> coverImageLoad = submissionImageLoader.get().loadImage(appContext, optimizedCoverImageUrl, imageLoadOptions);
 
           return coverImageLoad
@@ -268,7 +268,7 @@ public class CachePreFiller {
           if (linkMetadata.hasImage() && !UrlParser.isGifUrl(linkMetadata.getImageUrl())) {
             ImageWithMultipleVariants redditSuppliedImages = ImageWithMultipleVariants.Companion.of(submission.getPreview());
             //noinspection ConstantConditions
-            String thumbnailImageUrl = redditSuppliedImages.findNearestFor(submissionAlbumLinkThumbnailWidth, linkMetadata.getImageUrl());
+            String thumbnailImageUrl = redditSuppliedImages.findNearestUrlFor(submissionAlbumLinkThumbnailWidth, linkMetadata.getImageUrl());
             imagesToDownload.add(thumbnailImageUrl);
           }
           return imagesToDownload;

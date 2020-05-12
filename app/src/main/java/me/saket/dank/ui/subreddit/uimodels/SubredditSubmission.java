@@ -132,6 +132,8 @@ public interface SubredditSubmission {
 
       public abstract String contentDescription();
 
+      public abstract Optional<Integer> height();
+
       public static Builder builder() {
         return new AutoValue_SubredditSubmission_UiModel_Thumbnail.Builder();
       }
@@ -149,6 +151,8 @@ public interface SubredditSubmission {
         public abstract Builder tintColor(Optional<Integer> tintColor);
 
         public abstract Builder contentDescription(String description);
+
+        public abstract Builder height(Optional<Integer> height);
 
         public abstract Thumbnail build();
       }
@@ -282,7 +286,7 @@ public interface SubredditSubmission {
               setLargeImage(thumb, largeImageHeight);
               break;
             case FULL_HEIGHT:
-              setLargeImage(thumb, ViewGroup.LayoutParams.WRAP_CONTENT);
+              setLargeImage(thumb, thumb.height().orElse(ViewGroup.LayoutParams.WRAP_CONTENT));
               break;
           }
         }
