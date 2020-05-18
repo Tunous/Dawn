@@ -1,5 +1,6 @@
 package me.saket.dank.utils;
 
+import android.net.Uri;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.util.Util;
 
@@ -22,7 +23,8 @@ public enum VideoFormat {
   }
 
   public static VideoFormat parse(String videoUrl) {
-    @C.ContentType int type = Util.inferContentType(videoUrl);
+    String cleanUrl = Uri.parse(videoUrl).buildUpon().clearQuery().toString();
+    @C.ContentType int type = Util.inferContentType(cleanUrl);
 
     switch (type) {
       case C.TYPE_DASH:

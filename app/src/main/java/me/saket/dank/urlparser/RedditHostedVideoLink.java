@@ -6,6 +6,7 @@ import com.google.auto.value.AutoValue;
 
 import me.saket.dank.BuildConfig;
 import me.saket.dank.utils.VideoFormat;
+import timber.log.Timber;
 
 /**
  * Reddit uses DASH for its videos, which automatically switches between video qualities
