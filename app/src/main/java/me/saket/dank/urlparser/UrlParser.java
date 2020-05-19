@@ -46,7 +46,7 @@ public class UrlParser {
   public UrlParser(@Named("url_parser") Cache<String, Link> cache, UrlParserConfig config) {
     this.cache = cache;
     this.config = config;
-    this.imgurPreviewPat = Pattern.compile("_d\\.");
+    this.imgurPreviewPat = Pattern.compile("_d(\\.\\w+)$");
   }
 
   /**
@@ -272,7 +272,7 @@ public class UrlParser {
         // Strip any preview-related suffixes and queries
         imageUrl = imageUrl.newBuilder()
             .encodedQuery(null)
-            .encodedPath(imgurPreviewPat.matcher(imageUrlPath).replaceFirst("."))
+            .encodedPath(imgurPreviewPat.matcher(imageUrlPath).replaceFirst("$1"))
             .build();
       } else {
         // Attempt to get direct links to images from Imgur submissions.
