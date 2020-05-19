@@ -1,6 +1,6 @@
 package me.saket.dank.utils;
 
-import android.net.Uri;
+import okhttp3.HttpUrl;
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.util.Util;
 
@@ -22,9 +22,10 @@ public enum VideoFormat {
     return this == OTHER;
   }
 
+  @SuppressWarnings("ConstantConditions")
   public static VideoFormat parse(String videoUrl) {
-    String cleanUrl = Uri.parse(videoUrl).buildUpon().clearQuery().toString();
-    @C.ContentType int type = Util.inferContentType(cleanUrl);
+    String fileName = HttpUrl.parse(videoUrl).encodedPath();
+    @C.ContentType int type = Util.inferContentType(fileName);
 
     switch (type) {
       case C.TYPE_DASH:
