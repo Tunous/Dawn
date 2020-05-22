@@ -298,7 +298,6 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
 
   private void resolveMediaLinkAndDisplayContent(MediaLink mediaLinkToDisplay) {
     mediaHostRepository.resolveActualLinkIfNeeded(mediaLinkToDisplay)
-        // TODO: Handle Imgur rate limit reached.
         .doOnNext(resolvedMediaLink -> this.resolvedMediaLink = resolvedMediaLink)
         .map(resolvedMediaLink -> {
           // Find all child images under an album.

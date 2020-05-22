@@ -24,6 +24,8 @@ buildscript {
       androidTest     : '1.0.2',
       kotlin          : '1.3.61',
       room            : '1.1.0',
+      jsoup           : '1.12.1',
+      rxjava          : '2.2.16',
   ]
 
   repositories {
@@ -46,8 +48,8 @@ allprojects {
 }
 
 tasks.wrapper {
-  gradleVersion = "5.6.3"
   distributionType = DistributionType.ALL
+  distributionSha256Sum = "d08f7e24d061910382c2fda9915e6ed42dd1480ae2e99211f92c70190cb697e0"
 }
 
 task clean(type: Delete) {

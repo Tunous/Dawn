@@ -32,7 +32,7 @@
     <!--android:textSize="@dimen/textsize12" />-->
 
     <!-- TODO: Merge these three TextViews and use spans instead -->
-    <TextView
+    <me.saket.dank.widgets.SelectionLimitingTextView
       android:id="@+id/submission_title"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
       android:lineSpacingExtra="@dimen/spacing2"
       android:textColor="@color/text_light"
       android:textSize="@dimen/textsize16"
-      tools:ignore="SelectableText"
+      android:textIsSelectable="false"
       tools:text="I did a thing in Photoshop, and am fairly proud of it." />
 
     <TextView
@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:focusable="false"
         android:textColor="@color/white_opacity_75"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="false" />
     </FrameLayout>
 
     <include

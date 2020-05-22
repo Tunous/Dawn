@@ -21,15 +21,14 @@
       android:id="@+id/item_comment_byline"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginBottom="@dimen/spacing4"
-      android:layout_marginEnd="@dimen/submission_comment_horiz_padding"
       android:layout_marginStart="@dimen/submission_comment_horiz_padding"
+      android:layout_marginEnd="@dimen/submission_comment_horiz_padding"
+      android:layout_marginBottom="@dimen/spacing4"
       android:ellipsize="end"
-      android:maxLines="1"
       android:textColor="@color/submission_comment_byline_default_color"
       android:textIsSelectable="false"
       android:textSize="@dimen/textsize12"
-      tools:text="nuckingfuts73 \u00b7 516 \u00b7 2 hr. ago" />
+      tools:text="nuckingfuts73 \u00b7 516 points \u00b7 i5 4690 + GTX 1060 / rip Athlon II (stolen) \u00b7 2 hr. ago" />
 
     <me.saket.dank.utils.markdown.markwon.MarkdownTextView
       android:id="@+id/item_comment_body"

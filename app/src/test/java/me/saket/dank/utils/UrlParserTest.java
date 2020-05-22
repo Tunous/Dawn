@@ -44,7 +44,7 @@ import me.saket.dank.urlparser.UrlParser;
 import me.saket.dank.urlparser.UrlParserConfig;
 
 import static com.google.common.truth.Truth.assertThat;
-import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.*;
 import static org.mockito.AdditionalMatchers.or;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Matchers.any;
@@ -373,7 +373,7 @@ public class UrlParserTest {
     for (String url : IMGUR_ALBUM_URLS) {
       try {
         Link parsedLink = urlParser.parse(url);
-        assertEquals(parsedLink instanceof ImgurAlbumUnresolvedLink, true);
+        assertTrue(parsedLink instanceof ImgurAlbumUnresolvedLink);
 
       } catch (Exception e) {
         throw new IllegalStateException("Exception for url: " + url, e);
@@ -381,7 +381,7 @@ public class UrlParserTest {
     }
 
     Link link = urlParser.parse("http://i.imgur.com/0Jp0l2R.jpg");
-    assertEquals(false, link instanceof ImgurAlbumUnresolvedLink);
+    assertFalse(link instanceof ImgurAlbumUnresolvedLink);
   }
 
   @Test
@@ -410,6 +410,20 @@ public class UrlParserTest {
     // Glide will eventually load a GIF though.
     Link parsedGifLinkWithoutExtension = urlParser.parse("https://imgur.com/a/qU24g");
     assertThat(parsedGifLinkWithoutExtension).isInstanceOf(ImgurAlbumUnresolvedLink.class);
+
+    // Preview urls should be transformed into fullsize urls
+    String[] previewUrls = {
+        "http://i.imgur.com/BU5XFMg_d.webp?maxwidth=640&shape=thumb&fidelity=medium",
+        "https://i.imgur.com/BU5XFMg.webp?maxwidth=640&shape=thumb&fidelity=medium",
+        "https://i.imgur.com/BU5XFMg_d.webp",
+        "https://i.imgur.com/BU5XFMg.webp",
+    };
+
+    for (String url : previewUrls) {
+      Link link = urlParser.parse(url);
+      assertTrue(link instanceof ImgurLink);
+      assertEquals(((ImgurLink) link).highQualityUrl(), "https://i.imgur.com/BU5XFMg.webp");
+    }
   }
 
   @Test

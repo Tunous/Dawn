@@ -631,13 +631,9 @@ public class SubmissionCommentTreeUiConstructor {
       ));
       bylineBuilder.append(author);
       bylineBuilder.popSpan();
-      optionalAuthorFlairText.ifPresent(flair -> {
-        bylineBuilder.append(context.getString(R.string.submission_comment_byline_item_separator));
-        bylineBuilder.append(markdown.get().parseAuthorFlair(flair));
-      });
+
       bylineBuilder.append(context.getString(R.string.submission_comment_byline_item_separator));
       bylineBuilder.pushSpan(new ForegroundColorSpan(color(context, Themes.voteColor(voteDirection))));
-
       String scoreText = optionalCommentScore
           .map(score -> context.getResources().getQuantityString(
               R.plurals.submission_comment_byline_item_score,
@@ -645,8 +641,13 @@ public class SubmissionCommentTreeUiConstructor {
               Strings.abbreviateScore(score)))
           .orElse(context.getString(R.string.submission_comment_byline_score_hidden));
       bylineBuilder.append(scoreText);
-
       bylineBuilder.popSpan();
+
+      optionalAuthorFlairText.ifPresent(flair -> {
+        bylineBuilder.append(context.getString(R.string.submission_comment_byline_item_separator));
+        bylineBuilder.append(markdown.get().parseAuthorFlair(flair));
+      });
+
       bylineBuilder.append(context.getString(R.string.submission_comment_byline_item_separator));
       bylineBuilder.append(Dates.createTimestamp(context.getResources(), createdTimeMillis));
     }

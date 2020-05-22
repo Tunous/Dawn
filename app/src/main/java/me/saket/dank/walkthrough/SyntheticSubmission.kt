@@ -127,9 +127,14 @@ class SyntheticSubmission(
 }
 
 class SyntheticComment(
-    override val body: String,
-    private val parent: Submission,
-    private val replies: List<Comment> = listOf()
+  override val body: String,
+  private val parent: Submission,
+  private val replies: List<Comment> = listOf(),
+  override val author: String = "Dawn",
+  override val isScoreHidden: Boolean = false,
+  override val score: Int = 1,
+  override val created: Date = Date(System.currentTimeMillis()),
+  private val authorFlair: String? = null
 ) : Comment() {
 
   override fun getUrl(): String? = null
@@ -142,13 +147,11 @@ class SyntheticComment(
 
   override fun getControversiality(): Int = 0
 
-  override fun getAuthorFlairText(): String? = null
+  override fun getAuthorFlairText(): String? = authorFlair
 
   override fun getReplies(): Listing<NestedIdentifiable> = Listing.create(null, replies)
 
   override fun getSubmissionFullName(): String = parent.fullName
-
-  override val author: String = "Dawn"
 
   override val edited: Date? = null
 
@@ -156,15 +159,11 @@ class SyntheticComment(
 
   override val isSaved: Boolean = false
 
-  override val isScoreHidden: Boolean = false
-
   override val isStickied: Boolean = false
 
   override val subreddit: String = "GetDank"
 
   override val subredditFullName: String = "t5_3kfea"
-
-  override val created: Date = Date(System.currentTimeMillis())
 
   override val distinguished: DistinguishedStatus = DistinguishedStatus.NORMAL
 
@@ -175,8 +174,6 @@ class SyntheticComment(
   override val id: String = "${body.hashCode()}"
 
   override val fullName: String = "t1_$id"
-
-  override val score: Int = 1
 
   override val vote: VoteDirection = VoteDirection.NONE
 

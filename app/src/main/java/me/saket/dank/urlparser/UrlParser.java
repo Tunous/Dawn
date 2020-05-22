@@ -9,8 +9,10 @@ import com.nytimes.android.external.cache3.Cache;
 
 import net.dean.jraw.models.Submission;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -22,6 +24,7 @@ import me.saket.dank.utils.JrawUtils2;
 import me.saket.dank.utils.Optional;
 import me.saket.dank.utils.Urls;
 import okhttp3.HttpUrl;
+import timber.log.Timber;
 
 /**
  * Parses URLs found in the wilderness of Reddit and categorizes them into {@link Link} subclasses.
@@ -37,11 +40,13 @@ public class UrlParser {
 
   private final Cache<String, Link> cache;
   private final UrlParserConfig config;
+  private final Pattern imgurPreviewPat;
 
   @Inject
   public UrlParser(@Named("url_parser") Cache<String, Link> cache, UrlParserConfig config) {
     this.cache = cache;
     this.config = config;
+    this.imgurPreviewPat = Pattern.compile("_d(\\.\\w+)$");
   }
 
   /**
@@ -158,11 +163,19 @@ public class UrlParser {
     return parsedLink;
   }
 
+  private String rewriteAsHttps(String link) {
+    Uri uri = Uri.parse(link);
+    if (Objects.equals(uri.getScheme(), "http")) {
+      return uri.buildUpon().scheme("https").build().toString();
+    }
+    return link;
+  }
+
   private Link parseNonRedditUrl(String url) {
     Uri linkURI = Uri.parse(url);
 
-    String urlDomain = linkURI.getHost() != null ? linkURI.getHost() : "";
-    String urlPath = linkURI.getPath() != null ? linkURI.getPath() : "";
+    final String urlDomain = linkURI.getHost() != null ? linkURI.getHost() : "";
+    final String urlPath = linkURI.getPath() != null ? linkURI.getPath() : "";
 
     if ((urlDomain.contains("imgur.com") || urlDomain.contains("bildgur.de"))) {
       if (isUnsupportedImgurLink(urlPath)) {
@@ -195,11 +208,21 @@ public class UrlParser {
     } else if (urlDomain.contains("reddituploads.com") || urlDomain.contains("redditmedia.com")) {
       // Reddit sends HTML-escaped URLs for reddituploads.com. Decode them again.
       //noinspection deprecation
-      String htmlUnescapedUrl = org.jsoup.parser.Parser.unescapeEntities(url, true);
+      String htmlUnescapedUrl = rewriteAsHttps(org.jsoup.parser.Parser.unescapeEntities(url, true));
       return GenericMediaLink.create(htmlUnescapedUrl, Link.Type.SINGLE_IMAGE);
 
+    } else if (urlDomain.endsWith("redd.it")) {
+      // force https for *redd.it links to avoid problems with networkSecurityConfig
+      String httpsUrl = rewriteAsHttps(url);
+      return GenericMediaLink.create(httpsUrl, getMediaUrlType(urlPath));
+
     } else if (isImageOrGifUrlPath(urlPath) || isVideoPath(urlPath)) {
-      return GenericMediaLink.create(url, getMediaUrlType(urlPath));
+      if (Objects.equals(linkURI.getScheme(), "https")) {
+        return GenericMediaLink.create(url, getMediaUrlType(urlPath));
+      } else {
+        // show non-https media in WebView
+        return ExternalLink.create(url);
+      }
 
     } else {
       return ExternalLink.create(url);
@@ -242,13 +265,23 @@ public class UrlParser {
         .scheme("https")
         .build();
 
-    // Attempt to get direct links to images from Imgur submissions.
-    // For example, convert 'http://imgur.com/djP1IZC' to 'http://i.imgur.com/djP1IZC.jpg'.
-    if (!isImageOrGifUrlPath(url) && !url.endsWith("mp4")) {
-      // If this happened to be a GIF submission, the user sadly will be forced to see it instead of its GIFV.
-      imageUrl = imageUrl.newBuilder(imageUrl.encodedPath() + ".jpg")
-          .host("i.imgur.com")
-          .build();
+    String imageUrlPath = imageUrl.encodedPath();
+
+    if (!url.endsWith("mp4")) {
+      if (isImageOrGifUrlPath(imageUrlPath)) {
+        // Strip any preview-related suffixes and queries
+        imageUrl = imageUrl.newBuilder()
+            .encodedQuery(null)
+            .encodedPath(imgurPreviewPat.matcher(imageUrlPath).replaceFirst("$1"))
+            .build();
+      } else {
+        // Attempt to get direct links to images from Imgur submissions.
+        // For example, convert 'http://imgur.com/djP1IZC' to 'http://i.imgur.com/djP1IZC.jpg'.
+        // If this happened to be a GIF submission, the user sadly will be forced to see it instead of its GIFV.
+        imageUrl = imageUrl.newBuilder(imageUrlPath + ".jpg")
+            .host("i.imgur.com")
+            .build();
+      }
     }
 
     //noinspection ConstantConditions
@@ -341,7 +374,8 @@ public class UrlParser {
   }
 
   public static boolean isImagePath(String urlPath) {
-    return urlPath.endsWith(".png") || urlPath.endsWith(".jpg") || urlPath.endsWith(".jpeg");
+    return urlPath.endsWith(".png") || urlPath.endsWith(".jpg") ||
+        urlPath.endsWith(".jpeg") || urlPath.endsWith(".webp");
   }
 
   private static boolean isImageOrGifUrlPath(String urlPath) {
