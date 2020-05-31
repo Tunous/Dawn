@@ -612,8 +612,9 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
           Boolean isUserMod = trio.third();
           Identifiable parentContribution = trio.first().parentContribution();
           boolean isSubmissionReply = parentContribution instanceof Submission;
-
-          if (submissionData.getSubmission().isArchived()) {
+          if (!userSessionRepository.get().isUserLoggedIn()) {
+            onLoginRequireListener.get().onLoginRequired();
+          } else if (submissionData.getSubmission().isArchived()) {
             if (isSubmissionReply) {
               Pair<Intent, ActivityOptions> archivedIntent = ArchivedSubmissionDialogActivity.intentWithFabTransform(
                   ((Activity) getContext()),
