@@ -100,6 +100,7 @@ public interface DankApi {
 
   @CheckResult
   @GET("https://api.gfycat.com/v1/oauth/token?grant_type=client_credentials")
+  @Headers({"Accept: application/json,text/html"}) // fails with 400 if text/html is not present
   Single<GfycatOauthResponse> gfycatOAuth(
       @Query("client_id") String clientId,
       @Query("client_secret") String clientSecret
