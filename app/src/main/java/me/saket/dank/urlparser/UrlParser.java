@@ -341,9 +341,9 @@ public class UrlParser {
     Matcher giphyIdMatcher = config.giphyIdPattern().matcher(urlPath);
     if (giphyIdMatcher.matches()) {
       String videoId = giphyIdMatcher.group(1);
-      String gifVideoUrl = giphyURI.getScheme() + "://i.giphy.com/" + videoId + ".mp4";
 
-      HttpUrl giphyUrl = httpUrl.newBuilder(urlPath + ".mp4")
+      HttpUrl giphyUrl = new HttpUrl.Builder()
+          .addPathSegment(videoId + ".mp4")
           .scheme("https")
           .host("i.giphy.com")
           .build();
