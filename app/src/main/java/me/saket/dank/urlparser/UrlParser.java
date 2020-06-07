@@ -197,6 +197,9 @@ public class UrlParser {
     } else if (urlDomain.contains("gfycat.com")) {
       return createGfycatLink(linkURI);
 
+    } else if (urlDomain.contains("redgifs.com")) {
+      return createRedgifsLink(linkURI);
+
     } else if (urlDomain.contains("giphy.com")) {
       return createGiphyLink(linkURI);
 
@@ -327,6 +330,12 @@ public class UrlParser {
       // Fallback.
       return ExternalLink.create(gfycatURI.toString());
     }
+  }
+
+  private Link createRedgifsLink(Uri redgifsURI) {
+    // Redgifs stores different gifs on different subdomains (unlike giant.gfycat.com)
+    // so three capital letters hack is useless here
+    return RedgifsUnresolvedLink.create(redgifsURI.toString(), redgifsURI.getLastPathSegment());
   }
 
   @SuppressWarnings("ConstantConditions")
