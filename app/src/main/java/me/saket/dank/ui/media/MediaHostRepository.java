@@ -178,12 +178,12 @@ public class MediaHostRepository {
 
     } else if (unresolvedLink instanceof GfycatUnresolvedLink) {
       return gfycatRepository.get()
-          .gif_gfycat(((GfycatUnresolvedLink) unresolvedLink).threeWordId())
+          .gif_gfycat_or_redgifs(((GfycatUnresolvedLink) unresolvedLink).threeWordId())
           .cast(MediaLink.class);
 
     } else if (unresolvedLink instanceof GfycatLink) {
       return gfycatRepository.get()
-          .gif_gfycat(((GfycatLink) unresolvedLink).threeWordId())
+          .gif_gfycat_or_redgifs(((GfycatLink) unresolvedLink).threeWordId())
           .cast(MediaLink.class);
 
     } else if (unresolvedLink instanceof RedgifsUnresolvedLink) {

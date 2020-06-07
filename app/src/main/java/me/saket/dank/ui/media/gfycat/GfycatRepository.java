@@ -31,6 +31,18 @@ public class GfycatRepository {
     this.data = data;
   }
 
+  public Single<GfycatLink> gif_gfycat_or_redgifs(String threeWordId) {
+    return gif_gfycat(threeWordId)
+        .onErrorResumeNext(error -> {
+          if (error instanceof HttpException && ((HttpException) error).code() == 404) {
+            // try to resolve with redgifs api in case this is a gfycat-to-redgifs redirect link
+            return gif_redgifs(threeWordId);
+          } else {
+            return Single.error(error);
+          }
+        });
+  }
+
   public Single<GfycatLink> gif_gfycat(String threeWordId) {
     return gif(DankApi.GFYCAT_API_DOMAIN, threeWordId);
   }
