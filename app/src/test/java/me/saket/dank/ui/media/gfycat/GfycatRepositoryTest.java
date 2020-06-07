@@ -56,7 +56,7 @@ public class GfycatRepositoryTest {
     GfycatResponse response = GfycatResponse.create(GFYCAT_RESPONSE);
     when(dankApi.gfycat_no_auth(DankApi.GFYCAT_API_DOMAIN, UNRESOLVED_ID)).thenReturn(Single.just(response));
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gif_gfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()
@@ -73,7 +73,7 @@ public class GfycatRepositoryTest {
     GfycatResponse response = GfycatResponse.create(GFYCAT_RESPONSE);
     when(dankApi.gfycat_with_auth(DankApi.GFYCAT_API_DOMAIN, AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gif_gfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()
@@ -94,7 +94,7 @@ public class GfycatRepositoryTest {
     when(dankApi.gfycatOAuth(anyString(), anyString())).thenReturn(Single.just(oAuthResponse));
     when(data.saveOAuthResponse(oAuthResponse)).thenReturn(Completable.complete());
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gif_gfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()
@@ -128,7 +128,7 @@ public class GfycatRepositoryTest {
     when(dankApi.gfycat_with_auth(DankApi.GFYCAT_API_DOMAIN, AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
     when(data.accessToken()).thenReturn(Single.just(AUTH_TOKEN));
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gif_gfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()

@@ -31,11 +31,20 @@ public class GfycatRepository {
     this.data = data;
   }
 
-  public Single<GfycatLink> gif(String threeWordId) {
+  public Single<GfycatLink> gif_gfycat(String threeWordId) {
+    return gif(DankApi.GFYCAT_API_DOMAIN, threeWordId);
+  }
+
+  // Gfycat and Redgifs is, essentially, the same platform and share same api
+  public Single<GfycatLink> gif_redgifs(String threeWordId) {
+    return gif(DankApi.REDGIFS_API_DOMAIN, threeWordId);
+  }
+
+  public Single<GfycatLink> gif(String domain, String threeWordId) {
     return Single.fromCallable(() -> data.get().isAccessTokenRequired())
         .flatMap(headerRequired -> headerRequired
-            ? authToken().flatMap(authHeader -> dankApi.get().gfycat_with_auth(DankApi.GFYCAT_API_DOMAIN, authHeader, threeWordId))
-            : dankApi.get().gfycat_no_auth(DankApi.GFYCAT_API_DOMAIN, threeWordId))
+            ? authToken().flatMap(authHeader -> dankApi.get().gfycat_with_auth(domain, authHeader, threeWordId))
+            : dankApi.get().gfycat_no_auth(domain, threeWordId))
         .retry(error -> {
           // At the time of writing this, Gfycat allows API calls without auth headers.
           // I'm going to wing it to reduce API calls until Gfycat finds out and makes
