@@ -28,6 +28,8 @@ public interface DankApi {
   String HEADER_WHOLESOME_API_AUTH = "Authorization";
   String WHOLESOME_API_HOST = "dank-wholesome.herokuapp.com";
   String GIPHY_API_KEY = "SFGHZ6SYGn3AzZ07b2tNpENCEDdYTzpB";
+  String GFYCAT_API_DOMAIN = "api.gfycat.com";
+  String REDGIFS_API_DOMAIN = "api.redgifs.com";
 
 // ======== IMGUR ======== //
 
@@ -96,7 +98,7 @@ public interface DankApi {
       @Query("offset") int paginationOffset
   );
 
-// ======== GFYCAT ======== //
+// ======== GFYCAT / REDGIFS ======== //
 
   @CheckResult
   @GET("https://api.gfycat.com/v1/oauth/token?grant_type=client_credentials")
@@ -106,13 +108,15 @@ public interface DankApi {
       @Query("client_secret") String clientSecret
   );
 
-  @GET("https://api.gfycat.com/v1/gfycats/{gfyid}")
-  Single<GfycatResponse> gfycat(
+  @GET("https://{domain}/v1/gfycats/{gfyid}")
+  Single<GfycatResponse> gfycat_no_auth(
+      @Path("domain") String domain,
       @Path("gfyid") String threeWordId
   );
 
-  @GET("https://api.gfycat.com/v1/gfycats/{gfyid}")
-  Single<GfycatResponse> gfycat(
+  @GET("https://{domain}/v1/gfycats/{gfyid}")
+  Single<GfycatResponse> gfycat_with_auth(
+      @Path("domain") String domain,
       @Header("Authorization") String authHeader,
       @Path("gfyid") String threeWordId
   );

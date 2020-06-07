@@ -34,8 +34,8 @@ public class GfycatRepository {
   public Single<GfycatLink> gif(String threeWordId) {
     return Single.fromCallable(() -> data.get().isAccessTokenRequired())
         .flatMap(headerRequired -> headerRequired
-            ? authToken().flatMap(authHeader -> dankApi.get().gfycat(authHeader, threeWordId))
-            : dankApi.get().gfycat(threeWordId))
+            ? authToken().flatMap(authHeader -> dankApi.get().gfycat_with_auth(DankApi.GFYCAT_API_DOMAIN, authHeader, threeWordId))
+            : dankApi.get().gfycat_no_auth(DankApi.GFYCAT_API_DOMAIN, threeWordId))
         .retry(error -> {
           // At the time of writing this, Gfycat allows API calls without auth headers.
           // I'm going to wing it to reduce API calls until Gfycat finds out and makes
