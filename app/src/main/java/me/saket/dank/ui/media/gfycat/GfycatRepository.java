@@ -31,24 +31,24 @@ public class GfycatRepository {
     this.data = data;
   }
 
-  public Single<GfycatLink> gif_gfycat_or_redgifs(String threeWordId) {
-    return gif_gfycat(threeWordId)
+  public Single<GfycatLink> gifGfycatOrRedgifs(String threeWordId) {
+    return gifGfycat(threeWordId)
         .onErrorResumeNext(error -> {
           if (error instanceof HttpException && ((HttpException) error).code() == 404) {
             // try to resolve with redgifs api in case this is a gfycat-to-redgifs redirect link
-            return gif_redgifs(threeWordId);
+            return gifRedgifs(threeWordId);
           } else {
             return Single.error(error);
           }
         });
   }
 
-  public Single<GfycatLink> gif_gfycat(String threeWordId) {
+  public Single<GfycatLink> gifGfycat(String threeWordId) {
     return gif(DankApi.GFYCAT_API_DOMAIN, threeWordId);
   }
 
   // Gfycat and Redgifs is, essentially, the same platform and share same api
-  public Single<GfycatLink> gif_redgifs(String threeWordId) {
+  public Single<GfycatLink> gifRedgifs(String threeWordId) {
     return gif(DankApi.REDGIFS_API_DOMAIN, threeWordId);
   }
 
