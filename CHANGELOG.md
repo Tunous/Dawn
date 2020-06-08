@@ -5,10 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
+- Support for Redgifs ([#219](https://github.com/Tunous/Dawn/pull/219))
 
 ### Changed
 
 ### Fixed
+- Fixes for Gfycat and Giphy media ([#211](https://github.com/Tunous/Dawn/issues/211))
 - Fix playing of reddit hosted videos ([#210](https://github.com/Tunous/Dawn/pull/210))
 - Imgur images (up)loading ([#202](https://github.com/Tunous/Dawn/pull/202))
 - Always show fullsize imgur images ([#209](https://github.com/Tunous/Dawn/pull/209))
