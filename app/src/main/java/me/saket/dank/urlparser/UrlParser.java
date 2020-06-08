@@ -335,7 +335,14 @@ public class UrlParser {
   private Link createRedgifsLink(Uri redgifsURI) {
     // Redgifs stores different gifs on different subdomains (unlike giant.gfycat.com)
     // so three capital letters hack is useless here
-    return RedgifsUnresolvedLink.create(redgifsURI.toString(), redgifsURI.getLastPathSegment());
+    Matcher m = config.gfycatIdPattern().matcher(redgifsURI.getPath());
+
+    if (m.matches()) {
+      String id = m.group(1);
+      return RedgifsUnresolvedLink.create(redgifsURI.toString(), id);
+    } else {
+      return ExternalLink.create(redgifsURI.toString());
+    }
   }
 
   @SuppressWarnings("ConstantConditions")
