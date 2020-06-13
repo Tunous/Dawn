@@ -40,13 +40,11 @@ public class UrlParser {
 
   private final Cache<String, Link> cache;
   private final UrlParserConfig config;
-  private final Pattern imgurPreviewPat;
 
   @Inject
   public UrlParser(@Named("url_parser") Cache<String, Link> cache, UrlParserConfig config) {
     this.cache = cache;
     this.config = config;
-    this.imgurPreviewPat = Pattern.compile("_d(\\.\\w+)$");
   }
 
   /**
@@ -199,6 +197,9 @@ public class UrlParser {
     } else if (urlDomain.contains("gfycat.com")) {
       return createGfycatLink(linkURI);
 
+    } else if (urlDomain.contains("redgifs.com")) {
+      return createRedgifsLink(linkURI);
+
     } else if (urlDomain.contains("giphy.com")) {
       return createGiphyLink(linkURI);
 
@@ -272,7 +273,7 @@ public class UrlParser {
         // Strip any preview-related suffixes and queries
         imageUrl = imageUrl.newBuilder()
             .encodedQuery(null)
-            .encodedPath(imgurPreviewPat.matcher(imageUrlPath).replaceFirst("$1"))
+            .encodedPath(config.imgurPreviewExtPattern().matcher(imageUrlPath).replaceFirst("$1"))
             .build();
       } else {
         // Attempt to get direct links to images from Imgur submissions.
@@ -331,6 +332,19 @@ public class UrlParser {
     }
   }
 
+  private Link createRedgifsLink(Uri redgifsURI) {
+    // Redgifs stores different gifs on different subdomains (unlike giant.gfycat.com)
+    // so three capital letters hack is useless here
+    Matcher m = config.gfycatIdPattern().matcher(redgifsURI.getPath());
+
+    if (m.matches()) {
+      String id = m.group(1);
+      return RedgifsUnresolvedLink.create(redgifsURI.toString(), id);
+    } else {
+      return ExternalLink.create(redgifsURI.toString());
+    }
+  }
+
   @SuppressWarnings("ConstantConditions")
   private Link createGiphyLink(Uri giphyURI) {
     String url = giphyURI.toString();
@@ -341,9 +355,9 @@ public class UrlParser {
     Matcher giphyIdMatcher = config.giphyIdPattern().matcher(urlPath);
     if (giphyIdMatcher.matches()) {
       String videoId = giphyIdMatcher.group(1);
-      String gifVideoUrl = giphyURI.getScheme() + "://i.giphy.com/" + videoId + ".mp4";
 
-      HttpUrl giphyUrl = httpUrl.newBuilder(urlPath + ".mp4")
+      HttpUrl giphyUrl = new HttpUrl.Builder()
+          .addPathSegment(videoId + ".mp4")
           .scheme("https")
           .host("i.giphy.com")
           .build();

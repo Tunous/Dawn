@@ -31,11 +31,32 @@ public class GfycatRepository {
     this.data = data;
   }
 
-  public Single<GfycatLink> gif(String threeWordId) {
+  public Single<GfycatLink> gifGfycatOrRedgifs(String threeWordId) {
+    return gifGfycat(threeWordId)
+        .onErrorResumeNext(error -> {
+          if (error instanceof HttpException && ((HttpException) error).code() == 404) {
+            // try to resolve with redgifs api in case this is a gfycat-to-redgifs redirect link
+            return gifRedgifs(threeWordId);
+          } else {
+            return Single.error(error);
+          }
+        });
+  }
+
+  public Single<GfycatLink> gifGfycat(String threeWordId) {
+    return gif(DankApi.GFYCAT_API_DOMAIN, threeWordId);
+  }
+
+  // Gfycat and Redgifs is, essentially, the same platform and share same api
+  public Single<GfycatLink> gifRedgifs(String threeWordId) {
+    return gif(DankApi.REDGIFS_API_DOMAIN, threeWordId);
+  }
+
+  public Single<GfycatLink> gif(String domain, String threeWordId) {
     return Single.fromCallable(() -> data.get().isAccessTokenRequired())
         .flatMap(headerRequired -> headerRequired
-            ? authToken().flatMap(authHeader -> dankApi.get().gfycat(authHeader, threeWordId))
-            : dankApi.get().gfycat(threeWordId))
+            ? authToken().flatMap(authHeader -> dankApi.get().gfycat_with_auth(domain, authHeader, threeWordId))
+            : dankApi.get().gfycat_no_auth(domain, threeWordId))
         .retry(error -> {
           // At the time of writing this, Gfycat allows API calls without auth headers.
           // I'm going to wing it to reduce API calls until Gfycat finds out and makes

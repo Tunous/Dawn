@@ -54,9 +54,9 @@ public class GfycatRepositoryTest {
     when(data.isAccessTokenRequired()).thenReturn(false);
 
     GfycatResponse response = GfycatResponse.create(GFYCAT_RESPONSE);
-    when(dankApi.gfycat(UNRESOLVED_ID)).thenReturn(Single.just(response));
+    when(dankApi.gfycat_no_auth(DankApi.GFYCAT_API_DOMAIN, UNRESOLVED_ID)).thenReturn(Single.just(response));
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gifGfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()
@@ -71,9 +71,9 @@ public class GfycatRepositoryTest {
     when(data.accessToken()).thenReturn(Single.just(AUTH_TOKEN));
 
     GfycatResponse response = GfycatResponse.create(GFYCAT_RESPONSE);
-    when(dankApi.gfycat(AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
+    when(dankApi.gfycat_with_auth(DankApi.GFYCAT_API_DOMAIN, AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gifGfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()
@@ -88,13 +88,13 @@ public class GfycatRepositoryTest {
     when(data.accessToken()).thenReturn(Single.just(AUTH_TOKEN));
 
     GfycatResponse response = GfycatResponse.create(GFYCAT_RESPONSE);
-    when(dankApi.gfycat(AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
+    when(dankApi.gfycat_with_auth(DankApi.GFYCAT_API_DOMAIN, AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
 
     GfycatOauthResponse oAuthResponse = GfycatOauthResponse.create(3600, AUTH_TOKEN);
     when(dankApi.gfycatOAuth(anyString(), anyString())).thenReturn(Single.just(oAuthResponse));
     when(data.saveOAuthResponse(oAuthResponse)).thenReturn(Completable.complete());
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gifGfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()
@@ -116,7 +116,7 @@ public class GfycatRepositoryTest {
 
     HttpException forbiddenError = mock(HttpException.class);
     when(forbiddenError.code()).thenReturn(403);
-    when(dankApi.gfycat(UNRESOLVED_ID)).thenReturn(Single.error(forbiddenError));
+    when(dankApi.gfycat_no_auth(DankApi.GFYCAT_API_DOMAIN, UNRESOLVED_ID)).thenReturn(Single.error(forbiddenError));
 
     when(data.tokenExpiryTimeMillis()).thenReturn(Single.just(0L));
 
@@ -125,10 +125,10 @@ public class GfycatRepositoryTest {
     when(data.saveOAuthResponse(oAuthResponse)).thenReturn(Completable.complete());
 
     GfycatResponse response = GfycatResponse.create(GFYCAT_RESPONSE);
-    when(dankApi.gfycat(AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
+    when(dankApi.gfycat_with_auth(DankApi.GFYCAT_API_DOMAIN, AUTH_TOKEN, UNRESOLVED_ID)).thenReturn(Single.just(response));
     when(data.accessToken()).thenReturn(Single.just(AUTH_TOKEN));
 
-    gfycatRepository.gif(UNRESOLVED_ID)
+    gfycatRepository.gifGfycat(UNRESOLVED_ID)
         .test()
         .assertNoErrors()
         .assertComplete()
