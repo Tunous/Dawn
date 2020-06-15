@@ -72,11 +72,14 @@ public class UrlParserConfig {
   private static final Pattern DEFAULT_IMGUR_ALBUM_PATTERN = Pattern.compile("/(?:gallery)?(?:a)?(?:t/\\w*)?/(\\w*).*");
 
   /**
-   * Extracts Imgur preview suffix and file extension
+   * Extracts Imgur image id (1) and extension (2) if exists
    * <p>
-   * _d.jpg
+   * /TwxFuFG_d.jpg
+   * /TwxFuFG.jpg
+   * /TwxFuFG.png
+   * /TwxFuFG
    */
-  private static final Pattern IMGUR_PREVIEW_SUFFIX_PATTERN = Pattern.compile("_d(\\.\\w+)$");
+  private static final Pattern IMGUR_IMAGE_ID_EXT_PATTERN = Pattern.compile("^.*/([A-Za-z0-9]+)(?:_d)?(?:\\.(\\w+))?$");
 
   @Inject
   public UrlParserConfig() {
@@ -134,7 +137,7 @@ public class UrlParserConfig {
     return DEFAULT_IMGUR_ALBUM_PATTERN;
   }
 
-  Pattern imgurPreviewExtPattern() {
-    return IMGUR_PREVIEW_SUFFIX_PATTERN;
+  Pattern imgurIdExtPattern() {
+    return IMGUR_IMAGE_ID_EXT_PATTERN;
   }
 }

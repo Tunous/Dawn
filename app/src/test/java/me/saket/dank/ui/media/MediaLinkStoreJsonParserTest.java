@@ -27,7 +27,7 @@ public class MediaLinkStoreJsonParserTest {
 
     MediaHostRepository.MediaLinkStoreJsonParser storeJsonParser = new MediaHostRepository.MediaLinkStoreJsonParser(moshi);
 
-    ImgurLink resolvedLink = ImgurLink.create("", Link.Type.SINGLE_IMAGE, "", "", "");
+    ImgurLink resolvedLink = ImgurLink.create("", Link.Type.SINGLE_IMAGE, "", "", "", "");
     String json = storeJsonParser.toJson(resolvedLink);
 
     InputStream stream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8.name()));
