@@ -294,7 +294,7 @@ public class UrlParser {
 
       String lowQuality = imageBase
           .newBuilder()
-          .addPathSegment(String.format("%s_d.%s", id, ext))
+          .addPathSegment(String.format("%s_d.jpg", id))
           .addQueryParameter("maxwidth", "1280")
           .build()
           .toString();
