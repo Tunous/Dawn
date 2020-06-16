@@ -8,6 +8,8 @@ import javax.inject.Singleton;
 @Singleton
 public class UrlParserConfig {
 
+  private static final String IMGUR_LOW_QUALITY_MAXRES = "1280";
+
   /**
    * /r/$subreddit.
    */
@@ -137,7 +139,11 @@ public class UrlParserConfig {
     return DEFAULT_IMGUR_ALBUM_PATTERN;
   }
 
-  Pattern imgurIdExtPattern() {
+  public Pattern imgurIdExtPattern() {
     return IMGUR_IMAGE_ID_EXT_PATTERN;
+  }
+
+  public String imgurLowQualityMaxres() {
+    return IMGUR_LOW_QUALITY_MAXRES;
   }
 }

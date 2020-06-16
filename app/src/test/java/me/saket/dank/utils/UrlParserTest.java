@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -411,18 +412,108 @@ public class UrlParserTest {
     Link parsedGifLinkWithoutExtension = urlParser.parse("https://imgur.com/a/qU24g");
     assertThat(parsedGifLinkWithoutExtension).isInstanceOf(ImgurAlbumUnresolvedLink.class);
 
-    // Preview urls should be transformed into fullsize urls
-    String[] previewUrls = {
-        "http://i.imgur.com/BU5XFMg_d.webp?maxwidth=640&shape=thumb&fidelity=medium",
-        "https://i.imgur.com/BU5XFMg.webp?maxwidth=640&shape=thumb&fidelity=medium",
-        "https://i.imgur.com/BU5XFMg_d.webp",
-        "https://i.imgur.com/BU5XFMg.webp",
+    // Test single image url extractor regex
+
+    String[][] extractorUrls = {
+        // bad_url / url, id, ext?
+        { "/TwxFuFG_d.jpg", "TwxFuFG", "jpg"},
+        { "/some/path/TwxFuFG_d.jpg", "TwxFuFG", "jpg"},
+        { "/TwxFuFG.jpg",  "TwxFuFG", "jpg"},
+        { "/TwxFuFG.png", "TwxFuFG", "png"},
+        { "/TwxFuFG", "TwxFuFG", null },
+        { "/some/path/TwxFuFG", "TwxFuFG", null },
+        { "/bad/id/foo-bar" },
+        { "/bad/ext/TwxFuFG." },
     };
 
-    for (String url : previewUrls) {
-      Link link = urlParser.parse(url);
-      assertTrue(link instanceof ImgurLink);
-      assertEquals(((ImgurLink) link).highQualityUrl(), "https://i.imgur.com/BU5XFMg.webp");
+    UrlParserConfig parserCfg = new UrlParserConfig();
+
+    for (String[] r : extractorUrls) {
+      assertThat(r.length).isAnyOf(1, 3);
+      Matcher m = parserCfg.imgurIdExtPattern().matcher(r[0]);
+
+      if (r.length > 1) {
+        assertTrue(m.matches());
+        assertEquals(m.group(1), r[1]);
+        assertEquals(m.group(2), r[2]);
+      } else {
+        assertFalse(m.matches());
+      }
+    }
+
+    // Test URL parser
+
+    String[][] picUrls = {
+        // url, id, hq_ext
+        { "http://i.imgur.com/BU5XFMg_d.webp?maxwidth=640&shape=thumb&fidelity=medium", "BU5XFMg", "webp" },
+        { "https://i.imgur.com/BU5XFMg.webp?maxwidth=640&shape=thumb&fidelity=medium", "BU5XFMg", "webp" },
+        { "https://i.imgur.com/BU5XFMg_d.webp", "BU5XFMg", "webp" },
+        { "https://i.imgur.com/BU5XFMg.webp", "BU5XFMg", "webp" },
+        { "https://i.imgur.com/BU5XFMg.png", "BU5XFMg", "png" },
+        { "https://i.imgur.com/BU5XFMg.jpg", "BU5XFMg", "jpg" },
+        { "https://imgur.com/BU5XFMg", "BU5XFMg", "jpg" },
+        { "https://imgur.com/BU5XFMg.png", "BU5XFMg", "png" },
+    };
+
+    String[][] gifUrls = {
+        // url, id
+        { "https://i.imgur.com/BU5XFMg.gif", "BU5XFMg" },
+        { "https://i.imgur.com/BU5XFMg.gifv", "BU5XFMg" },
+    };
+
+    String[][] mp4Urls = {
+        { "https://i.imgur.com/BU5XFMg.mp4", "BU5XFMg" },
+    };
+
+    for (String[] r : picUrls) {
+      assertEquals(r.length, 3);
+
+      String hqUrl = String.format("https://i.imgur.com/%s.%s", r[1], r[2]);
+      String lqUrl = String.format("https://i.imgur.com/%s_d.jpg?maxwidth=%s", r[1], parserCfg.imgurLowQualityMaxres());
+
+      Link[] links = {
+          urlParser.parse(r[0]),
+          urlParser.createImgurLink(r[0], null, null, true), // test fallback
+      };
+
+      for (Link link : links) {
+        assertTrue(link instanceof ImgurLink);
+        assertEquals(((ImgurLink) link).highQualityUrl(), hqUrl);
+        assertEquals(((ImgurLink) link).lowQualityUrl(), lqUrl);
+      }
+    }
+
+    for (String[] r : gifUrls) {
+      assertEquals(r.length, 2);
+
+      String genericRef = String.format("https://i.imgur.com/%s.mp4", r[1]);
+      String fallbackRef = String.format("https://i.imgur.com/%s.gif", r[1]);
+
+      Link generic = urlParser.parse(r[0]);
+      assertThat(generic).isInstanceOf(ImgurLink.class);
+      assertEquals(((ImgurLink) generic).highQualityUrl(), genericRef);
+      assertEquals(((ImgurLink) generic).lowQualityUrl(), genericRef);
+
+      ImgurLink fallback = urlParser.createImgurLink(r[0], null, null, true);
+      assertEquals(fallback.highQualityUrl(), fallbackRef);
+      assertEquals(fallback.lowQualityUrl(), fallbackRef);
+    }
+
+    for (String[] r : mp4Urls) {
+      assertEquals(r.length, 2);
+
+      String urlRef = String.format("https://i.imgur.com/%s.mp4", r[1]);
+
+      Link[] links = {
+          urlParser.parse(r[0]),
+          urlParser.createImgurLink(r[0], null, null, true), // test fallback
+      };
+
+      for (Link link : links) {
+        assertTrue(link instanceof ImgurLink);
+        assertEquals(((ImgurLink) link).highQualityUrl(), urlRef);
+        assertEquals(((ImgurLink) link).lowQualityUrl(), urlRef);
+      }
     }
   }
 
