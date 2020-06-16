@@ -480,6 +480,7 @@ public class UrlParserTest {
         assertTrue(link instanceof ImgurLink);
         assertEquals(((ImgurLink) link).highQualityUrl(), hqUrl);
         assertEquals(((ImgurLink) link).lowQualityUrl(), lqUrl);
+        assertEquals(link.type(), Link.Type.SINGLE_IMAGE);
       }
     }
 
@@ -493,10 +494,12 @@ public class UrlParserTest {
       assertThat(generic).isInstanceOf(ImgurLink.class);
       assertEquals(((ImgurLink) generic).highQualityUrl(), genericRef);
       assertEquals(((ImgurLink) generic).lowQualityUrl(), genericRef);
+      assertEquals(generic.type(), Link.Type.SINGLE_VIDEO);
 
       ImgurLink fallback = urlParser.createImgurLink(r[0], null, null, true);
       assertEquals(fallback.highQualityUrl(), fallbackRef);
       assertEquals(fallback.lowQualityUrl(), fallbackRef);
+      assertEquals(fallback.type(), Link.Type.SINGLE_GIF);
     }
 
     for (String[] r : mp4Urls) {
@@ -513,6 +516,7 @@ public class UrlParserTest {
         assertTrue(link instanceof ImgurLink);
         assertEquals(((ImgurLink) link).highQualityUrl(), urlRef);
         assertEquals(((ImgurLink) link).lowQualityUrl(), urlRef);
+        assertEquals(link.type(), Link.Type.SINGLE_VIDEO);
       }
     }
   }
