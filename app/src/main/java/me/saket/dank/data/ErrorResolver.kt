@@ -4,8 +4,6 @@ import com.bumptech.glide.load.engine.GlideException
 import io.reactivex.exceptions.CompositeException
 import io.reactivex.exceptions.UndeliverableException
 import me.saket.dank.R
-import me.saket.dank.data.exceptions.ImgurApiRequestRateLimitReachedException
-import me.saket.dank.data.exceptions.ImgurApiUploadRateLimitReachedException
 import okhttp3.internal.http2.ConnectionShutdownException
 import okhttp3.internal.http2.StreamResetException
 import retrofit2.HttpException
@@ -56,18 +54,6 @@ constructor() {
           ResolvedError.Type.REDDIT_IS_DOWN,
           R.string.common_reddit_is_down_error_emoji,
           R.string.common_reddit_is_down_error_message)
-
-    } else if (actualError is ImgurApiRequestRateLimitReachedException) {
-      ResolvedError.create(
-          ResolvedError.Type.IMGUR_RATE_LIMIT_REACHED,
-          R.string.common_imgur_rate_limit_error_emoji,
-          R.string.common_imgur_request_rate_limit_error_message)
-
-    } else if (actualError is ImgurApiUploadRateLimitReachedException) {
-      ResolvedError.create(
-          ResolvedError.Type.IMGUR_RATE_LIMIT_REACHED,
-          R.string.common_imgur_rate_limit_error_emoji,
-          R.string.common_imgur_upload_rate_limit_error_message)
 
     } else if (actualError is CancellationException || actualError is InterruptedIOException || actualError is InterruptedException) {
       ResolvedError.create(

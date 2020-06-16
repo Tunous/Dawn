@@ -1,9 +1,11 @@
 package me.saket.dank.ui.webview;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -40,7 +42,11 @@ public class ChromeCustomTabsForwardingActivity extends DankActivity {
     CustomTabsIntent customTabsIntent = builder.build();
 
     String url = getIntent().getStringExtra(KEY_URL);
-    customTabsIntent.launchUrl(this, Uri.parse(url));
+    try {
+      customTabsIntent.launchUrl(this, Uri.parse(url));
+    } catch (ActivityNotFoundException exception) {
+      Toast.makeText(this, String.format(getString(R.string.common_error_no_app_found_to_handle_url), url), Toast.LENGTH_SHORT).show();
+    }
 
     finish();
   }

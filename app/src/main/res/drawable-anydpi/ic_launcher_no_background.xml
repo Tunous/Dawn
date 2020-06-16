@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<inset
+  android:drawable="@mipmap/ic_launcher_no_background_dusk" />

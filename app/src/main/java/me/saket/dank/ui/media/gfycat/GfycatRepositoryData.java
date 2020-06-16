@@ -23,8 +23,8 @@ public class GfycatRepositoryData {
 
   @Inject
   public GfycatRepositoryData(@Named("gfycat_repository") RxSharedPreferences kvStore) {
-    needsAccessTokenHeaderStore = kvStore.getBoolean("gfycat_needs_access_token", false);
-    accessTokenExpiryTimeMillisStore = kvStore.getLong("gfycat_access_token_expiry_time_millis", currentTimeMillis());
+    needsAccessTokenHeaderStore = kvStore.getBoolean("gfycat_needs_access_token2", false);
+    accessTokenExpiryTimeMillisStore = kvStore.getLong("gfycat_access_token_expiry_time_millis", 0L); // consider expired if absent
     accessTokenStore = kvStore.getString("gfycat_access_token", ACCESS_TOKEN_EMPTY_VALUE);
   }
 

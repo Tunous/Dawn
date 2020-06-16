@@ -44,7 +44,7 @@ public class UrlParserConfig {
    * /MessySpryAfricancivet.webm
    * /MessySpryAfricancivet-mobile.mp4
    */
-  private static final Pattern DEFAULT_GFYCAT_ID_PATTERN_2 = Pattern.compile("^/([^-.]*).*$");
+  private static final Pattern DEFAULT_GFYCAT_ID_PATTERN_2 = Pattern.compile("^.*/([^-.]*)[^/]*$");
 
   /**
    * Extracts the ID of a giphy link. In these examples, the ID is 'l2JJyLbhqCF4va86c
@@ -70,6 +70,13 @@ public class UrlParserConfig {
    * /a/RBpAe
    */
   private static final Pattern DEFAULT_IMGUR_ALBUM_PATTERN = Pattern.compile("/(?:gallery)?(?:a)?(?:t/\\w*)?/(\\w*).*");
+
+  /**
+   * Extracts Imgur preview suffix and file extension
+   * <p>
+   * _d.jpg
+   */
+  private static final Pattern IMGUR_PREVIEW_SUFFIX_PATTERN = Pattern.compile("_d(\\.\\w+)$");
 
   @Inject
   public UrlParserConfig() {
@@ -125,5 +132,9 @@ public class UrlParserConfig {
 
   Pattern imgurAlbumPattern() {
     return DEFAULT_IMGUR_ALBUM_PATTERN;
+  }
+
+  Pattern imgurPreviewExtPattern() {
+    return IMGUR_PREVIEW_SUFFIX_PATTERN;
   }
 }

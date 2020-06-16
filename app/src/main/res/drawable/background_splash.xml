@@ -6,6 +6,6 @@
   <item>
     <bitmap
       android:gravity="center"
-      android:src="@drawable/ic_launcher_180" />
+      android:src="@mipmap/ic_launcher_no_background_dawn" />
   </item>
 </layer-list>

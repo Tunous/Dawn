@@ -1,0 +1,138 @@
+name: Release
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      # Preparation
+
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
+
+      # Cache
+
+      - name: Generate cache key
+        run: ./checksum.sh checksum.txt
+
+      - name: Cache gradle modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches/modules-2
+          key: ${{ runner.os }}-gradlemodules-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradlemodules-
+
+      - name: Cache gradle jars
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches/jars-3
+          key: ${{ runner.os }}-gradlejars-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradlejars-
+
+      - name: Cache gradle build
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches/build-cache-1
+          key: ${{ runner.os }}-gradlebuildcache-${{ hashFiles('checksum.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-gradlebuildcache-
+
+      # Signing
+
+      - name: Setup signing
+        env:
+          SIGNING_ENCRYPTION_KEY: ${{ secrets.SIGNING_ENCRYPTION_KEY }}
+        run: ./signing/setup.sh "$SIGNING_ENCRYPTION_KEY"
+
+      # Release APK
+
+      - name: Build app
+        run: ./gradlew :app:bundleRelease :app:assembleRelease
+
+      - name: Upload release APK
+        uses: actions/upload-artifact@master
+        with:
+          name: Dawn Release APK
+          path: app/build/outputs/apk/release/app-release.apk
+
+      - name: Upload release Bundle
+        uses: actions/upload-artifact@master
+        with:
+          name: Dawn Release Bundle
+          path: app/build/outputs/bundle/release/app-release.aab
+
+      # Cleanup
+
+      - name: Cleanup signing
+        if: always()
+        run: ./signing/cleanup.sh
+
+  create_github_release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Get APK
+        uses: actions/download-artifact@v1
+        with:
+          name: Dawn Release APK
+          path: artifacts
+      - name: Get Bundle
+        uses: actions/download-artifact@v1
+        with:
+          name: Dawn Release Bundle
+          path: artifacts
+
+      - name: Get Changelog Entry
+        id: changelog_reader
+        uses: mindsers/changelog-reader-action@v1.1.0
+        with:
+          version: ${{ github.ref }}
+          path: ./CHANGELOG.md
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: ${{ steps.changelog_reader.outputs.log_entry }}
+          draft: false
+          prerelease: false
+
+      - name: Get the version
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
+      - name: Upload Release Apk
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/app-release.apk
+          asset_name: Dawn_${{ steps.get_version.outputs.VERSION }}.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Upload Release Bundle
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/app-release.aab
+          asset_name: Dawn_${{ steps.get_version.outputs.VERSION }}.aab
+          asset_content_type: application/octet-stream

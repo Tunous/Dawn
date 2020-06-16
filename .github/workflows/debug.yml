@@ -1,5 +1,9 @@
 name: Debug
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
 jobs:
   build:
     name: Build

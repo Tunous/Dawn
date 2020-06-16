@@ -99,7 +99,7 @@ public abstract class DankJobService extends JobService {
     NotificationCompat.Builder builder = new NotificationCompat.Builder(this, getString(R.string.notification_channel_debug_notifs_id))
         .setContentTitle(String.format(notifBody, args))
         .setContentIntent(onClickPendingIntent)
-        .setSmallIcon(R.drawable.ic_status_bar_24dp)
+        .setSmallIcon(R.drawable.ic_stat)
         .setShowWhen(true)
         .setAutoCancel(true)
         .setPriority(Notification.PRIORITY_MIN)

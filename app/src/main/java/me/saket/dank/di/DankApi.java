@@ -25,20 +25,17 @@ import retrofit2.http.Query;
 public interface DankApi {
 
   String HEADER_IMGUR_AUTH = "Authorization: Client-ID 87450e5590435e9";
-  String HEADER_MASHAPE_KEY = "X-Mashape-Key: VOjpM0pXeAmshuRGE4Hhe6KY9Ouep1YCLx8jsnaivCFNYALpN5";
   String HEADER_WHOLESOME_API_AUTH = "Authorization";
   String WHOLESOME_API_HOST = "dank-wholesome.herokuapp.com";
   String GIPHY_API_KEY = "SFGHZ6SYGn3AzZ07b2tNpENCEDdYTzpB";
+  String GFYCAT_API_DOMAIN = "api.gfycat.com";
+  String REDGIFS_API_DOMAIN = "api.redgifs.com";
 
 // ======== IMGUR ======== //
 
-  /**
-   * Get images in an Imgur album. This is a paid API so we try to minimize its usage. The response
-   * is wrapped in {@link Response} so that the headers can be extracted for checking Imgur rate-limits.
-   */
   @CheckResult
-  @GET("https://imgur-apiv3.p.mashape.com/3/album/{albumId}")
-  @Headers({ HEADER_IMGUR_AUTH, HEADER_MASHAPE_KEY })
+  @GET("https://api.imgur.com/3/album/{albumId}")
+  @Headers({ HEADER_IMGUR_AUTH })
   Single<Response<ImgurAlbumResponse>> imgurAlbum(
       @Path("albumId") String albumId
   );
@@ -47,16 +44,16 @@ public interface DankApi {
    * Get an image's details from Imgur. This is also a paid API.
    */
   @CheckResult
-  @GET("https://imgur-apiv3.p.mashape.com/3/image/{imageId}")
-  @Headers({ HEADER_IMGUR_AUTH, HEADER_MASHAPE_KEY })
+  @GET("https://api.imgur.com/3/image/{imageId}")
+  @Headers({ HEADER_IMGUR_AUTH })
   Single<Response<ImgurImageResponse>> imgurImage(
       @Path("imageId") String imageId
   );
 
   @CheckResult
   @Multipart
-  @POST("https://imgur-apiv3.p.mashape.com/3/image")
-  @Headers({ HEADER_IMGUR_AUTH, HEADER_MASHAPE_KEY })
+  @POST("https://api.imgur.com/3/image")
+  @Headers({ HEADER_IMGUR_AUTH })
   Single<Response<ImgurUploadResponse>> uploadToImgur(
       @Part MultipartBody.Part file,
       @Query("type") String fileType
@@ -101,22 +98,25 @@ public interface DankApi {
       @Query("offset") int paginationOffset
   );
 
-// ======== GFYCAT ======== //
+// ======== GFYCAT / REDGIFS ======== //
 
   @CheckResult
   @GET("https://api.gfycat.com/v1/oauth/token?grant_type=client_credentials")
+  @Headers({"Accept: application/json,text/html"}) // fails with 400 if text/html is not present
   Single<GfycatOauthResponse> gfycatOAuth(
       @Query("client_id") String clientId,
       @Query("client_secret") String clientSecret
   );
 
-  @GET("https://api.gfycat.com/v1/gfycats/{gfyid}")
-  Single<GfycatResponse> gfycat(
+  @GET("https://{domain}/v1/gfycats/{gfyid}")
+  Single<GfycatResponse> gfycat_no_auth(
+      @Path("domain") String domain,
       @Path("gfyid") String threeWordId
   );
 
-  @GET("https://api.gfycat.com/v1/gfycats/{gfyid}")
-  Single<GfycatResponse> gfycat(
+  @GET("https://{domain}/v1/gfycats/{gfyid}")
+  Single<GfycatResponse> gfycat_with_auth(
+      @Path("domain") String domain,
       @Header("Authorization") String authHeader,
       @Path("gfyid") String threeWordId
   );

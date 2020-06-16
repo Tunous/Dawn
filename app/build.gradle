@@ -29,8 +29,8 @@ android {
     applicationId "me.thanel.dank"
     minSdkVersion versions.minSdk
     targetSdkVersion versions.compileSdk
-    versionCode 16
-    versionName "0.8.1"
+    versionCode 19
+    versionName "0.9.3"
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -100,6 +100,12 @@ android {
   androidExtensions {
     experimental = true
   }
+
+  testOptions {
+    unitTests {
+      includeAndroidResources = true
+    }
+  }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -123,7 +129,10 @@ dependencies {
   testImplementation "junit:junit:$versions.junit"
   testImplementation 'org.powermock:powermock-module-junit4:2.0.4'
   testImplementation 'org.powermock:powermock-api-mockito2:2.0.2'
-  testImplementation "com.google.truth:truth:1.0"
+  testImplementation "com.google.truth:truth:1.0.1"
+  testImplementation 'org.robolectric:robolectric:4.3'
+  testImplementation 'androidx.test:core:1.2.0'
+  testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 
   androidTestImplementation 'androidx.annotation:annotation:1.1.0'
   androidTestImplementation 'androidx.test:runner:1.2.0'
@@ -187,7 +196,7 @@ dependencies {
   implementation 'com.bugsnag:bugsnag-android:4.22.2'
 
   implementation 'com.github.saketme:markwon:b68d3058ca'
-  implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.13.0'
+  implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.14.0'
 
   // TODO: Replace all Date4J usages with ThreeTenAbp.
   implementation 'com.darwinsys:hirondelle-date4j:1.5.1'

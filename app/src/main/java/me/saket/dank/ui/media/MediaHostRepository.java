@@ -27,22 +27,10 @@ import me.saket.dank.cache.DiskLruCachePathResolver;
 import me.saket.dank.cache.StoreFilePersister;
 import me.saket.dank.data.CachedResolvedLinkInfo;
 import me.saket.dank.data.FileUploadProgressEvent;
-import me.saket.dank.data.exceptions.ImgurApiRequestRateLimitReachedException;
-import me.saket.dank.data.exceptions.ImgurApiUploadRateLimitReachedException;
 import me.saket.dank.ui.giphy.GiphyGif;
 import me.saket.dank.ui.giphy.GiphyRepository;
 import me.saket.dank.ui.media.gfycat.GfycatRepository;
-import me.saket.dank.urlparser.GfycatLink;
-import me.saket.dank.urlparser.GfycatUnresolvedLink;
-import me.saket.dank.urlparser.ImgurAlbumLink;
-import me.saket.dank.urlparser.ImgurAlbumUnresolvedLink;
-import me.saket.dank.urlparser.ImgurLink;
-import me.saket.dank.urlparser.Link;
-import me.saket.dank.urlparser.MediaLink;
-import me.saket.dank.urlparser.StreamableLink;
-import me.saket.dank.urlparser.StreamableUnresolvedLink;
-import me.saket.dank.urlparser.UnresolvedMediaLink;
-import me.saket.dank.urlparser.UrlParser;
+import me.saket.dank.urlparser.*;
 import okio.BufferedSource;
 import timber.log.Timber;
 
@@ -154,9 +142,6 @@ public class MediaHostRepository {
         .subscribe();
   }
 
-  /**
-   * Remember to handle {@link ImgurApiRequestRateLimitReachedException}.
-   */
   public Observable<MediaLink> resolveActualLinkIfNeeded(MediaLink unresolvedLink) {
     return incorrectMediaUrlParsingData.get()
         .isFlagged(unresolvedLink)
@@ -193,12 +178,17 @@ public class MediaHostRepository {
 
     } else if (unresolvedLink instanceof GfycatUnresolvedLink) {
       return gfycatRepository.get()
-          .gif(((GfycatUnresolvedLink) unresolvedLink).threeWordId())
+          .gifGfycatOrRedgifs(((GfycatUnresolvedLink) unresolvedLink).threeWordId())
           .cast(MediaLink.class);
 
     } else if (unresolvedLink instanceof GfycatLink) {
       return gfycatRepository.get()
-          .gif(((GfycatLink) unresolvedLink).threeWordId())
+          .gifGfycatOrRedgifs(((GfycatLink) unresolvedLink).threeWordId())
+          .cast(MediaLink.class);
+
+    } else if (unresolvedLink instanceof RedgifsUnresolvedLink) {
+      return gfycatRepository.get()
+          .gifRedgifs(((RedgifsUnresolvedLink) unresolvedLink).threeWordId())
           .cast(MediaLink.class);
 
     } else {
@@ -215,9 +205,6 @@ public class MediaHostRepository {
     return imgurImageLinks;
   }
 
-  /**
-   * Remember to handle {@link ImgurApiUploadRateLimitReachedException}.
-   */
   @CheckResult
   public Observable<FileUploadProgressEvent<ImgurUploadResponse>> uploadImage(File image, String mimeType) {
     return imgurRepository.uploadImage(image, mimeType);

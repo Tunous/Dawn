@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -74,7 +75,6 @@ import me.saket.dank.data.OnLoginRequireListener;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.data.StatusBarTint;
 import me.saket.dank.data.UserPreferences;
-import me.saket.dank.data.exceptions.ImgurApiRequestRateLimitReachedException;
 import me.saket.dank.di.Dank;
 import me.saket.dank.reply.Reply;
 import me.saket.dank.reply.ReplyRepository;
@@ -125,7 +125,6 @@ import me.saket.dank.ui.subreddit.SubredditActivity;
 import me.saket.dank.ui.subreddit.events.SubmissionOpenInNewTabSwipeEvent;
 import me.saket.dank.ui.subreddit.events.SubmissionOptionSwipeEvent;
 import me.saket.dank.ui.user.UserSessionRepository;
-import me.saket.dank.urlparser.ExternalLink;
 import me.saket.dank.urlparser.ImgurAlbumLink;
 import me.saket.dank.urlparser.Link;
 import me.saket.dank.urlparser.MediaLink;
@@ -269,6 +268,9 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
 
     // LayoutManager needs to be set before onRestore() gets called to retain scroll position.
     commentRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()) {
+      final Rect parentRect = new Rect();
+      final Rect childRect = new Rect();
+
       @Override
       public void smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position) {
         // Bug workaround: when smooth-scrolling to a position, if the target View is already visible,
@@ -277,6 +279,32 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
         LinearSmoothScroller linearSmoothScroller = new LinearSmoothScrollerWithVerticalSnapPref(getContext(), LinearSmoothScroller.SNAP_TO_START);
         linearSmoothScroller.setTargetPosition(position);
         startSmoothScroll(linearSmoothScroller);
+      }
+
+      // Workaround to keep arrow keys navigation working
+      private boolean intersects(View parent, View child) {
+        parent.getHitRect(parentRect);
+        child.getHitRect(childRect);
+        return Rect.intersects(parentRect, childRect);
+      }
+
+      // Disable RecyclerView automatic scroll on focus change
+      @Override
+      public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate) {
+        if (intersects(parent, child)) {
+          return false;
+        }
+
+        return super.requestChildRectangleOnScreen(parent, child, rect, immediate);
+      }
+
+      @Override
+      public boolean requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate, boolean focusedChildVisible) {
+        if (intersects(parent, child)) {
+          return false;
+        }
+
+        return super.requestChildRectangleOnScreen(parent, child, rect, immediate, focusedChildVisible);
       }
     });
 
@@ -584,8 +612,9 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
           Boolean isUserMod = trio.third();
           Identifiable parentContribution = trio.first().parentContribution();
           boolean isSubmissionReply = parentContribution instanceof Submission;
-
-          if (submissionData.getSubmission().isArchived()) {
+          if (!userSessionRepository.get().isUserLoggedIn()) {
+            onLoginRequireListener.get().onLoginRequired();
+          } else if (submissionData.getSubmission().isArchived()) {
             if (isSubmissionReply) {
               Pair<Intent, ActivityOptions> archivedIntent = ArchivedSubmissionDialogActivity.intentWithFabTransform(
                   ((Activity) getContext()),
@@ -1347,14 +1376,9 @@ public class SubmissionPageLayout extends ExpandablePageLayout implements Expand
               })
               .observeOn(mainThread())
               .onErrorResumeNext(error -> {
-                // Open this album in browser if Imgur rate limits have reached.
-                if (error instanceof ImgurApiRequestRateLimitReachedException) {
-                  return Observable.just(ExternalLink.create(parsedLink.unparsedUrl()));
-                } else {
-                  uiEvents.accept(SubmissionContentResolvingFailed.create());
-                  showMediaLoadError(error);
-                  return Observable.never();
-                }
+                uiEvents.accept(SubmissionContentResolvingFailed.create());
+                showMediaLoadError(error);
+                return Observable.never();
               });
         })
         .flatMapSingle(link -> {
