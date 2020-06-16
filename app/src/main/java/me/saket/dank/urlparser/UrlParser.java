@@ -251,8 +251,12 @@ public class UrlParser {
     }
   }
 
-  @SuppressWarnings("ConstantConditions")
   public ImgurLink createImgurLink(String url, @Nullable String title, @Nullable String description) {
+    return createImgurLink(url, title, description, false);
+  }
+
+  @SuppressWarnings("ConstantConditions")
+  public ImgurLink createImgurLink(String url, @Nullable String title, @Nullable String description, Boolean fallback) {
     HttpUrl parsedUrl = HttpUrl.parse(url)
         .newBuilder()
         .scheme("https")
@@ -277,13 +281,21 @@ public class UrlParser {
 
       // Convert GIFs to MP4s that are insanely light weight in size.
       if (ext.equals("gif") || ext.equals("gifv")) {
-        String mp4Url = imageBase
-            .newBuilder()
-            .addPathSegment(String.format("%s.mp4", id))
-            .build()
-            .toString();
+        HttpUrl.Builder linkBase = imageBase.newBuilder();
+        Link.Type linkType;
 
-        return ImgurLink.create(url, Link.Type.SINGLE_VIDEO, title, description, mp4Url, mp4Url);
+        if (fallback) {
+          // Fallback to normal gif if mp4 couldn't be downloaded
+          // This happens when gif is a static image
+          linkBase.addPathSegment(String.format("%s.gif", id));
+          linkType = Link.Type.SINGLE_GIF;
+        } else {
+          linkBase.addPathSegment(String.format("%s.mp4", id));
+          linkType = Link.Type.SINGLE_VIDEO;
+        }
+
+        String gifUrl = linkBase.build().toString();
+        return ImgurLink.create(url, linkType, title, description, gifUrl, gifUrl);
       }
 
       String highQuality = imageBase
