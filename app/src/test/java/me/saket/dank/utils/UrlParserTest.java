@@ -387,25 +387,6 @@ public class UrlParserTest {
 
   @Test
   public void parseImgurImageUrls() {
-    // Key: Imgur URLs to pass. Value: normalized URLs.
-    String[] imageUrls = {
-        "http://i.imgur.com/0Jp0l2R.jpg",
-        "https://imgur.com/sEpUFzt",
-    };
-
-    for (String url : imageUrls) {
-      Link parsedLink = urlParser.parse(url);
-      assertThat(parsedLink).isInstanceOf(ImgurLink.class);
-      assertThat(parsedLink.type()).isEqualTo(Link.Type.SINGLE_IMAGE);
-
-      assert parsedLink instanceof ImgurLink;
-      assertThat(((ImgurLink) parsedLink).highQualityUrl()).startsWith("https://");
-      assertThat(((ImgurLink) parsedLink).lowQualityUrl()).startsWith("https://");
-    }
-
-    Link parsedGifLink = urlParser.parse("https://i.imgur.com/cuPUfRY.gif");
-    assertThat(parsedGifLink).isInstanceOf(ImgurLink.class);
-    assertThat(parsedGifLink.type()).isEqualTo(Link.Type.SINGLE_VIDEO);
 
     // Redirects to a GIF, but Dank will recognize it as a static image.
     // Glide will eventually load a GIF though.
