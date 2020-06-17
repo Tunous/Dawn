@@ -176,6 +176,15 @@ public class MediaHostRepository {
             }
           });
 
+    } else if (unresolvedLink instanceof ImgurLink) {
+      // If ImgurLink ended up here it means something has gone wrong
+      // Reparse url with fallback mechanisms enabled
+      ImgurLink link = (ImgurLink) unresolvedLink;
+      return Single.just(
+          (MediaLink) urlParser.get()
+              .createImgurLink(link.unparsedUrl(), link.title(), link.description(), true)
+      );
+
     } else if (unresolvedLink instanceof GfycatUnresolvedLink) {
       return gfycatRepository.get()
           .gifGfycatOrRedgifs(((GfycatUnresolvedLink) unresolvedLink).threeWordId())
