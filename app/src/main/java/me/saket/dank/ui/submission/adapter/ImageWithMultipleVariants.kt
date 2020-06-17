@@ -66,6 +66,8 @@ class ImageWithMultipleVariants private constructor(private val optionalRedditPr
 
   companion object {
 
+    const val DEFAULT_VIEWER_MIN_WIDTH = 1200
+
     fun of(redditSuppliedImages: SubmissionPreview?): ImageWithMultipleVariants {
       return ImageWithMultipleVariants(Optional.ofNullable(redditSuppliedImages))
     }
