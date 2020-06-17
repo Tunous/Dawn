@@ -37,11 +37,13 @@ public abstract class ImgurLink extends MediaLink implements Parcelable {
     return cacheKeyWithClassName(Urls.parseFileNameWithExtension(highQualityUrl()));
   }
 
-  public static ImgurLink create(String unparsedUrl, Type type, @Nullable String title, @Nullable String description, String imageUrl) {
-    if (BuildConfig.DEBUG && imageUrl.startsWith("http://")) {
+  public static ImgurLink create(String unparsedUrl, Type type, @Nullable String title, @Nullable String description,
+                                 String highQualityImageUrl, String lowQualityImageUrl) {
+    if (BuildConfig.DEBUG && highQualityImageUrl.startsWith("http://")) {
       Timber.e(new Exception("Use https for imgur!"));
     }
-    return new AutoValue_ImgurLink(unparsedUrl, type, title, description, imageUrl, imageUrl);
+    return new AutoValue_ImgurLink(unparsedUrl, type, title, description,
+        highQualityImageUrl, lowQualityImageUrl);
   }
 
   public static JsonAdapter<ImgurLink> jsonAdapter(Moshi moshi) {

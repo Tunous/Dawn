@@ -251,43 +251,72 @@ public class UrlParser {
     }
   }
 
-  @SuppressWarnings("ConstantConditions")
   public ImgurLink createImgurLink(String url, @Nullable String title, @Nullable String description) {
-    // Convert GIFs to MP4s that are insanely light weight in size.
-    String[] gifFormats = new String[] { ".gif", ".gifv" };
-    for (String gifFormat : gifFormats) {
-      if (url.endsWith(gifFormat)) {
-        url = url.substring(0, url.length() - gifFormat.length()) + ".mp4";
-      }
-    }
+    return createImgurLink(url, title, description, false);
+  }
 
-    HttpUrl imageUrl = HttpUrl.parse(url)
+  @SuppressWarnings("ConstantConditions")
+  public ImgurLink createImgurLink(String url, @Nullable String title, @Nullable String description, Boolean fallback) {
+    HttpUrl parsedUrl = HttpUrl.parse(url)
         .newBuilder()
         .scheme("https")
         .build();
 
-    String imageUrlPath = imageUrl.encodedPath();
+    Matcher idMatcher = config.imgurIdExtPattern().matcher(parsedUrl.encodedPath());
 
-    if (!url.endsWith("mp4")) {
-      if (isImageOrGifUrlPath(imageUrlPath)) {
-        // Strip any preview-related suffixes and queries
-        imageUrl = imageUrl.newBuilder()
-            .encodedQuery(null)
-            .encodedPath(config.imgurPreviewExtPattern().matcher(imageUrlPath).replaceFirst("$1"))
-            .build();
-      } else {
-        // Attempt to get direct links to images from Imgur submissions.
-        // For example, convert 'http://imgur.com/djP1IZC' to 'http://i.imgur.com/djP1IZC.jpg'.
-        // If this happened to be a GIF submission, the user sadly will be forced to see it instead of its GIFV.
-        imageUrl = imageUrl.newBuilder(imageUrlPath + ".jpg")
-            .host("i.imgur.com")
-            .build();
+    if (idMatcher.matches()) {
+      String id = idMatcher.group(1);
+      String ext = idMatcher.group(2);
+      ext = ext == null ? "jpg" : ext;
+
+      if (ext.equals("mp4")) {
+        String mp4Url = parsedUrl.toString();
+        return ImgurLink.create(url, Link.Type.SINGLE_VIDEO, title, description, mp4Url, mp4Url);
       }
-    }
 
-    //noinspection ConstantConditions
-    Link.Type urlType = getMediaUrlType(imageUrl.encodedPath());
-    return ImgurLink.create(url, urlType, title, description, imageUrl.toString());
+      HttpUrl imageBase = new HttpUrl.Builder()
+          .scheme("https")
+          .host("i.imgur.com")
+          .build();
+
+      // Convert GIFs to MP4s that are insanely light weight in size.
+      if (ext.equals("gif") || ext.equals("gifv")) {
+        HttpUrl.Builder linkBase = imageBase.newBuilder();
+        Link.Type linkType;
+
+        if (fallback) {
+          // Fallback to normal gif if mp4 couldn't be downloaded
+          // This happens when gif is a static image
+          linkBase.addPathSegment(String.format("%s.gif", id));
+          linkType = Link.Type.SINGLE_GIF;
+        } else {
+          linkBase.addPathSegment(String.format("%s.mp4", id));
+          linkType = Link.Type.SINGLE_VIDEO;
+        }
+
+        String gifUrl = linkBase.build().toString();
+        return ImgurLink.create(url, linkType, title, description, gifUrl, gifUrl);
+      }
+
+      String highQuality = imageBase
+          .newBuilder()
+          .addPathSegment(String.format("%s.%s", id, ext))
+          .build()
+          .toString();
+
+      String lowQuality = imageBase
+          .newBuilder()
+          .addPathSegment(String.format("%s_d.jpg", id))
+          .addQueryParameter("maxwidth", config.imgurLowQualityMaxres())
+          .build()
+          .toString();
+
+      return ImgurLink.create(url, Link.Type.SINGLE_IMAGE, title, description, highQuality, lowQuality);
+    } else {
+      Timber.w("Probably invalid Imgur link: %s", url);
+      String link = parsedUrl.toString();
+      return ImgurLink.create(url, Link.Type.SINGLE_IMAGE, title, description, link, link);
+    }
   }
 
   /**
