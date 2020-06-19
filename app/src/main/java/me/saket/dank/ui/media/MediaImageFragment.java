@@ -178,7 +178,8 @@ public class MediaImageFragment extends BaseMediaViewerFragment {
                 } else {
                   int deviceDisplayWidth = ((MediaFragmentCallbacks) requireActivity()).getDeviceDisplayWidth();
                   ImageWithMultipleVariants imageWithMultipleVariants = ImageWithMultipleVariants.Companion.of(redditImages);
-                  imageUrl = imageWithMultipleVariants.findNearestFor(deviceDisplayWidth, lowQualityUrl);
+                  imageUrl = imageWithMultipleVariants
+                      .findNearestFor(deviceDisplayWidth, ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH, lowQualityUrl);
                 }
               }
 

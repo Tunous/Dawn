@@ -15,12 +15,17 @@ class ImageWithMultipleVariants private constructor(private val optionalRedditPr
   /**
    * Find an image provided by Reddit that is the closest to <var>preferredWidth</var>.
    * Gives preference to higher-res thumbnails if multiple images have the same distance from the preferred width.
+   *
+   * @param minWidth Minimum preview width.
+   * Specify -1 to find any preview. minWidth is ignored if it larger than preferredWidth
    */
   @Suppress("DEPRECATION")
-  fun findNearestFor(preferredWidth: Int): String {
+  fun findNearestFor(preferredWidth: Int, minWidth: Int): String? {
     if (optionalRedditPreviews.isEmpty) {
-      throw NoSuchElementException("No reddit supplied images present")
+      return null
     }
+
+    val minWidthChecked = if (minWidth > preferredWidth) -1 else minWidth
 
     val redditPreviews = optionalRedditPreviews.get().images[0]
     var closestImage: SubmissionPreview.Variation = redditPreviews.source
@@ -36,23 +41,32 @@ class ImageWithMultipleVariants private constructor(private val optionalRedditPr
       }
     }
 
-    // Reddit sends HTML-escaped URLs.
-    return Html.fromHtml(closestImage.url).toString()
+    return if (closestImage.width < minWidthChecked) null else {
+      // Reddit sends HTML-escaped URLs.
+      Html.fromHtml(closestImage.url).toString()
+    }
   }
 
-  fun findNearestFor(preferredWidth: Int, defaultValue: String): String {
+  fun findNearestFor(preferredWidth: Int): String {
+    return this.findNearestFor(preferredWidth, -1) ?:
+      throw NoSuchElementException("No reddit supplied images present")
+  }
+
+  fun findNearestFor(preferredWidth: Int, minWidth: Int, defaultValue: String): String {
     if (UrlParser.isGifUrl(defaultValue)) {
       throw AssertionError("Optimizing GIFs is an error: $defaultValue")
     }
 
-    return if (optionalRedditPreviews.isPresent) {
-      findNearestFor(preferredWidth)
-    } else {
-      defaultValue
-    }
+    return this.findNearestFor(preferredWidth, minWidth) ?: defaultValue
+  }
+
+  fun findNearestFor(preferredWidth: Int, defaultValue: String): String {
+    return findNearestFor(preferredWidth, -1, defaultValue)
   }
 
   companion object {
+
+    const val DEFAULT_VIEWER_MIN_WIDTH = 1200
 
     fun of(redditSuppliedImages: SubmissionPreview?): ImageWithMultipleVariants {
       return ImageWithMultipleVariants(Optional.ofNullable(redditSuppliedImages))
