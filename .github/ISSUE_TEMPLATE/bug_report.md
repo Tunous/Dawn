@@ -17,6 +17,10 @@ Steps to reproduce the behavior:
 3. Scroll down to '....'
 4. See error
 
+**URLs of affected threads**
+This section is essential for any content or media related bugs.
+Include at least one url or otherwise omit this section if not applicable.
+
 **Expected behavior**
 A clear and concise description of what you expected to happen.
 
