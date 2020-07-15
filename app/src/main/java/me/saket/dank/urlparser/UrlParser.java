@@ -197,7 +197,7 @@ public class UrlParser {
     } else if (urlDomain.contains("gfycat.com")) {
       return createGfycatLink(linkURI);
 
-    } else if (urlDomain.contains("redgifs.com")) {
+    } else if (urlDomain.contains("redgifs.com") || urlDomain.contains("gifdeliverynetwork.com")) {
       return createRedgifsLink(linkURI);
 
     } else if (urlDomain.contains("giphy.com")) {
