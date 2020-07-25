@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.media.MediaMetadata;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Build;
@@ -421,6 +422,8 @@ public class MediaDownloadService extends Service {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
               MediaSession poop = new MediaSession(getBaseContext(), "me.saket.Dank.dummyMediaSession");
               MediaSessionCompat.Token dummyTokenCompat = MediaSessionCompat.Token.fromToken(poop.getSessionToken());
+              MediaMetadata meta = new MediaMetadata.Builder().putLong(MediaMetadata.METADATA_KEY_DURATION, -1).build();
+              poop.setMetadata(meta);
               poop.release();
 
               notificationBuilder = notificationBuilder
