@@ -354,6 +354,22 @@ public class MediaDownloadService extends Service {
     NotificationManagerCompat.from(this).notify(notificationId, errorNotification);
   }
 
+  private void displaySummaryNotification(NotificationManagerCompat nm, String channel) {
+    // No point in grouping download notifications on < Nougat since summary notification won't be exapndable
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      Notification summaryNotification = new NotificationCompat.Builder(MediaDownloadService.this, channel)
+          .setSmallIcon(R.drawable.ic_done_24dp)
+          .setGroup(NotificationConstants.MEDIA_DOWNLOAD_GROUP)
+          .setGroupSummary(true)
+          .setShowWhen(true)
+          .setDefaults(Notification.DEFAULT_ALL)
+          .setOnlyAlertOnce(true)
+          .setAutoCancel(true)
+          .build();
+      nm.notify(NotificationConstants.ID_MEDIA_DOWNLOAD_SUCCESS_BUNDLE_SUMMARY, summaryNotification);
+    }
+  }
+
   /**
    * Generate a notification with a preview of the media. Images and videos both work, thanks to Glide.
    */
@@ -446,7 +462,9 @@ public class MediaDownloadService extends Service {
             }
 
             Notification successNotification = notificationBuilder.build();
-            NotificationManagerCompat.from(MediaDownloadService.this).notify(notificationId, successNotification);
+            NotificationManagerCompat nm = NotificationManagerCompat.from(MediaDownloadService.this);
+            displaySummaryNotification(nm, notificationChannelId);
+            nm.notify(notificationId, successNotification);
           }
         });
   }
