@@ -13,10 +13,11 @@ import com.squareup.sqlbrite2.BriteDatabase;
 
 import net.dean.jraw.models.Identifiable;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 
 import javax.inject.Inject;
@@ -24,7 +25,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Lazy;
-import hirondelle.date4j.DateTime;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -40,6 +40,8 @@ import me.saket.dank.ui.user.UserSessionRepository;
 import me.saket.dank.utils.Arrays2;
 import me.saket.dank.utils.Preconditions;
 import timber.log.Timber;
+
+import static org.threeten.bp.ZoneOffset.UTC;
 
 /**
  * Manages sending replies and saving drafts.
@@ -217,9 +219,9 @@ public class ReplyRepository implements DraftStore {
 
   @VisibleForTesting
   void recycleOldDrafts(Map<String, ReplyDraft> allDrafts) {
-    DateTime nowDateTime = DateTime.now(TimeZone.getTimeZone("UTC"));
-    DateTime draftDateLimit = nowDateTime.minusDays(recycleDraftsOlderThanNumDays);
-    long draftDateLimitMillis = draftDateLimit.getMilliseconds(TimeZone.getTimeZone("UTC"));
+    LocalDateTime nowDateTime = LocalDateTime.now(UTC);
+    LocalDateTime draftDateLimit = nowDateTime.minusDays(recycleDraftsOlderThanNumDays);
+    long draftDateLimitMillis = draftDateLimit.getNano() / 1000000;
 
     SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
 

@@ -16,13 +16,13 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TimeZone;
 
-import hirondelle.date4j.DateTime;
 import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.utils.AutoValueMoshiAdapterFactory;
 
@@ -34,6 +34,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.threeten.bp.ZoneOffset.UTC;
 
 public class ReplyRepositoryShould {
 
@@ -91,8 +92,8 @@ public class ReplyRepositoryShould {
   @Test
   public void onRecycleOldDrafts_shouldCorrectlyRecycleStaleDrafts() {
     Map<String, ReplyDraft> savedDrafts = new HashMap<>();
-    DateTime twoWeeksOldDate = DateTime.forInstant(System.currentTimeMillis(), TimeZone.getTimeZone("UTC")).minusDays(RECYCLE_DRAFTS_IN_DAYS + 1);
-    long twoWeeksOldTimeMillis = twoWeeksOldDate.getMilliseconds(TimeZone.getTimeZone("UTC"));
+    ZonedDateTime twoWeeksOldDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(UTC).minusDays(RECYCLE_DRAFTS_IN_DAYS + 1);
+    long twoWeeksOldTimeMillis = twoWeeksOldDate.getNano() / 1000000;
     savedDrafts.put("oldKey", ReplyDraft.create("oldDraft", twoWeeksOldTimeMillis));
     savedDrafts.put("newKey", ReplyDraft.create("newDraft", System.currentTimeMillis()));
 
