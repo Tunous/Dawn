@@ -359,7 +359,7 @@ public class MediaDownloadService extends Service {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
       Notification summaryNotification = new NotificationCompat.Builder(MediaDownloadService.this, channel)
           .setSmallIcon(R.drawable.ic_done_24dp)
-          .setGroup(NotificationConstants.MEDIA_DOWNLOAD_GROUP)
+          .setGroup(NotificationConstants.MEDIA_DOWNLOAD_SUCCESS_GROUP)
           .setGroupSummary(true)
           .setShowWhen(true)
           .setDefaults(Notification.DEFAULT_ALL)
@@ -424,7 +424,7 @@ public class MediaDownloadService extends Service {
                 .setSmallIcon(R.drawable.ic_done_24dp)
                 .setOngoing(false)
                 .setLocalOnly(true)
-                .setGroup(NotificationConstants.MEDIA_DOWNLOAD_GROUP)
+                .setGroup(NotificationConstants.MEDIA_DOWNLOAD_SUCCESS_GROUP)
                 .setWhen(completedDownloadJob.timestamp())
                 .setContentIntent(viewImagePendingIntent)
                 .addAction(shareImageAction)

@@ -11,4 +11,5 @@ public class NotificationConstants {
 
   public static final String ID_MEDIA_DOWNLOAD_PROGRESS_PREFIX_ = "mediaDownloadProgress_";
   public static final String MEDIA_DOWNLOAD_GROUP = "mediaDownloadNotifs";
+  public static final String MEDIA_DOWNLOAD_SUCCESS_GROUP = "mediaDownloadSuccessNotifs";
 }
