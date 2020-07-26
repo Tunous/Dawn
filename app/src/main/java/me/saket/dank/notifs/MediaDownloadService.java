@@ -435,7 +435,9 @@ public class MediaDownloadService extends Service {
 
             // Taking advantage of O's tinted media notifications! I feel bad for this.
             // Let's see if anyone from Google asks me to remove this.
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            // ---
+            // Android 11 finally broke this so we'll force it to use BigPicture style for now
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Build.VERSION.SDK_INT < 30) {
               MediaSession poop = new MediaSession(getBaseContext(), "me.saket.Dank.dummyMediaSession");
               MediaSessionCompat.Token dummyTokenCompat = MediaSessionCompat.Token.fromToken(poop.getSessionToken());
               MediaMetadata meta = new MediaMetadata.Builder().putLong(MediaMetadata.METADATA_KEY_DURATION, -1).build();
