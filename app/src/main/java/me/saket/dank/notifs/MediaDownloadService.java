@@ -619,9 +619,10 @@ public class MediaDownloadService extends Service {
 
         //broadcast file
         ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.DATA, userAccessibleFile.getAbsolutePath());
         values.put(MediaStore.Images.Media.TITLE, mediaFileName);
         values.put(MediaStore.Images.Media.DISPLAY_NAME, mediaFileName);
-        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,values);
+        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
 
         return MediaDownloadJob.downloaded(downloadedMediaLink, userAccessibleFile, downloadJobUpdate.timestamp());
 
