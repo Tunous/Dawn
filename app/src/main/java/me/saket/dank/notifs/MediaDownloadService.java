@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -616,13 +617,26 @@ public class MediaDownloadService extends Service {
         String mediaFileName = Urls.parseFileNameWithExtension(downloadedMediaLink.highQualityUrl());
         //noinspection LambdaParameterTypeCanBeSpecified,ConstantConditions
         File userAccessibleFile = Files2.INSTANCE.copyFileToPicturesDirectory(getResources(), downloadJobUpdate.downloadedFile(), mediaFileName);
+        String userFilePath = userAccessibleFile.getAbsolutePath();
 
-        //broadcast file
+        ContentResolver resolver = getContentResolver();
+        Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DATA, userAccessibleFile.getAbsolutePath());
-        values.put(MediaStore.Images.Media.TITLE, mediaFileName);
-        values.put(MediaStore.Images.Media.DISPLAY_NAME, mediaFileName);
-        getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        values.put(MediaStore.Images.Media.DATE_MODIFIED, System.currentTimeMillis() / 1000);
+
+        // try to update mtime on already indexed file
+        int updatedCount = resolver.update(contentUri, values,
+            MediaStore.Images.Media.DATA + "=?",
+            new String[]{ userFilePath });
+
+        if (updatedCount <= 0) {
+          // broadcast new file
+          values.put(MediaStore.Images.Media.DATA, userFilePath);
+          values.put(MediaStore.Images.Media.TITLE, mediaFileName);
+          values.put(MediaStore.Images.Media.DISPLAY_NAME, mediaFileName);
+          resolver.insert(contentUri, values);
+        }
 
         return MediaDownloadJob.downloaded(downloadedMediaLink, userAccessibleFile, downloadJobUpdate.timestamp());
 
