@@ -620,21 +620,24 @@ public class MediaDownloadService extends Service {
         String userFilePath = userAccessibleFile.getAbsolutePath();
 
         ContentResolver resolver = getContentResolver();
-        Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+
+        Uri contentUri = downloadedMediaLink.isVideo() ?
+            MediaStore.Video.Media.EXTERNAL_CONTENT_URI :
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 
         ContentValues values = new ContentValues();
-        values.put(MediaStore.Images.Media.DATE_MODIFIED, System.currentTimeMillis() / 1000);
+        values.put(MediaStore.MediaColumns.DATE_MODIFIED, System.currentTimeMillis() / 1000);
 
         // try to update mtime on already indexed file
         int updatedCount = resolver.update(contentUri, values,
-            MediaStore.Images.Media.DATA + "=?",
+            MediaStore.MediaColumns.DATA + "=?",
             new String[]{ userFilePath });
 
         if (updatedCount <= 0) {
           // broadcast new file
-          values.put(MediaStore.Images.Media.DATA, userFilePath);
-          values.put(MediaStore.Images.Media.TITLE, mediaFileName);
-          values.put(MediaStore.Images.Media.DISPLAY_NAME, mediaFileName);
+          values.put(MediaStore.MediaColumns.DATA, userFilePath);
+          values.put(MediaStore.MediaColumns.TITLE, mediaFileName);
+          values.put(MediaStore.MediaColumns.DISPLAY_NAME, mediaFileName);
           resolver.insert(contentUri, values);
         }
 
