@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.media.MediaMetadata;
+import android.media.MediaScannerConnection;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Build;
@@ -640,6 +641,11 @@ public class MediaDownloadService extends Service {
           values.put(MediaStore.MediaColumns.DISPLAY_NAME, mediaFileName);
           resolver.insert(contentUri, values);
         }
+
+        MediaScannerConnection.scanFile(
+            MediaDownloadService.this,
+            new String[]{ userFilePath },
+            null, null);
 
         return MediaDownloadJob.downloaded(downloadedMediaLink, userAccessibleFile, downloadJobUpdate.timestamp());
 
