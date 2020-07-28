@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Fix sharing an image multiple times ([#280](https://github.com/Tunous/Dawn/pull/280))
 - Allow grouping of media download notifications ([#285](https://github.com/Tunous/Dawn/pull/285))
 - Workaround invisible download notifications on Android 11 ([#282](https://github.com/Tunous/Dawn/issues/282))
+- Fix downloaded media not appearing in gallery ([#288](https://github.com/Tunous/Dawn/pull/288))
 
 ## [0.9.2] - 2020-06-13
 
