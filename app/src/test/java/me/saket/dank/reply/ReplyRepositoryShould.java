@@ -16,7 +16,8 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
-import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.Instant;
+import org.threeten.bp.ZonedDateTime;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -91,7 +92,7 @@ public class ReplyRepositoryShould {
   @Test
   public void onRecycleOldDrafts_shouldCorrectlyRecycleStaleDrafts() {
     Map<String, ReplyDraft> savedDrafts = new HashMap<>();
-    LocalDateTime twoWeeksOldDate = LocalDateTime.now(UTC).minusDays(RECYCLE_DRAFTS_IN_DAYS + 1);
+    ZonedDateTime twoWeeksOldDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(UTC).minusDays(RECYCLE_DRAFTS_IN_DAYS + 1);
     long twoWeeksOldTimeMillis = twoWeeksOldDate.getNano() / 1000000;
     savedDrafts.put("oldKey", ReplyDraft.create("oldDraft", twoWeeksOldTimeMillis));
     savedDrafts.put("newKey", ReplyDraft.create("newDraft", System.currentTimeMillis()));
