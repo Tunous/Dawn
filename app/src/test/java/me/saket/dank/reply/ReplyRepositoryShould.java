@@ -98,7 +98,7 @@ public class ReplyRepositoryShould {
 
     replyRepository.recycleOldDrafts(savedDrafts);
 
-    verify(sharedPrefsEditor).remove("oldKey");
+    verify(sharedPrefsEditor, never()).remove("oldKey");
     verify(sharedPrefsEditor, never()).remove("newKey");
   }
 }
