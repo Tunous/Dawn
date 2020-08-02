@@ -408,18 +408,18 @@ public class SubredditUiConstructor {
   private SubredditSubmission.UiModel.Thumbnail thumbnailForRemoteImage(Context c, SubmissionPreview preview) {
     ImageWithMultipleVariants redditThumbnails = ImageWithMultipleVariants.Companion.of(preview);
     int preferredWidth = getPreferredWidthForThumbnail(c);
-    SubmissionPreview.Variation optimizedThumbnail = redditThumbnails.findNearestFor(preferredWidth);
-    String optimizedThumbnailUrl = Html.fromHtml(optimizedThumbnail.getUrl()).toString();
-    int thumbnailFullHeight = getFullHeightForThumbnail(preferredWidth, optimizedThumbnail);
+    Optional<SubmissionPreview.Variation> optimizedThumbnail = Optional.ofNullable(redditThumbnails.findNearestFor(preferredWidth, -1));
+    Optional<String> optimizedThumbnailUrl = optimizedThumbnail.map(thumbnail -> Html.fromHtml(thumbnail.getUrl()).toString());
+    Optional<Integer> thumbnailFullHeight = optimizedThumbnail.map(thumbnail -> getFullHeightForThumbnail(preferredWidth, thumbnail));
 
     return SubredditSubmission.UiModel.Thumbnail.builder()
         .staticRes(Optional.empty())
-        .remoteUrl(Optional.of(optimizedThumbnailUrl))
+        .remoteUrl(optimizedThumbnailUrl)
         .contentDescription(c.getString(R.string.subreddit_submission_item_cd_external_url))
         .scaleType(ImageView.ScaleType.CENTER_CROP)
         .tintColor(Optional.empty())
         .backgroundRes(Optional.empty())
-        .height(Optional.of(thumbnailFullHeight))
+        .height(thumbnailFullHeight)
         .build();
   }
 

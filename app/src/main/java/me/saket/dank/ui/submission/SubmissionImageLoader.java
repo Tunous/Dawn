@@ -118,7 +118,7 @@ public class SubmissionImageLoader {
       // Images supplied by Reddit are static, so cannot optimize for GIFs.
       String defaultImageUrl = mediaLink.lowQualityUrl();
       return mediaLink.isGif() ? defaultImageUrl :
-          ImageWithMultipleVariants.Companion.of(redditPreviews).findNearestFor(
+          ImageWithMultipleVariants.Companion.of(redditPreviews).findNearestUrlFor(
               deviceDisplaySize.getWidth(),
               ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
               defaultImageUrl

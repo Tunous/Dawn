@@ -179,7 +179,7 @@ public class MediaImageFragment extends BaseMediaViewerFragment {
                   int deviceDisplayWidth = ((MediaFragmentCallbacks) requireActivity()).getDeviceDisplayWidth();
                   ImageWithMultipleVariants imageWithMultipleVariants = ImageWithMultipleVariants.Companion.of(redditImages);
                   imageUrl = imageWithMultipleVariants
-                      .findNearestFor(deviceDisplayWidth, ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH, lowQualityUrl);
+                      .findNearestUrlFor(deviceDisplayWidth, ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH, lowQualityUrl);
                 }
               }
 

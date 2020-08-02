@@ -649,7 +649,7 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
     Observable<File> optimizedResImageFileStream = getRedditSuppliedImages()
         .flatMapObservable(redditImages -> Observable.create(emitter -> {
           ImageWithMultipleVariants imageVariants = ImageWithMultipleVariants.Companion.of(redditImages);
-          String optimizedQualityImageForDevice = imageVariants.findNearestFor(
+          String optimizedQualityImageForDevice = imageVariants.findNearestUrlFor(
               getDeviceDisplayWidth(),
               ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
               albumItem.mediaLink().lowQualityUrl()

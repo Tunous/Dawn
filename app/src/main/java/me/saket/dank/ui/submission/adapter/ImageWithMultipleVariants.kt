@@ -19,8 +19,7 @@ class ImageWithMultipleVariants private constructor(private val optionalRedditPr
    * @param minWidth Minimum preview width.
    * Specify -1 to find any preview. minWidth is ignored if it larger than preferredWidth
    */
-  @Suppress("DEPRECATION")
-  fun findNearestFor(preferredWidth: Int, minWidth: Int): String? {
+  fun findNearestFor(preferredWidth: Int, minWidth: Int): SubmissionPreview.Variation? {
     if (optionalRedditPreviews.isEmpty) {
       return null
     }
@@ -43,26 +42,36 @@ class ImageWithMultipleVariants private constructor(private val optionalRedditPr
     }
 
     return if (closestImage.width < minWidthChecked) null else {
-      // Reddit sends HTML-escaped URLs.
-      Html.fromHtml(closestImage.url).toString()
+      closestImage
     }
   }
 
-  fun findNearestFor(preferredWidth: Int): String {
-    return this.findNearestFor(preferredWidth, -1) ?:
+  @Suppress("DEPRECATION")
+  fun findNearestUrlFor(preferredWidth: Int, minWidth: Int): String? {
+    val url = findNearestFor(preferredWidth, minWidth)?.url
+    return if (url != null) {
+      // Reddit sends HTML-escaped URLs.
+      Html.fromHtml(url).toString()
+    } else {
+      null
+    }
+  }
+
+  fun findNearestUrlFor(preferredWidth: Int): String {
+    return findNearestUrlFor(preferredWidth, -1) ?:
       throw NoSuchElementException("No reddit supplied images present")
   }
 
-  fun findNearestFor(preferredWidth: Int, minWidth: Int, defaultValue: String): String {
+  fun findNearestUrlFor(preferredWidth: Int, minWidth: Int, defaultValue: String): String {
     if (UrlParser.isGifUrl(defaultValue)) {
       throw AssertionError("Optimizing GIFs is an error: $defaultValue")
     }
 
-    return this.findNearestFor(preferredWidth, minWidth) ?: defaultValue
+    return findNearestUrlFor(preferredWidth, minWidth) ?: defaultValue
   }
 
-  fun findNearestFor(preferredWidth: Int, defaultValue: String): String {
-    return findNearestFor(preferredWidth, -1, defaultValue)
+  fun findNearestUrlFor(preferredWidth: Int, defaultValue: String): String {
+    return findNearestUrlFor(preferredWidth, -1, defaultValue)
   }
 
   companion object {
