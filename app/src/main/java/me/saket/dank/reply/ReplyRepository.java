@@ -221,7 +221,7 @@ public class ReplyRepository implements DraftStore {
   void recycleOldDrafts(Map<String, ReplyDraft> allDrafts) {
     LocalDateTime nowDateTime = LocalDateTime.now(UTC);
     LocalDateTime draftDateLimit = nowDateTime.minusDays(recycleDraftsOlderThanNumDays);
-    long draftDateLimitMillis = draftDateLimit.getNano() / 1000000;
+    long draftDateLimitMillis = draftDateLimit.toInstant(UTC).toEpochMilli();
 
     SharedPreferences.Editor sharedPrefsEditor = sharedPrefs.edit();
 

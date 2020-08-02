@@ -93,7 +93,7 @@ public class ReplyRepositoryShould {
   public void onRecycleOldDrafts_shouldCorrectlyRecycleStaleDrafts() {
     Map<String, ReplyDraft> savedDrafts = new HashMap<>();
     ZonedDateTime twoWeeksOldDate = Instant.ofEpochMilli(System.currentTimeMillis()).atZone(UTC).minusDays(RECYCLE_DRAFTS_IN_DAYS + 1);
-    long twoWeeksOldTimeMillis = twoWeeksOldDate.getNano() / 1000000;
+    long twoWeeksOldTimeMillis = twoWeeksOldDate.toInstant().toEpochMilli();
     savedDrafts.put("oldKey", ReplyDraft.create("oldDraft", twoWeeksOldTimeMillis));
     savedDrafts.put("newKey", ReplyDraft.create("newDraft", System.currentTimeMillis()));
 
