@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Full height images style ([#207](https://github.com/Tunous/Dawn/pull/207))
 
 ### Changed
 - Add support for alternate Redgifs domain ([#281](https://github.com/Tunous/Dawn/pull/281))
