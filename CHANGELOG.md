@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Allow grouping of media download notifications ([#285](https://github.com/Tunous/Dawn/pull/285))
 - Workaround invisible download notifications on Android 11 ([#282](https://github.com/Tunous/Dawn/issues/282))
 - Fix downloaded media not appearing in gallery ([#288](https://github.com/Tunous/Dawn/pull/288))
+- Notification icon ([#269](https://github.com/Tunous/Dawn/issues/269))
 
 ## [0.9.2] - 2020-06-13
 
