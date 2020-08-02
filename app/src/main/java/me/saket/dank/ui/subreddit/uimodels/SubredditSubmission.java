@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.google.auto.value.AutoValue;
 import com.jakewharton.rxrelay2.PublishRelay;
 
@@ -280,7 +281,7 @@ public interface SubredditSubmission {
               break;
             case THUMBNAIL:
               imageView.setVisibility(View.GONE);
-              loadThumbnail(thumb, RequestOptions.circleCropTransform(), thumbnailView);
+              loadThumbnail(thumb, RequestOptions.circleCropTransform(), thumbnailView, -1);
               break;
             case LARGE:
               setLargeImage(thumb, largeImageHeight);
@@ -298,12 +299,13 @@ public interface SubredditSubmission {
       layoutParams.height = height;
       imageView.setLayoutParams(layoutParams);
       thumbnailView.setVisibility(View.GONE);
-      loadThumbnail(thumb, RequestOptions.centerCropTransform(), imageView);
+      loadThumbnail(thumb, RequestOptions.centerCropTransform(), imageView, height);
     }
 
-    private void loadThumbnail(UiModel.Thumbnail thumb, RequestOptions requestOptions, ImageView imageView) {
+    private void loadThumbnail(UiModel.Thumbnail thumb, RequestOptions requestOptions, ImageView imageView, int height) {
       Glide.with(itemView)
           .load(thumb.remoteUrl().get())
+          .signature(new ObjectKey(height))
           .apply(requestOptions)
           .transition(DrawableTransitionOptions.withCrossFade())
           .into(imageView);
