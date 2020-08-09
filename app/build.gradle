@@ -24,6 +24,10 @@ final def enableReleaseSigning = signingPropertiesFile.exists()
 
 android {
   compileSdkVersion versions.compileSdk
+  // Current version of AGP (4.0.1) "won't auto-download [NDK] in the case when the NDK is needed only for stripping".
+  // As a workaround specify NDK version here. It can be removed once the issue is fixed.
+  // See https://issuetracker.google.com/issues/144111441 for more details.
+  ndkVersion "21.3.6528147"
 
   defaultConfig {
     applicationId "me.thanel.dank"

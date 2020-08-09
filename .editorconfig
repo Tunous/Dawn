@@ -12,7 +12,7 @@ indent_style = space
 indent_size = 2
 ij_continuation_indent_size = 2
 
-[*.{java,kt}]
+[*.{java,kt,gradle}]
 indent_size = 2
 ij_continuation_indent_size = 4
 
