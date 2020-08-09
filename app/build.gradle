@@ -138,7 +138,7 @@ dependencies {
   androidTestImplementation 'androidx.test:runner:1.2.0'
   androidTestImplementation 'androidx.test:rules:1.2.0'
 
-  implementation 'androidx.recyclerview:recyclerview:1.0.0'
+  implementation 'androidx.recyclerview:recyclerview:1.1.0'
   implementation 'androidx.annotation:annotation:1.1.0'
   implementation 'com.google.android.material:material:1.0.0'
   implementation 'androidx.browser:browser:1.2.0'
