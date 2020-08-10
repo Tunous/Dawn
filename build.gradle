@@ -15,7 +15,7 @@ buildscript {
       retrofit        : '2.9.0',
       rxBindings      : '2.2.0',
       dagger          : '2.28.3',
-      butterKnife     : '10.2.1',
+      butterKnife     : '10.2.2',
       commonmark      : '0.10.0',
       flexmark        : '0.50.44',
       timber          : '4.7.1',
