@@ -6,21 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.10.0] - 2020-08-14
+
 ### Added
-- Full height images style ([#207](https://github.com/Tunous/Dawn/pull/207))
+
+-   Full height images style ([#207](https://github.com/Tunous/Dawn/pull/207))
 
 ### Changed
-- Add support for alternate Redgifs domain ([#281](https://github.com/Tunous/Dawn/pull/281))
+
+-   Add support for alternate Redgifs domain ([#281](https://github.com/Tunous/Dawn/pull/281))
 
 ### Fixed
 
-- Show smaller Imgur images when data saving mode enabled ([#256](https://github.com/Tunous/Dawn/pull/256))
-- Don't show too small reddit previews ([#264](https://github.com/Tunous/Dawn/pull/264))
-- Fix sharing an image multiple times ([#280](https://github.com/Tunous/Dawn/pull/280))
-- Allow grouping of media download notifications ([#285](https://github.com/Tunous/Dawn/pull/285))
-- Workaround invisible download notifications on Android 11 ([#282](https://github.com/Tunous/Dawn/issues/282))
-- Fix downloaded media not appearing in gallery ([#288](https://github.com/Tunous/Dawn/pull/288))
-- Notification icon ([#269](https://github.com/Tunous/Dawn/issues/269))
+-   Show smaller Imgur images when data saving mode enabled ([#256](https://github.com/Tunous/Dawn/pull/256))
+-   Don't show too small reddit previews ([#264](https://github.com/Tunous/Dawn/pull/264))
+-   Fix sharing an image multiple times ([#280](https://github.com/Tunous/Dawn/pull/280))
+-   Allow grouping of media download notifications ([#285](https://github.com/Tunous/Dawn/pull/285))
+-   Workaround invisible download notifications on Android 11 ([#282](https://github.com/Tunous/Dawn/issues/282))
+-   Fix downloaded media not appearing in gallery ([#288](https://github.com/Tunous/Dawn/pull/288))
+-   Notification icon ([#269](https://github.com/Tunous/Dawn/issues/269))
 
 ## [0.9.2] - 2020-06-13
 
@@ -142,7 +146,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Changes before the fork has been made.
 
-[Unreleased]: https://github.com/Tunous/Dawn/compare/0.9.2...HEAD
+[Unreleased]: https://github.com/Tunous/Dawn/compare/0.10.0...HEAD
+
+[0.10.0]: https://github.com/Tunous/Dawn/compare/0.9.2...0.10.0
 
 [0.9.2]: https://github.com/Tunous/Dawn/compare/0.9.1...0.9.2
 
