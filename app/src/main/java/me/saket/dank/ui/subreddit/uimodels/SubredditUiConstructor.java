@@ -260,9 +260,14 @@ public class SubredditUiConstructor {
     int postedAndPendingCommentCount = submission.getCommentCount() + pendingSyncReplyCount;
 
     Truss titleBuilder = new Truss();
-    titleBuilder.pushSpan(new ForegroundColorSpan(ContextCompat.getColor(c, Themes.voteColor(voteDirection))));
+    int voteColor = ContextCompat.getColor(c, Themes.voteColor(voteDirection));
+    titleBuilder.pushSpan(new ForegroundColorSpan(voteColor));
     titleBuilder.append(Strings.abbreviateScore(submissionScore));
     titleBuilder.popSpan();
+
+    if (true) // todo check pref
+      ColorReplicationIcons.pushVoteIcon(c, titleBuilder, voteDirection, voteColor, R.dimen.subreddit_submission_title);
+
     titleBuilder.append("  ");
     //noinspection deprecation
     titleBuilder.append(Html.fromHtml(submission.getTitle()));

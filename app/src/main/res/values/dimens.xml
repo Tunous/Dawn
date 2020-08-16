@@ -27,6 +27,7 @@
   <dimen name="subreddit_toolbar_sheet_elevation">10dp</dimen>
   <dimen name="subreddit_picker_sheet_height">366dp</dimen>
   <dimen name="subreddit_picker_sheet_bottom_margin">20dp</dimen>
+  <dimen name="subreddit_submission_title">@dimen/textsize16</dimen>
   <dimen name="subreddit_submission_padding">@dimen/spacing16</dimen>
   <dimen name="subreddit_submission_thumbnail_padding">@dimen/spacing24</dimen>
   <dimen name="subreddit_submission_thumbnail">52dp</dimen>
@@ -36,6 +37,7 @@
   <dimen name="popup_menu_vertical_offset_for_button">6dp</dimen> <!-- that includes padding to make space for shadow. -->
 
   <!-- Submission -->
+  <dimen name="submission_title">@dimen/textsize16</dimen>
   <dimen name="submission_commentssheet_minimum_visible_height">76dp</dimen>
   <!--<dimen name="submission_link_thumbnail_width_reddit_link">60dp</dimen>-->
   <dimen name="submission_link_thumbnail_width_external_link">100dp</dimen>

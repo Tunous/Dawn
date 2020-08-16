@@ -41,7 +41,7 @@
       android:layout_marginStart="@dimen/spacing16"
       android:lineSpacingExtra="@dimen/spacing2"
       android:textColor="@color/gray_100"
-      android:textSize="@dimen/textsize16"
+      android:textSize="@dimen/submission_title"
       android:textIsSelectable="false"
       tools:text="I did a thing in Photoshop, and am fairly proud of it." />
 

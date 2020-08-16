@@ -37,7 +37,7 @@
     android:lineSpacingExtra="@dimen/spacing2"
     android:textColor="@color/gray_100"
     android:textIsSelectable="false"
-    android:textSize="@dimen/textsize16"
+    android:textSize="@dimen/subreddit_submission_title"
     app:layout_constraintEnd_toStartOf="@+id/submission_item_icon"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toBottomOf="@+id/submission_item_image"
