@@ -8,7 +8,17 @@ import androidx.annotation.Px;
 public class Units {
 
   @Px
+  public static int unitToPx(float value, int unit, Context context) {
+    return (int) TypedValue.applyDimension(unit, value, context.getResources().getDisplayMetrics());
+  }
+
+  @Px
   public static int dpToPx(float dpValue, Context context) {
-    return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, context.getResources().getDisplayMetrics());
+    return unitToPx(dpValue, TypedValue.COMPLEX_UNIT_DIP, context);
+  }
+
+  @Px
+  public static int spToPx(float spValue, Context context) {
+    return unitToPx(spValue, TypedValue.COMPLEX_UNIT_SP, context);
   }
 }
