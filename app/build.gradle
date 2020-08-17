@@ -34,7 +34,7 @@ android {
     minSdkVersion versions.minSdk
     targetSdkVersion versions.compileSdk
     versionCode 19
-    versionName "0.9.3"
+    versionName "0.10.0"
     multiDexEnabled true
     testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
   }
