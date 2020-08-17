@@ -618,6 +618,9 @@ public class SubmissionCommentTreeUiConstructor {
       bylineBuilder.append(String.format(hiddenCommentsString, hiddenCommentsCount));
 
     } else {
+      if (isAuthorOP && true) // todo check pref
+        ColorReplicationIcons.pushOPCommentIcon(context, bylineBuilder);
+
       bylineBuilder.pushSpan(new ForegroundColorSpan(color(context, isAuthorOP
           ? R.color.submission_comment_byline_author_op
           : R.color.submission_comment_byline_author)

@@ -1,6 +1,7 @@
 package me.saket.dank.utils
 
 import android.content.Context
+import androidx.core.content.ContextCompat
 import me.saket.dank.R
 import me.saket.dank.widgets.span.CenterAlignedImageSpan
 import net.dean.jraw.models.VoteDirection
@@ -27,5 +28,10 @@ object ColorReplicationIcons {
 
     if (icon != 0)
       pushIcon(context, builder, iconSizeResId, icon, color)
+  }
+
+  @JvmStatic fun pushOPCommentIcon(context: Context, builder: Truss) {
+    val color = ContextCompat.getColor(context, R.color.submission_comment_byline_author_op)
+    pushIcon(context, builder, R.dimen.submission_comment_byline, R.drawable.ic_person_12dp, color)
   }
 }
