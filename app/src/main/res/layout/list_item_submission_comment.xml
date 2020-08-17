@@ -27,7 +27,7 @@
       android:ellipsize="end"
       android:textColor="@color/submission_comment_byline_default_color"
       android:textIsSelectable="false"
-      android:textSize="@dimen/textsize12"
+      android:textSize="@dimen/submission_comment_byline"
       tools:text="nuckingfuts73 \u00b7 516 points \u00b7 i5 4690 + GTX 1060 / rip Athlon II (stolen) \u00b7 2 hr. ago" />
 
     <me.saket.dank.utils.markdown.markwon.MarkdownTextView
