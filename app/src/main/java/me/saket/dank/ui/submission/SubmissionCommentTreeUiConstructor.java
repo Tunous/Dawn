@@ -8,7 +8,9 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.core.content.ContextCompat;
 
+import com.f2prateek.rx.preferences2.Preference;
 import me.saket.dank.utils.*;
+import me.saket.dank.utils.lifecycle.LifecycleStreams;
 import net.dean.jraw.models.Comment;
 import net.dean.jraw.models.Identifiable;
 import net.dean.jraw.models.MoreChildren;
@@ -23,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import dagger.Lazy;
 import io.reactivex.Observable;
@@ -64,6 +67,7 @@ public class SubmissionCommentTreeUiConstructor {
   private final Lazy<VotingManager> votingManager;
   private final Lazy<Markdown> markdown;
   private final Lazy<UserSessionRepository> userSessionRepository;
+  private final Preference<Boolean> showColorReplicationIcons;
 
   /** Contribution IDs for which inline replies are active. */
   static class ActiveReplyIds extends RxHashSet<String> {
@@ -167,12 +171,14 @@ public class SubmissionCommentTreeUiConstructor {
       Lazy<ReplyRepository> replyRepository,
       Lazy<VotingManager> votingManager,
       Lazy<Markdown> markdown,
-      Lazy<UserSessionRepository> userSessionRepository)
+      Lazy<UserSessionRepository> userSessionRepository,
+      @Named("show_color_replication_icons") Preference<Boolean> showColorReplicationIcons)
   {
     this.replyRepository = replyRepository;
     this.votingManager = votingManager;
     this.markdown = markdown;
     this.userSessionRepository = userSessionRepository;
+    this.showColorReplicationIcons = showColorReplicationIcons;
   }
 
   @CheckResult
@@ -209,6 +215,11 @@ public class SubmissionCommentTreeUiConstructor {
 
     Observable<Object> voteChanges = votingManager.get().streamChanges();
 
+    Observable<?> userPrefChanges = showColorReplicationIcons.asObservable()
+        .skip(1)
+        .map(__ -> LifecycleStreams.NOTHING)
+        .startWith(LifecycleStreams.NOTHING);
+
     return CombineLatestWithLog
         .from(
             O.of("submission and root comments", submissionDatum),
@@ -216,7 +227,9 @@ public class SubmissionCommentTreeUiConstructor {
             O.of("focusedComment", focusedComments),
             O.of("row-visibility", rowVisibilityChanges),
             O.of("votes", voteChanges),
-            (submissionData, pendingSyncRepliesMap, focusedComment, o, oo) -> new Triple<>(submissionData, pendingSyncRepliesMap, focusedComment))
+            O.of("ext-changes", userPrefChanges),
+            (submissionData, pendingSyncRepliesMap, focusedComment, _a, _b, _c) ->
+                new Triple<>(submissionData, pendingSyncRepliesMap, focusedComment))
         .observeOn(scheduler)
         .map(triple -> {
           SubmissionAndComments submissionData = triple.getFirst();
@@ -609,6 +622,7 @@ public class SubmissionCommentTreeUiConstructor {
   {
     Truss bylineBuilder = new Truss();
     int voteColor = color(context, Themes.voteColor(voteDirection));
+    boolean pushIcons = showColorReplicationIcons.get();
     if (isCollapsed) {
       bylineBuilder.append(author);
       bylineBuilder.append(context.getString(R.string.submission_comment_byline_item_separator));
@@ -618,7 +632,7 @@ public class SubmissionCommentTreeUiConstructor {
       bylineBuilder.append(String.format(hiddenCommentsString, hiddenCommentsCount));
 
     } else {
-      if (isAuthorOP && true) // todo check pref
+      if (pushIcons && isAuthorOP)
         ColorReplicationIcons.pushOPCommentIcon(context, bylineBuilder);
 
       bylineBuilder.pushSpan(new ForegroundColorSpan(color(context, isAuthorOP
@@ -639,7 +653,7 @@ public class SubmissionCommentTreeUiConstructor {
       bylineBuilder.append(scoreText);
       bylineBuilder.popSpan();
 
-      if (true) // todo check pref
+      if (pushIcons)
         ColorReplicationIcons.pushVoteIcon(context, bylineBuilder, voteDirection, voteColor, R.dimen.submission_comment_byline);
 
       optionalAuthorFlairText.ifPresent(flair -> {

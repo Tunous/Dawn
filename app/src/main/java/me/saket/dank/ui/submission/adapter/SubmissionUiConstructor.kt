@@ -7,6 +7,7 @@ import androidx.annotation.CheckResult
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
+import com.f2prateek.rx.preferences2.Preference
 import dagger.Lazy
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
@@ -33,6 +34,7 @@ import net.dean.jraw.models.Submission
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
+import javax.inject.Named
 
 class SubmissionUiConstructor @Inject constructor(
     private val contentLinkUiModelConstructor: SubmissionContentLinkUiConstructor,
@@ -41,7 +43,8 @@ class SubmissionUiConstructor @Inject constructor(
     private val markdown: Markdown,
     private val userSessionRepository: UserSessionRepository,
     private val bookmarksRepository: Lazy<BookmarksRepository>,
-    private val swipeActionsRepository: SubmissionSwipeActionsRepository
+    private val swipeActionsRepository: SubmissionSwipeActionsRepository,
+    @Named("show_color_replication_icons") private val showColorReplicationIcons: Preference<Boolean>
 ) {
 
   @CheckResult
@@ -117,8 +120,14 @@ class SubmissionUiConstructor @Inject constructor(
               .map { it.size }
               .startWith(0)  // Stream sometimes takes too long to emit anything.
 
+          val userPrefChanges =
+              showColorReplicationIcons.asObservable().skip(1)
+
           val externalChanges = Observable
-              .merge(votingManager.streamChanges(), bookmarksRepository.get().streamChanges())
+              .merge(
+                  userPrefChanges,
+                  votingManager.streamChanges(),
+                  bookmarksRepository.get().streamChanges())
               .startWith(NOTHING)
 
           val headerUiModels = CombineLatestWithLog.from<Context, Submission, Optional<SubmissionContentLinkUiModel>, SwipeActions, SubmissionCommentsHeader.UiModel>(
@@ -254,7 +263,7 @@ class SubmissionUiConstructor @Inject constructor(
         .append(Strings.abbreviateScore(vote.toFloat()))
         .popSpan()
 
-    if (true) // todo check pref
+    if (showColorReplicationIcons.get())
       ColorReplicationIcons.pushVoteIcon(context, titleBuilder, pendingOrDefaultVote, voteDirectionColor, R.dimen.submission_title)
 
     titleBuilder = titleBuilder

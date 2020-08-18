@@ -53,6 +53,7 @@ public class SubredditUiConstructor {
   private final Preference<Boolean> showCommentCountInByline;
   private final Preference<Boolean> showNsfwContent;
   private final Preference<Boolean> showSubmissionThumbnailsOnLeft;
+  private final Preference<Boolean> showColorReplicationIcons;
   private final Preference<SubredditSubmissionImageStyle> subredditSubmissionImageStyle;
   private final ErrorResolver errorResolver;
   private final Lazy<BookmarksRepository> bookmarksRepository;
@@ -67,6 +68,7 @@ public class SubredditUiConstructor {
       @Named("comment_count_in_submission_list_byline") Preference<Boolean> showCommentCountInByline,
       @Named("show_nsfw_content") Preference<Boolean> showNsfwContent,
       @Named("show_submission_thumbnails_on_left") Preference<Boolean> showSubmissionThumbnailsOnLeft,
+      @Named("show_color_replication_icons") Preference<Boolean> showColorReplicationIcons,
       @Named("subreddit_submission_image_style") Preference<SubredditSubmissionImageStyle> subredditSubmissionImageStyle,
       Lazy<SubmissionSwipeActionsRepository> swipeActionsRepository
   ) {
@@ -77,6 +79,7 @@ public class SubredditUiConstructor {
     this.showCommentCountInByline = showCommentCountInByline;
     this.showNsfwContent = showNsfwContent;
     this.showSubmissionThumbnailsOnLeft = showSubmissionThumbnailsOnLeft;
+    this.showColorReplicationIcons = showColorReplicationIcons;
     this.subredditSubmissionImageStyle = subredditSubmissionImageStyle;
     this.swipeActionsRepository = swipeActionsRepository;
   }
@@ -93,6 +96,7 @@ public class SubredditUiConstructor {
             showCommentCountInByline.asObservable(),
             showNsfwContent.asObservable(),
             showSubmissionThumbnailsOnLeft.asObservable(),
+            showColorReplicationIcons.asObservable(),
             subredditSubmissionImageStyle.asObservable())
         )
         .skip(1); // Skip initial values.
@@ -265,7 +269,7 @@ public class SubredditUiConstructor {
     titleBuilder.append(Strings.abbreviateScore(submissionScore));
     titleBuilder.popSpan();
 
-    if (true) // todo check pref
+    if (showColorReplicationIcons.get())
       ColorReplicationIcons.pushVoteIcon(c, titleBuilder, voteDirection, voteColor, R.dimen.subreddit_submission_title);
 
     titleBuilder.append("  ");
