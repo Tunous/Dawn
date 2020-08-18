@@ -49,8 +49,8 @@ class CenterAlignedImageSpan(d: Drawable): ImageSpan(d, ALIGN_BASELINE) {
     val b = getCachedDrawable()
     canvas.save()
 
-    // Ported from API 29's DynamicDrawableSpan.ALIGN_CENTER
-    val transY = (bottom - top) / 2 - b!!.bounds.height() / 2
+    val fm = paint.fontMetricsInt
+    val transY = (fm.bottom - fm.top) / 2 - b!!.bounds.height() / 2
 
     canvas.translate(x, transY.toFloat())
     b.draw(canvas)
