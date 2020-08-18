@@ -172,13 +172,13 @@ public class SubmissionCommentTreeUiConstructor {
       Lazy<VotingManager> votingManager,
       Lazy<Markdown> markdown,
       Lazy<UserSessionRepository> userSessionRepository,
-      @Named("show_color_replication_icons") Preference<Boolean> showColorReplicationIcons)
+      @Named("show_color_replication_icons") Lazy<Preference<Boolean>> showColorReplicationIcons)
   {
     this.replyRepository = replyRepository;
     this.votingManager = votingManager;
     this.markdown = markdown;
     this.userSessionRepository = userSessionRepository;
-    this.showColorReplicationIcons = showColorReplicationIcons;
+    this.showColorReplicationIcons = showColorReplicationIcons.get();
   }
 
   @CheckResult

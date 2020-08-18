@@ -1,6 +1,7 @@
 package me.saket.dank.ui.comments
 
 import androidx.test.core.app.ApplicationProvider
+import com.f2prateek.rx.preferences2.Preference
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.doReturn
@@ -51,11 +52,16 @@ abstract class SubmissionCommentTreeBaseTest {
         it.getArgument<Comment>(0).body
       }
     }
+    val prefIcons = mock<Preference<Boolean>> {
+      on { asObservable() } doReturn Observable.empty()
+      on { get() } doReturn false
+    }
     uiConstructor = SubmissionCommentTreeUiConstructor(
       { replyRepository },
       { votingManager },
       { markdown },
-      { mock() }
+      { mock() },
+      { prefIcons }
     )
     SubmissionCommentTreeUiConstructor.COLLAPSED_COMMENT_IDS.clear()
   }
