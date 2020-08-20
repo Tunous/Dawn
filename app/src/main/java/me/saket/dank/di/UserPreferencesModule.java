@@ -124,12 +124,6 @@ public class UserPreferencesModule {
   }
 
   @Provides
-  @Named("show_color_replication_icons")
-  Preference<Boolean> showColorReplicationIcons(@Named("user_prefs") RxSharedPreferences rxPrefs) {
-    return rxPrefs.getBoolean("show_color_replication_icons", false);
-  }
-
-  @Provides
   RxPreferencesEnumTypeAdapter<SubredditSubmissionImageStyle> subredditSubmissionImageStyleEnumTypeAdapter() {
     return new RxPreferencesEnumTypeAdapter<>(SubredditSubmissionImageStyle.class);
   }

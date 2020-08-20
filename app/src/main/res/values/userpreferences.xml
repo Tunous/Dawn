@@ -32,9 +32,6 @@
   <string name="userprefs_show_colored_comments_tree_on">Lines are colored</string>
   <string name="userprefs_show_colored_comments_tree_off">Same color for all lines</string>
 
-  <string name="userprefs_show_color_replication_icons">Color-blind friendly mode</string>
-  <string name="userprefs_show_color_replication_icons_summary">Replicate any significant color with icons</string>
-
   <string name="userprefs_group_gestures">Gestures</string>
   <string name="userprefs_customize_submission_gestures">Submission gesture actions</string>
   <string name="userprefs_customize_comment_gestures">Comment gesture actions</string>
