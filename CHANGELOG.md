@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 
+-	Icons for OP comments and up/downvote ([#305](https://github.com/Tunous/Dawn/pull/305))
 -   Support for reddit galleries ([#312](https://github.com/Tunous/Dawn/pull/312))
 
 ### Changed
