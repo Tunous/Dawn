@@ -618,7 +618,7 @@ public class SubmissionCommentTreeUiConstructor {
       bylineBuilder.append(String.format(hiddenCommentsString, hiddenCommentsCount));
 
     } else {
-      if (isAuthorOP && true) // todo check pref
+      if (isAuthorOP)
         ColorReplicationIcons.pushOPCommentIcon(context, bylineBuilder);
 
       bylineBuilder.pushSpan(new ForegroundColorSpan(color(context, isAuthorOP
@@ -639,8 +639,7 @@ public class SubmissionCommentTreeUiConstructor {
       bylineBuilder.append(scoreText);
       bylineBuilder.popSpan();
 
-      if (true) // todo check pref
-        ColorReplicationIcons.pushVoteIcon(context, bylineBuilder, voteDirection, voteColor, R.dimen.submission_comment_byline);
+      ColorReplicationIcons.pushVoteIcon(context, bylineBuilder, voteDirection, voteColor, R.dimen.submission_comment_byline);
 
       optionalAuthorFlairText.ifPresent(flair -> {
         bylineBuilder.append(context.getString(R.string.submission_comment_byline_item_separator));
