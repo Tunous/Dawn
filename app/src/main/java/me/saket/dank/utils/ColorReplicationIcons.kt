@@ -7,11 +7,13 @@ import me.saket.dank.widgets.span.CenterAlignedImageSpan
 import net.dean.jraw.models.VoteDirection
 
 object ColorReplicationIcons {
-  @JvmStatic fun pushIcon(context: Context, builder: Truss, sizeDimenResId: Int, drawableResId: Int, tintColor: Int) {
+  @JvmStatic fun pushIcon(context: Context, builder: Truss, sizeDimenResId: Int,
+                          drawableResId: Int, tintColor: Int, offsetSpY: Float = 0f) {
+    val offsetY = Units.spToPx(offsetSpY, context)
     val size = context.resources.getDimensionPixelSize(sizeDimenResId)
     val icon = context.resources.getDrawable(drawableResId, null).mutate()
     icon.setTint(tintColor)
-    icon.setBounds(0, 0, size, size)
+    icon.setBounds(0, 0 + offsetY, size, size + offsetY)
 
     builder
         .pushSpan(CenterAlignedImageSpan(icon))
@@ -27,11 +29,11 @@ object ColorReplicationIcons {
     }
 
     if (icon != 0)
-      pushIcon(context, builder, iconSizeResId, icon, color)
+      pushIcon(context, builder, iconSizeResId, icon, color, 0.5f)
   }
 
   @JvmStatic fun pushOPCommentIcon(context: Context, builder: Truss) {
     val color = ContextCompat.getColor(context, R.color.submission_comment_byline_author_op)
-    pushIcon(context, builder, R.dimen.submission_comment_byline, R.drawable.ic_person_12dp, color)
+    pushIcon(context, builder, R.dimen.submission_comment_byline, R.drawable.ic_person_12dp, color, 0.5f)
   }
 }
