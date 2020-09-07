@@ -1,8 +1,6 @@
 package me.saket.dank.utils;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
-import android.os.Build;
 
 import com.google.auto.value.AutoValue;
 
@@ -21,7 +19,6 @@ import me.saket.dank.BuildConfig;
 import timber.log.Timber;
 
 @SuppressLint("UseSparseArrays")
-@TargetApi(Build.VERSION_CODES.N)
 public class CombineLatestWithLog {
 
   @AutoValue
@@ -68,12 +65,13 @@ public class CombineLatestWithLog {
 
         if (needsLog) {
           Timber.w("------------------------------------------------");
-          items.forEach((name, item) -> {
+          for (Map.Entry<String, Object> item: items.entrySet()) {
+            String name = item.getKey();
             if (delays.get(name) > threshold) {
               Timber.w("%s = %sms [SLOW]", name, delays.get(name));
               Timber.w("Time since subscribe: %s", (endTimes.get(name) - subscribeTimes.get(name)));
             }
-          });
+          }
           Timber.i("------------------------------------------------");
         }
       }));
