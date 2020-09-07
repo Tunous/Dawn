@@ -29,7 +29,7 @@ import me.saket.dank.R;
 import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.di.Dank;
-import me.saket.dank.ui.submission.adapter.ImageWithMultipleVariants;
+import me.saket.dank.utils.ImageWithMultipleVariants;
 import me.saket.dank.utils.Animations;
 import me.saket.dank.utils.FileSizeUnit;
 import me.saket.dank.utils.Views;
@@ -171,14 +171,14 @@ public class MediaImageFragment extends BaseMediaViewerFragment {
 
               } else {
                 String lowQualityUrl = mediaAlbumItemToShow.mediaLink().lowQualityUrl();
-                if (mediaAlbumItemToShow.mediaLink().isGif()) {
+                if (!mediaAlbumItemToShow.mediaLink().isImage()) {
                   imageUrl = lowQualityUrl;
-
 
                 } else {
                   int deviceDisplayWidth = ((MediaFragmentCallbacks) requireActivity()).getDeviceDisplayWidth();
-                  ImageWithMultipleVariants imageWithMultipleVariants = ImageWithMultipleVariants.Companion.of(redditImages);
-                  imageUrl = imageWithMultipleVariants
+                  imageUrl = ImageWithMultipleVariants.Companion
+                      .of(redditImages)
+                      .orElse(() -> mediaAlbumItemToShow.mediaLink().previewVariants())
                       .findNearestUrlFor(deviceDisplayWidth, ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH, lowQualityUrl);
                 }
               }

@@ -10,6 +10,9 @@ import androidx.core.content.ContextCompat;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import me.saket.dank.urlparser.RedditGalleryImageLink;
+import me.saket.dank.urlparser.RedditGalleryLink;
+import me.saket.dank.utils.*;
 import net.dean.jraw.models.Submission;
 import net.dean.jraw.models.SubmissionPreview;
 import net.dean.jraw.models.VoteDirection;
@@ -34,15 +37,8 @@ import me.saket.dank.ui.submission.BookmarksRepository;
 import me.saket.dank.ui.submission.CachedSubmissionFolder;
 import me.saket.dank.ui.submission.PrivateSubredditException;
 import me.saket.dank.ui.submission.SubredditNotFoundException;
-import me.saket.dank.ui.submission.adapter.ImageWithMultipleVariants;
 import me.saket.dank.ui.subreddit.SubmissionPaginationResult;
 import me.saket.dank.ui.subreddit.SubmissionThumbnailTypeMinusNsfw;
-import me.saket.dank.utils.JrawUtils2;
-import me.saket.dank.utils.Optional;
-import me.saket.dank.utils.Pair;
-import me.saket.dank.utils.Strings;
-import me.saket.dank.utils.Themes;
-import me.saket.dank.utils.Truss;
 import me.saket.dank.vote.VotingManager;
 import me.saket.dank.walkthrough.SubmissionGesturesWalkthrough;
 import me.saket.dank.widgets.swipe.SwipeActions;
@@ -314,6 +310,14 @@ public class SubredditUiConstructor {
                 .contentDescription(c.getString(R.string.cd_subreddit_submission_item_nsfw_post))
                 .build());
 
+      } else if (submission.isGallery()) { // gallery posts don't have preview field
+        RedditGalleryImageLink first = RedditGalleryLink.extractFirstImage(submission);
+        if (first == null || first.previewVariants() == null) {
+          thumbnail = Optional.empty();
+        } else {
+          thumbnail = Optional.of(thumbnailForRemoteImage(c, first.previewVariants()));
+        }
+
       } else {
         switch (thumbnailType) {
           case SELF_POST:
@@ -406,10 +410,13 @@ public class SubredditUiConstructor {
   }
 
   private SubredditSubmission.UiModel.Thumbnail thumbnailForRemoteImage(Context c, SubmissionPreview preview) {
-    ImageWithMultipleVariants redditThumbnails = ImageWithMultipleVariants.Companion.of(preview);
+    return thumbnailForRemoteImage(c, ImageWithMultipleVariants.Companion.of(preview));
+  }
+
+  private SubredditSubmission.UiModel.Thumbnail thumbnailForRemoteImage(Context c, ImageWithMultipleVariants thumbs) {
     int preferredWidth = getPreferredWidthForThumbnail(c);
-    Optional<SubmissionPreview.Variation> optimizedThumbnail = Optional.ofNullable(redditThumbnails.findNearestFor(preferredWidth, -1));
-    Optional<String> optimizedThumbnailUrl = optimizedThumbnail.map(thumbnail -> Html.fromHtml(thumbnail.getUrl()).toString());
+    Optional<ImageVariant> optimizedThumbnail = Optional.ofNullable(thumbs.findNearestFor(preferredWidth, -1));
+    Optional<String> optimizedThumbnailUrl = optimizedThumbnail.map(ImageVariant::getUrl);
     Optional<Integer> thumbnailFullHeight = optimizedThumbnail.map(thumbnail -> getFullHeightForThumbnail(preferredWidth, thumbnail));
 
     return SubredditSubmission.UiModel.Thumbnail.builder()
@@ -423,7 +430,7 @@ public class SubredditUiConstructor {
         .build();
   }
 
-  private int getFullHeightForThumbnail(int preferredWidth, SubmissionPreview.Variation optimizedThumbnail) {
+  private int getFullHeightForThumbnail(int preferredWidth, ImageVariant optimizedThumbnail) {
     int widthDifference = preferredWidth - optimizedThumbnail.getWidth();
     float aspectRatio = optimizedThumbnail.getWidth() / ((float) optimizedThumbnail.getHeight());
     int heightDifference = aspectRatio != 0 ? Math.round(widthDifference / aspectRatio) : 0;

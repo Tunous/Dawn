@@ -5,6 +5,7 @@ import android.os.Parcelable;
 import com.google.auto.value.AutoValue;
 
 import me.saket.dank.di.DankApi;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Container for a streamable video's ID, which can only be used after its video URL has been
@@ -13,6 +14,7 @@ import me.saket.dank.di.DankApi;
 @AutoValue
 public abstract class StreamableUnresolvedLink extends MediaLink implements Parcelable, UnresolvedMediaLink {
 
+  @NotNull
   public abstract String unparsedUrl();
 
   public abstract String videoId();

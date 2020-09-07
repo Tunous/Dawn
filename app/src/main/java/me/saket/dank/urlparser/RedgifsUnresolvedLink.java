@@ -3,10 +3,12 @@ package me.saket.dank.urlparser;
 import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
+import org.jetbrains.annotations.NotNull;
 
 @AutoValue
 public abstract class RedgifsUnresolvedLink extends MediaLink implements Parcelable, UnresolvedMediaLink {
 
+  @NotNull
   public abstract String unparsedUrl();
 
   public abstract String threeWordId();

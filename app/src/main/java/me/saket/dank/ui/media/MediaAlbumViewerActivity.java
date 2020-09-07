@@ -38,6 +38,7 @@ import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 
+import me.saket.dank.urlparser.MediaAlbumLink;
 import net.dean.jraw.models.SubmissionPreview;
 
 import java.io.File;
@@ -67,8 +68,7 @@ import me.saket.dank.di.Dank;
 import me.saket.dank.notifs.MediaDownloadService;
 import me.saket.dank.ui.DankActivity;
 import me.saket.dank.ui.preferences.NetworkStrategy;
-import me.saket.dank.ui.submission.adapter.ImageWithMultipleVariants;
-import me.saket.dank.urlparser.ImgurAlbumLink;
+import me.saket.dank.utils.ImageWithMultipleVariants;
 import me.saket.dank.urlparser.MediaLink;
 import me.saket.dank.utils.Animations;
 import me.saket.dank.utils.Files2;
@@ -244,15 +244,17 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
           String highQualityUrl = activeMediaItem.mediaLink().highQualityUrl();
           String optimizedQualityUrl;
 
-          if (activeMediaItem.mediaLink().isGif()) {
+          if (!activeMediaItem.mediaLink().isImage()) {
             optimizedQualityUrl = activeMediaItem.mediaLink().lowQualityUrl();
           } else {
-            ImageWithMultipleVariants imageVariants = ImageWithMultipleVariants.Companion.of(redditSuppliedImages);
-            optimizedQualityUrl = imageVariants.findNearestUrlFor(
-                getResources().getDisplayMetrics().widthPixels,
-                ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
-                activeMediaItem.mediaLink().lowQualityUrl() /* defaultValue */
-            );
+            optimizedQualityUrl = ImageWithMultipleVariants.Companion
+                .of(redditSuppliedImages)
+                .orElse(() -> activeMediaItem.mediaLink().previewVariants())
+                .findNearestUrlFor(
+                    getResources().getDisplayMetrics().widthPixels,
+                    ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
+                    activeMediaItem.mediaLink().lowQualityUrl() /* defaultValue */
+                );
           }
 
           //noinspection ConstantConditions
@@ -303,7 +305,7 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
         .map(resolvedMediaLink -> {
           // Find all child images under an album.
           if (resolvedMediaLink.isMediaAlbum()) {
-            return ((ImgurAlbumLink) resolvedMediaLink).images();
+            return ((MediaAlbumLink<?>) resolvedMediaLink).images();
           } else {
             return Collections.singletonList(resolvedMediaLink);
           }
@@ -457,7 +459,7 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
     return waitTillOnPostCreate
         .observeOn(io())
         .andThen(Single.fromCallable(() -> {
-          if (resolvedMediaLink instanceof ImgurAlbumLink || mediaAlbumAdapter.getCount() > 1) {
+          if (resolvedMediaLink.isMediaAlbum() || mediaAlbumAdapter.getCount() > 1) {
             // Child pages do not know if they're part of an album. Don't let
             // them replace imgur images with reddit-supplied album-cover image.
             return Optional.<SubmissionPreview>empty();
@@ -648,12 +650,14 @@ public class MediaAlbumViewerActivity extends DankActivity implements MediaFragm
 
     Observable<File> optimizedResImageFileStream = getRedditSuppliedImages()
         .flatMapObservable(redditImages -> Observable.create(emitter -> {
-          ImageWithMultipleVariants imageVariants = ImageWithMultipleVariants.Companion.of(redditImages);
-          String optimizedQualityImageForDevice = imageVariants.findNearestUrlFor(
-              getDeviceDisplayWidth(),
-              ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
-              albumItem.mediaLink().lowQualityUrl()
-          );
+          String optimizedQualityImageForDevice = ImageWithMultipleVariants.Companion
+              .of(redditImages)
+              .orElse(() -> albumItem.mediaLink().previewVariants())
+              .findNearestUrlFor(
+                  getDeviceDisplayWidth(),
+                  ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
+                  albumItem.mediaLink().lowQualityUrl()
+              );
 
           FutureTarget<File> optimizedResolutionImageTarget = Glide.with(this)
               .download(optimizedQualityImageForDevice)

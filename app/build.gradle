@@ -131,7 +131,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 
   testImplementation "junit:junit:$versions.junit"
-  testImplementation 'org.powermock:powermock-module-junit4:2.0.4'
+  testImplementation 'org.powermock:powermock-module-junit4:2.0.7'
   testImplementation 'org.powermock:powermock-api-mockito2:2.0.2'
   testImplementation "com.google.truth:truth:1.0.1"
   testImplementation 'org.robolectric:robolectric:4.3.1'
@@ -144,7 +144,7 @@ dependencies {
 
   implementation 'androidx.recyclerview:recyclerview:1.1.0'
   implementation 'androidx.annotation:annotation:1.1.0'
-  implementation 'com.google.android.material:material:1.0.0'
+  implementation 'com.google.android.material:material:1.2.1'
   implementation 'androidx.browser:browser:1.2.0'
   implementation 'androidx.palette:palette:1.0.0'
 
@@ -205,7 +205,7 @@ dependencies {
   implementation "org.threeten:threetenbp:1.3.6:no-tzdb"
   implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
 
-  implementation 'com.github.saket:jraw:f8350f6558f'
+  implementation 'com.github.absurdlysuspicious:jraw:a6abaf31'
   implementation("net.dean.jraw:JRAW-Android:1.1.0") {
     exclude group: 'net.dean.jraw'
   }

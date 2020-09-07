@@ -34,18 +34,8 @@ import me.saket.dank.R;
 import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.data.LinkMetadataRepository;
 import me.saket.dank.data.ResolvedError;
-import me.saket.dank.urlparser.ExternalLink;
-import me.saket.dank.urlparser.ImgurAlbumLink;
-import me.saket.dank.urlparser.Link;
-import me.saket.dank.urlparser.RedditLink;
-import me.saket.dank.urlparser.RedditSubmissionLink;
-import me.saket.dank.urlparser.RedditSubredditLink;
-import me.saket.dank.urlparser.RedditUserLink;
-import me.saket.dank.urlparser.UrlParser;
-import me.saket.dank.utils.Colors;
-import me.saket.dank.utils.Optional;
-import me.saket.dank.utils.Pair;
-import me.saket.dank.utils.Urls;
+import me.saket.dank.urlparser.*;
+import me.saket.dank.utils.*;
 import me.saket.dank.utils.glide.GlideCircularTransformation;
 import me.thanel.dawn.linkunfurler.LinkMetadata;
 import timber.log.Timber;
@@ -95,11 +85,10 @@ public class SubmissionContentLinkUiConstructor {
       return streamLoadExternalLink(context, (ExternalLink) link, windowBackgroundColor, redditSuppliedThumbnails);
 
     } else if (link.isRedditPage()) {
-      return streamLoadRedditLink(context, ((RedditLink) link));
+      return streamLoadRedditLink(context, (RedditLink) link);
 
-    } else if (link.isMediaAlbum() && link instanceof ImgurAlbumLink) {
-      return streamLoadImgurAlbum(context, ((ImgurAlbumLink) link), windowBackgroundColor, redditSuppliedThumbnails);
-
+    } else if (link.isMediaAlbum()) {
+      return streamLoadMediaAlbum(context, (MediaAlbumLink<?>) link, windowBackgroundColor, redditSuppliedThumbnails);
     } else {
       throw new AssertionError("Unknown link: " + link);
     }
@@ -306,22 +295,23 @@ public class SubmissionContentLinkUiConstructor {
     );
   }
 
-  public Observable<SubmissionContentLinkUiModel> streamLoadImgurAlbum(
+  public Observable<SubmissionContentLinkUiModel> streamLoadMediaAlbum(
       Context context,
-      ImgurAlbumLink albumLink,
+      MediaAlbumLink<?> albumLink,
       int windowBackgroundColor,
       ImageWithMultipleVariants redditSuppliedThumbnails)
   {
+    Optional<String> albumTitle = Optional.ofNullable(albumLink.albumTitle());
     Observable<String> iconContentDescriptionStream = Observable.just(context.getString(R.string.submission_link_imgur_gallery));
 
     //noinspection ConstantConditions
     Observable<String> titleStream = Observable.just(
-        albumLink.hasAlbumTitle()
-            ? albumLink.albumTitle()
+        albumTitle.isPresent()
+            ? albumTitle.get()
             : context.getString(R.string.submission_image_album_title));
 
     Observable<String> bylineStream = Observable.just(
-        albumLink.hasAlbumTitle()
+        albumTitle.isPresent()
             ? context.getString(R.string.submission_image_album_label_with_image_count, albumLink.images().size())
             : context.getString(R.string.submission_image_album_image_count, albumLink.images().size()));
 

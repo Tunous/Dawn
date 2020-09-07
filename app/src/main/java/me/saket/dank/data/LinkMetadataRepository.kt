@@ -62,7 +62,7 @@ class LinkMetadataRepository @Inject constructor(
 
   private fun unfurlLinkFromRemoteOnDevice(link: Link): Single<LinkMetadata> {
     // Reddit uses different title for sharing to social media, which we don't want.
-    val ignoreSocialMetadata = link.isRedditPage
+    val ignoreSocialMetadata = link.isRedditPage()
     return linkUnfurler.unfurl(link.unparsedUrl(), ignoreSocialMetadata)
       .map { it.getOrThrow() }
   }
@@ -73,7 +73,7 @@ class LinkMetadataRepository @Inject constructor(
     link: Link
   ): Single<LinkMetadata> {
     // Reddit uses different title for sharing to social media, which we don't want.
-    val ignoreSocialMetadata = link.isRedditPage
+    val ignoreSocialMetadata = link.isRedditPage()
     return dankApi.unfurlUrl(link.unparsedUrl(), ignoreSocialMetadata)
       .map { response ->
         val error = response.error()

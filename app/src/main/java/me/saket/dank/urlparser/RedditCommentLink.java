@@ -3,6 +3,7 @@ package me.saket.dank.urlparser;
 import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Never used alone. Always with {@link RedditSubmissionLink}.
@@ -10,6 +11,7 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class RedditCommentLink extends RedditLink implements Parcelable {
 
+  @NotNull
   @Override
   public abstract String unparsedUrl();
 

@@ -53,11 +53,7 @@ public class UrlParser {
    * @return null if the url couldn't be identified. A class implementing {@link Link} otherwise.
    */
   public Link parse(String url) {
-    try {
-      return cache.get(url, () -> parseInternal(url, Optional.empty()));
-    } catch (ExecutionException e) {
-      throw Exceptions.propagate(e);
-    }
+    return parse(url, null);
   }
 
   /**
@@ -67,7 +63,7 @@ public class UrlParser {
    */
   public Link parse(String url, Submission submission) {
     try {
-      return cache.get(url, () -> parseInternal(url, Optional.of(submission)));
+      return cache.get(url, () -> parseInternal(url, Optional.ofNullable(submission)));
     } catch (ExecutionException e) {
       throw Exceptions.propagate(e);
     }
@@ -115,6 +111,16 @@ public class UrlParser {
           // Old mobile website that nobody uses anymore. Format: i.reddit.com/post_id. Eg., https://i.reddit.com/5524cd
           String submissionId = urlPath.substring(1);  // Remove the leading slash.
           parsedLink = RedditSubmissionLink.create(url, submissionId, null);
+
+        } else if (config.galleryPattern().matcher(urlPath).matches()) {
+          Optional<RedditGalleryLink> galleryLink;
+          if (submission.isPresent() && submission.get().isGallery() &&
+              (galleryLink = RedditGalleryLink.create(url, submission.get())).isPresent()) {
+            parsedLink = galleryLink.get();
+          } else {
+            parsedLink = ExternalLink.create(url);
+          }
+
         } else {
           Optional<String> urlSubdomain = Urls.subdomain(linkURI);
           if (urlSubdomain.isPresent() && urlSubdomain.get().equals("v")) {
