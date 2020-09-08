@@ -8,11 +8,13 @@ import com.squareup.moshi.Moshi;
 
 import me.saket.dank.BuildConfig;
 import me.saket.dank.utils.Urls;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 @AutoValue
 public abstract class StreamableLink extends MediaLink implements Parcelable {
 
+  @NotNull
   @Override
   public abstract String unparsedUrl();
 

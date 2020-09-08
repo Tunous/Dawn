@@ -38,6 +38,11 @@ public class UrlParserConfig {
   private static final Pattern DEFAULT_LIVE_THREAD_PATTERN = Pattern.compile("^/live/\\w*(/)*$");
 
   /**
+   * /gallery/$post_id (id is not captured)
+   */
+  private static final Pattern GALLERY_PATTERN = Pattern.compile("^/gallery/\\w+");
+
+  /**
    * Extracts the three-word name of a gfycat until a '.' or '-' is encountered. Example URLs:
    * <p>
    * /MessySpryAfricancivet
@@ -109,6 +114,10 @@ public class UrlParserConfig {
 
   public Pattern autoLinkSubredditPattern() {
     return DEFAULT_UNBOUNDED_SUBREDDIT_PATTERN;
+  }
+
+  public Pattern galleryPattern() {
+    return GALLERY_PATTERN;
   }
 
   Pattern gfycatIdPattern() {

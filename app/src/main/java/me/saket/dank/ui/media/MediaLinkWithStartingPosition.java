@@ -3,6 +3,7 @@ package me.saket.dank.ui.media;
 import com.google.auto.value.AutoValue;
 
 import me.saket.dank.urlparser.MediaLink;
+import org.jetbrains.annotations.NotNull;
 
 @AutoValue
 public abstract class MediaLinkWithStartingPosition extends MediaLink {
@@ -26,6 +27,7 @@ public abstract class MediaLinkWithStartingPosition extends MediaLink {
     return delegate().cacheKey();
   }
 
+  @NotNull
   @Override
   public String unparsedUrl() {
     return delegate().unparsedUrl();

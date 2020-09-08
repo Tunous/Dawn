@@ -97,9 +97,10 @@ public abstract class BaseMediaViewerFragment extends DankFragment {
             optionsHeight -> {
               Views.setPaddingBottom(titleDescriptionView, titleDescriptionView.getPaddingBottom() + optionsHeight);
 
-              if (mediaLinkToShow instanceof ImgurLink) {
-                String title = ((ImgurLink) mediaLinkToShow).title();
-                String description = ((ImgurLink) mediaLinkToShow).description();
+              String title = mediaLinkToShow.title();
+              String description = mediaLinkToShow.description();
+
+              if (title != null || description != null) {
                 titleDescriptionView.setTitleAndDescription(title, description);
 
                 if (description != null) {
@@ -107,6 +108,7 @@ public abstract class BaseMediaViewerFragment extends DankFragment {
                   Linkify.addLinks(titleDescriptionView.descriptionView, Linkify.ALL);
                 }
               }
+
             }, error -> {
               ResolvedError resolvedError = errorResolver.get().resolve(error);
               resolvedError.ifUnknown(() -> Timber.e(error, "Error while trying to get option buttons' height"));

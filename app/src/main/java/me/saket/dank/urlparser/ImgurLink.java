@@ -10,20 +10,24 @@ import com.squareup.moshi.Moshi;
 
 import me.saket.dank.BuildConfig;
 import me.saket.dank.utils.Urls;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 @AutoValue
 public abstract class ImgurLink extends MediaLink implements Parcelable {
 
+  @NotNull
   public abstract String unparsedUrl();
 
   @Override
   public abstract Link.Type type();
 
   @Nullable
+  @Override
   public abstract String title();
 
   @Nullable
+  @Override
   public abstract String description();
 
   @Override

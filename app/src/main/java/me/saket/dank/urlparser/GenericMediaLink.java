@@ -7,6 +7,7 @@ import com.squareup.moshi.JsonAdapter;
 import com.squareup.moshi.Moshi;
 
 import me.saket.dank.utils.Urls;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Direct link to a media hosted by an unknown/unsupported-yet website.
@@ -14,6 +15,7 @@ import me.saket.dank.utils.Urls;
 @AutoValue
 public abstract class GenericMediaLink extends MediaLink implements Parcelable {
 
+  @NotNull
   @Override
   public abstract String unparsedUrl();
 

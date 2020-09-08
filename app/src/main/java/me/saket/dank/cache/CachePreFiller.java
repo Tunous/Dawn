@@ -11,6 +11,7 @@ import com.bumptech.glide.Priority;
 import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences2.Preference;
 
+import me.saket.dank.urlparser.*;
 import net.dean.jraw.models.Submission;
 
 import java.util.ArrayList;
@@ -38,13 +39,8 @@ import me.saket.dank.ui.submission.AuditedCommentSort;
 import me.saket.dank.ui.submission.AuditedCommentSort.SelectedBy;
 import me.saket.dank.ui.submission.SubmissionImageLoader;
 import me.saket.dank.ui.submission.SubmissionRepository;
-import me.saket.dank.ui.submission.adapter.ImageWithMultipleVariants;
+import me.saket.dank.utils.ImageWithMultipleVariants;
 import me.saket.dank.ui.submission.adapter.SubmissionContentLinkUiConstructor;
-import me.saket.dank.urlparser.ImgurAlbumLink;
-import me.saket.dank.urlparser.ImgurLink;
-import me.saket.dank.urlparser.Link;
-import me.saket.dank.urlparser.MediaLink;
-import me.saket.dank.urlparser.UrlParser;
 import me.saket.dank.utils.DankSubmissionRequest;
 import me.saket.dank.utils.NetworkStateListener;
 import me.saket.dank.utils.Optional;
@@ -222,9 +218,9 @@ public class CachePreFiller {
 
     Observable<Drawable> albumImagesLoad = replayedResolvedLinks
         .filter(resolvedLink -> resolvedLink.isMediaAlbum())
-        .cast(ImgurAlbumLink.class)
-        .flatMap(albumLink -> {
-          ImgurLink firstImage = albumLink.images().get(0);
+        .flatMap(link -> {
+          MediaAlbumLink<?> albumLink = (MediaAlbumLink<?>) link;
+          MediaLink firstImage = albumLink.images().get(0);
           Single<Drawable> firstImageLoad = submissionImageLoader.get().load(appContext, firstImage, imageLoadOptions);
 
           ImageWithMultipleVariants redditSuppliedImages = ImageWithMultipleVariants.Companion.of(submission.getPreview());

@@ -3,6 +3,7 @@ package me.saket.dank.urlparser;
 import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Used when a Gfycat link is detected, but does not
@@ -11,6 +12,7 @@ import com.google.auto.value.AutoValue;
 @AutoValue
 public abstract class GfycatUnresolvedLink extends MediaLink implements Parcelable, UnresolvedMediaLink {
 
+  @NotNull
   public abstract String unparsedUrl();
 
   public abstract String threeWordId();

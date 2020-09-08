@@ -25,7 +25,7 @@ import io.reactivex.Scheduler;
 import io.reactivex.Single;
 import me.saket.dank.R;
 import me.saket.dank.ui.preferences.NetworkStrategy;
-import me.saket.dank.ui.submission.adapter.ImageWithMultipleVariants;
+import me.saket.dank.utils.ImageWithMultipleVariants;
 import me.saket.dank.urlparser.MediaLink;
 import me.saket.dank.utils.NetworkStateListener;
 import me.saket.dank.utils.Optional;
@@ -117,12 +117,15 @@ public class SubmissionImageLoader {
     } else {
       // Images supplied by Reddit are static, so cannot optimize for GIFs.
       String defaultImageUrl = mediaLink.lowQualityUrl();
-      return mediaLink.isGif() ? defaultImageUrl :
-          ImageWithMultipleVariants.Companion.of(redditPreviews).findNearestUrlFor(
-              deviceDisplaySize.getWidth(),
-              ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
-              defaultImageUrl
-          );
+      return !mediaLink.isImage() ? defaultImageUrl :
+          ImageWithMultipleVariants.Companion
+              .of(redditPreviews)
+              .orElse(mediaLink::previewVariants)
+              .findNearestUrlFor(
+                  deviceDisplaySize.getWidth(),
+                  ImageWithMultipleVariants.DEFAULT_VIEWER_MIN_WIDTH,
+                  defaultImageUrl
+              );
     }
   }
 

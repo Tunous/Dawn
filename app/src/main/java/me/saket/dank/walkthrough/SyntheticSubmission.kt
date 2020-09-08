@@ -91,6 +91,12 @@ class SyntheticSubmission(
 
   override fun isSpam() = false
 
+  override fun isGallery(): Boolean = false
+
+  override fun getGalleryData(): GalleryData? = null
+
+  override fun getMediaMetadata(): MutableMap<String, MediaMetadataItem>? = null
+
   override val author: String = "Saketme"
 
   override val body: String? = null

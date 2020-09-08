@@ -5,10 +5,12 @@ import android.os.Parcelable;
 import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
+import org.jetbrains.annotations.NotNull;
 
 @AutoValue
 public abstract class RedditSubmissionLink extends RedditLink implements Parcelable {
 
+  @NotNull
   @Override
   public abstract String unparsedUrl();
 

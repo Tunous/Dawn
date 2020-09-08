@@ -6,6 +6,7 @@ import com.google.auto.value.AutoValue;
 
 import me.saket.dank.BuildConfig;
 import me.saket.dank.utils.VideoFormat;
+import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
 /**
@@ -20,6 +21,7 @@ public abstract class RedditHostedVideoLink extends MediaLink implements Parcela
     return Type.SINGLE_VIDEO;
   }
 
+  @NotNull
   @Override
   public abstract String unparsedUrl();
 
