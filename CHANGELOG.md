@@ -10,9 +10,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 -   Support for reddit galleries ([#312](https://github.com/Tunous/Dawn/pull/312))
 
+### Changed
+
+-   Increased minimum required API version to 23 ([#318](https://github.com/Tunous/Dawn/pull/318))
+
 ### Fixed
 
--   Correctly parse links with leading/trailing spaces ([319](https://github.com/Tunous/Dawn/pull/319))
+-   Correctly parse links with leading/trailing spaces ([#319](https://github.com/Tunous/Dawn/pull/319))
 
 ## [0.10.0] - 2020-08-14
 
