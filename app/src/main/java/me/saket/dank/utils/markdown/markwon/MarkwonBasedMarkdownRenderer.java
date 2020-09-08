@@ -39,10 +39,10 @@ import timber.log.Timber;
 
 public class MarkwonBasedMarkdownRenderer implements Markdown {
 
-  private static final Pattern LINK_MARKDOWN_PATTERN = Pattern.compile("\\[([^\\]]*)\\]\\(([^)\"]*)\\)");
-  private static final Pattern LINK_WITH_SPACE_MARKDOWN_PATTERN = Pattern.compile("\\[([^\\]]*)\\]\\s+\\(([^)\"]*)\\)");
+  private static final Pattern LINK_MARKDOWN_PATTERN = Pattern.compile("\\[([^]]*)]\\(([^)\"]*)\\)");
+  private static final Pattern LINK_WITH_SPACE_MARKDOWN_PATTERN = Pattern.compile("\\[([^]]*)]\\s+\\(([^)\"]*)\\)");
   private static final Pattern HEADING_WITHOUT_SPACE_MARKDOWN_PATTERN = Pattern.compile("(#{1,6})\\s{0}((?:(?!\\\\n).)*)");
-  private static final Pattern POTENTIALLY_INVALID_SPOILER_MARKDOWN_PATTERN = Pattern.compile("\\[([^\\]]*)\\]\\((.*?)\"+(.*?(?<!\\\\))\"+\\)");
+  private static final Pattern POTENTIALLY_INVALID_SPOILER_MARKDOWN_PATTERN = Pattern.compile("\\[([^]]*)]\\((.*?)\"+(.*?(?<!\\\\))\"+\\)");
 
   private final MarkdownHintOptions markdownOptions;
   private final Cache<String, CharSequence> cache;
@@ -81,7 +81,7 @@ public class MarkwonBasedMarkdownRenderer implements Markdown {
     markdown = fixInvalidTables(markdown);
     markdown = fixInvalidHeadings(markdown);
     markdown = removeSpaceBetweenLinkLabelAndUrl(markdown);
-    markdown = escapeSpacesInLinkUrls(markdown);
+    markdown = fixSpacesInLinkUrls(markdown);
     markdown = fixInvalidSpoilers(markdown);
 
     // WARNING: this should be at the end.
@@ -229,8 +229,7 @@ public class MarkwonBasedMarkdownRenderer implements Markdown {
 
         markdown = markdown.substring(0, matcher.start())
             + String.format("[%s](%s)", linkText, linkUrl)
-            + markdown.substring(matcher.end(), markdown.length());
-        //markdown = markdown.replace(matcher.group(0), String.format("[%s](%s)", linkText, linkUrl));
+            + markdown.substring(matcher.end());
       }
     } catch (Throwable e) {
       Timber.e(e, "Couldn't remove spaces between link and url in: %s", markdown);
@@ -240,18 +239,17 @@ public class MarkwonBasedMarkdownRenderer implements Markdown {
   }
 
   @VisibleForTesting
-  String escapeSpacesInLinkUrls(String markdown) {
+  String fixSpacesInLinkUrls(String markdown) {
     try {
       Matcher matcher = LINK_MARKDOWN_PATTERN.matcher(markdown);
 
       while (matcher.find()) {
         String linkText = matcher.group(1);
-        String linkUrl = matcher.group(2).replaceAll("\\s", "%20");
+        String linkUrl = matcher.group(2).trim().replaceAll("\\s", "%20");
 
         markdown = markdown.substring(0, matcher.start())
             + String.format("[%s](%s)", linkText, linkUrl)
-            + markdown.substring(matcher.end(), markdown.length());
-        //markdown = markdown.replace(matcher.group(0), String.format("[%s](%s)", linkText, linkUrl));
+            + markdown.substring(matcher.end());
       }
     } catch (Throwable e) {
       Timber.e(e, "Couldn't escape spaces in link url in: %s", markdown);

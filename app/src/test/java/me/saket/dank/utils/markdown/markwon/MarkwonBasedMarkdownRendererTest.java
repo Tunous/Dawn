@@ -53,7 +53,7 @@ public class MarkwonBasedMarkdownRendererTest {
         "[^Send ^feedback](https://www.reddit.com/message/compose/?to=poochi&amp;amp;subject=New%20bot%20feedback)\n" +
         "\n[spoiler](/s \"the right thing :p\")\n\n[spoiler](#s \"I will be hanged\")\n\nEdit: fixed grammar";
 
-    String parsed = renderer.escapeSpacesInLinkUrls(invalid);
+    String parsed = renderer.fixSpacesInLinkUrls(invalid);
     assertEquals(expected, parsed);
   }
 
@@ -97,5 +97,14 @@ public class MarkwonBasedMarkdownRendererTest {
         "[Feedback](http://np.reddit.com/message/compose?to=%23autotldr \"PM's and comments are monitored, constructive feedback is welcome.\")";
     String parsed = renderer.fixInvalidSpoilers(valid);
     assertEquals(valid, parsed);
+  }
+
+  @Test
+  public void trimSpaceInLinks() {
+    String invalid = "[Defending your Life.]( https://youtu.be/oZEbLVD72hY)";
+    String expected = "[Defending your Life.](https://youtu.be/oZEbLVD72hY)";
+
+    String parsed = renderer.fixSpacesInLinkUrls(invalid);
+    assertEquals(expected, parsed);
   }
 }

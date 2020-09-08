@@ -10,8 +10,6 @@ import timber.log.Timber
 import java.lang.IllegalStateException
 import java.lang.UnsupportedOperationException
 
-private data class UnknownMimeException(val mime: String?): Exception()
-
 @JsonClass(generateAdapter = true)
 @Parcelize
 data class RedditGalleryLink(
@@ -20,32 +18,39 @@ data class RedditGalleryLink(
 ): MediaAlbumLink<RedditGalleryImageLink>(), Parcelable {
 
   companion object {
+    private data class UnknownMimeException(val mime: String?): Exception()
+
     @JvmStatic fun extractImages(submission: Submission): Sequence<RedditGalleryImageLink>? {
-      return submission.galleryData?.items?.asSequence()?.map {
-        val id = it.mediaId
-        val meta = submission.mediaMetadata?.get(id)
+      try {
+        return submission.galleryData?.items?.asSequence()?.map {
+          val id = it.mediaId
+          val meta = submission.mediaMetadata?.get(id)
 
-        val (hqUrl, lqUrl, mediaType) = if (meta != null && meta.mime == "image/gif") {
-          val (url, mediaType) = meta.full?.mp4Url
-              ?.let { u -> Pair(u, Type.SINGLE_VIDEO) }
-              ?: Pair("https://i.redd.it/$id.gif", Type.SINGLE_GIF)
-          Triple(url, null, mediaType)
-        } else {
-          val ext = when (meta?.mime) {
-            "image/jpeg", "image/jpg" -> "jpg"
-            "image/png" -> "png"
-            "image/webp" -> "webp"
-            else -> throw UnknownMimeException(meta?.mime)
+          val (hqUrl, lqUrl, mediaType) = if (meta != null && meta.mime == "image/gif") {
+            val (url, mediaType) = meta.full?.mp4Url
+                ?.let { u -> Pair(u, Type.SINGLE_VIDEO) }
+                ?: Pair("https://i.redd.it/$id.gif", Type.SINGLE_GIF)
+            Triple(url, null, mediaType)
+          } else {
+            val ext = when (meta?.mime) {
+              "image/jpeg", "image/jpg" -> "jpg"
+              "image/png" -> "png"
+              "image/webp" -> "webp"
+              else -> throw UnknownMimeException(meta?.mime)
+            }
+            Triple(
+                "https://i.redd.it/$id.$ext",
+                meta.previews?.lastOrNull()?.imgUrl,
+                Type.SINGLE_IMAGE
+            )
           }
-          Triple(
-              "https://i.redd.it/$id.$ext",
-              meta.previews?.lastOrNull()?.imgUrl,
-              Type.SINGLE_IMAGE
-          )
-        }
 
-        val previews = ImageWithMultipleVariants.of(meta)
-        RedditGalleryImageLink(hqUrl, lqUrl, previews, mediaType, it.caption)
+          val previews = ImageWithMultipleVariants.of(meta)
+          RedditGalleryImageLink(hqUrl, lqUrl, previews, mediaType, it.caption)
+        }
+      } catch (e: UnknownMimeException) {
+        Timber.e("Unknown mime type ${e.mime} in reddit gallery ${submission.id}")
+        return null
       }
     }
 
@@ -54,13 +59,7 @@ data class RedditGalleryLink(
     }
 
     @JvmStatic fun create(galleryUrl: String, submission: Submission): Optional<RedditGalleryLink> {
-      val images = try {
-        extractImages(submission)?.toList()
-      } catch (e: UnknownMimeException) {
-        Timber.e("Unknown mime type ${e.mime} in reddit gallery $galleryUrl")
-        null
-      }
-
+      val images = extractImages(submission)?.toList()
       return if (images?.isEmpty() != false) Optional.empty()
       else Optional.of(RedditGalleryLink(galleryUrl, images))
     }
