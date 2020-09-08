@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
 
 -   Correctly parse links with leading/trailing spaces ([#319](https://github.com/Tunous/Dawn/pull/319))
+-   App icon on API versions lower than 26 ([#318](https://github.com/Tunous/Dawn/pull/318))
 
 ## [0.10.0] - 2020-08-14
 
