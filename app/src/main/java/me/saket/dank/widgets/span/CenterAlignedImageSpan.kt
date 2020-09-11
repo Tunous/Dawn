@@ -13,7 +13,8 @@ class CenterAlignedImageSpan(drawable: Drawable, private val lineSpacingExtra: I
                     start: Int, end: Int, x: Float,
                     top: Int, y: Int, bottom: Int, paint: Paint) {
     val drawableHeight = drawable.bounds.height()
-    val translationY = (bottom - top - drawableHeight - lineSpacingExtra) / 2f
+    val realExtraSpacing = if (canvas.clipBounds.bottom != bottom) lineSpacingExtra else 0 // extra line spacing is not applied to last line
+    val translationY = top + (bottom - top - drawableHeight - realExtraSpacing) / 2f
 
     canvas.save()
     canvas.translate(x, translationY)
