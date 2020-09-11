@@ -7,31 +7,15 @@ import android.graphics.drawable.Drawable
 import android.text.style.ImageSpan
 import java.lang.ref.WeakReference
 
-class CenterAlignedImageSpan(d: Drawable): ImageSpan(d, ALIGN_BASELINE) {
-  private var mDrawableRef: WeakReference<Drawable>? = null
-
-  // Reimplemented because this is a private member
-  private fun getCachedDrawable(): Drawable? {
-    val wr = mDrawableRef
-    var d: Drawable? = null
-
-    if (wr != null)
-      d = wr.get()
-
-    if (d == null) {
-      d = drawable
-      mDrawableRef = WeakReference(d)
-    }
-
-    return d
-  }
+class CenterAlignedImageSpan(d: Drawable, private val lineSpacingExtra: Int): ImageSpan(d, ALIGN_BASELINE) {
+  private var drawableReference: WeakReference<Drawable>? = null
 
   // Reimplemented because getCachedDrawable above uses field from this class
-  override fun getSize(paint: Paint?, text: CharSequence?,
+  override fun getSize(paint: Paint, text: CharSequence?,
                        start: Int, end: Int,
                        fm: FontMetricsInt?): Int {
-    val d = getCachedDrawable()
-    val rect = d!!.bounds
+    val drawable = getCachedDrawable()
+    val rect = drawable.bounds
 
     if (fm != null) {
       fm.ascent = -rect.bottom
@@ -46,14 +30,25 @@ class CenterAlignedImageSpan(d: Drawable): ImageSpan(d, ALIGN_BASELINE) {
   override fun draw(canvas: Canvas, text: CharSequence?,
                     start: Int, end: Int, x: Float,
                     top: Int, y: Int, bottom: Int, paint: Paint) {
-    val b = getCachedDrawable()
+    val drawable = getCachedDrawable()
+    val drawableHeight = drawable.bounds.height()
+    val translationY = (bottom - top - drawableHeight - lineSpacingExtra) / 2f
+
     canvas.save()
-
-    val fm = paint.fontMetricsInt
-    val transY = (fm.bottom - fm.top) / 2 - b!!.bounds.height() / 2
-
-    canvas.translate(x, transY.toFloat())
-    b.draw(canvas)
+    canvas.translate(x, translationY)
+    drawable.draw(canvas)
     canvas.restore()
+  }
+
+  // Reimplemented because this is a private member
+  private fun getCachedDrawable(): Drawable {
+    var cachedDrawable = drawableReference?.get()
+
+    if (cachedDrawable == null) {
+      cachedDrawable = drawable
+      drawableReference = WeakReference(cachedDrawable)
+    }
+
+    return cachedDrawable!!
   }
 }

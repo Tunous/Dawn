@@ -265,7 +265,8 @@ public class SubredditUiConstructor {
     titleBuilder.append(Strings.abbreviateScore(submissionScore));
     titleBuilder.popSpan();
 
-    ColorReplicationIcons.pushVoteIcon(c, titleBuilder, voteDirection, voteColor, R.dimen.subreddit_submission_title);
+    int lineSpacingExtra = Units.dpToPx(2f, c);
+    ColorReplicationIcons.pushVoteIcon(c, titleBuilder, voteDirection, voteColor, R.dimen.subreddit_submission_title, lineSpacingExtra);
 
     titleBuilder.append("  ");
     //noinspection deprecation

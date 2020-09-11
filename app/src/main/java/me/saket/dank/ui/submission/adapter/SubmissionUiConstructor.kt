@@ -254,8 +254,16 @@ class SubmissionUiConstructor @Inject constructor(
         .append(Strings.abbreviateScore(vote.toFloat()))
         .popSpan()
 
+    val lineSpacingExtra = Units.dpToPx(2f, context)
     ColorReplicationIcons
-        .pushVoteIcon(context, titleBuilder, pendingOrDefaultVote, voteDirectionColor, R.dimen.submission_title)
+        .pushVoteIcon(
+          context,
+          titleBuilder,
+          pendingOrDefaultVote,
+          voteDirectionColor,
+          R.dimen.submission_title,
+          lineSpacingExtra
+        )
 
     titleBuilder = titleBuilder
         .append("  ")
