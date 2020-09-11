@@ -17,7 +17,7 @@ class GesturePreferencesSwipeActionSwipeActionsProvider<T : Any> @Inject constru
   private val deleteSwipeActions = PublishRelay.create<ActionWithDirection<T>>()
 
   init {
-    val deleteAction = SwipeAction.create(ACTION_NAME_DELETE, R.color.appshortcut_swipe_delete, 1f)
+    val deleteAction = SwipeAction.create(ACTION_NAME_DELETE, R.color.destructive_action_background, 1f)
     val actionsHolder = SwipeActionsHolder.builder()
       .add(deleteAction)
       .build()

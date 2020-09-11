@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout android:id="@+id/account_manager_root"
-  xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
+  android:id="@+id/account_manager_root"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
   android:fitsSystemWindows="true">
 
-  <me.saket.dank.widgets.ViewFlipperWithDebugPreview
+  <ViewFlipper
     android:id="@+id/account_manager_content_flipper"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -17,9 +17,7 @@
     android:clickable="true"
     android:elevation="@dimen/elevation_nested_expandable_sheet"
     android:focusable="true"
-    android:translationZ="60dp"
-    app:debug_displayedChild="0"
-    tools:ignore="UselessParent">
+    android:translationZ="60dp">
 
     <LinearLayout
       android:id="@+id/account_manager_flipper_accounts_screen"
@@ -37,9 +35,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lineSpacingExtra="@dimen/spacing2"
-        android:paddingBottom="@dimen/spacing4"
-        android:paddingEnd="@dimen/spacing24"
         android:paddingStart="@dimen/spacing16"
+        android:paddingEnd="@dimen/spacing24"
+        android:paddingBottom="@dimen/spacing4"
         android:text="@string/account_manager_message"
         android:textColor="@color/white_opacity_50"
         android:textIsSelectable="false" />
@@ -60,39 +58,38 @@
         android:id="@+id/account_progressbar"
         style="@style/DankProgressBar.Horizontal.TopAligned"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
-        <LinearLayout
-          android:layout_width="match_parent"
+      <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+          android:id="@+id/account_manager_logout"
+          style="?attr/buttonBarPositiveButtonStyle"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
-          android:orientation="horizontal">
+          android:layout_marginEnd="@dimen/spacing8"
+          android:layout_marginBottom="@dimen/spacing8"
+          android:layout_weight="1"
+          android:gravity="start|center_vertical"
+          android:text="@string/account_manager_logout" />
 
-          <Button
-            android:id="@+id/account_manager_logout"
-            style="?attr/buttonBarPositiveButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="start|center_vertical"
-            android:layout_marginBottom="@dimen/spacing8"
-            android:layout_marginEnd="@dimen/spacing8"
-            android:text="@string/account_manager_logout" />
+        <Button
+          android:id="@+id/account_manager_done"
+          style="?attr/buttonBarPositiveButtonStyle"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginEnd="@dimen/spacing8"
+          android:layout_marginBottom="@dimen/spacing8"
+          android:layout_weight="1"
+          android:gravity="end|center_vertical"
+          android:text="@string/account_manager_done" />
 
-          <Button
-            android:id="@+id/account_manager_done"
-            style="?attr/buttonBarPositiveButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="end|center_vertical"
-            android:layout_marginBottom="@dimen/spacing8"
-            android:layout_marginEnd="@dimen/spacing8"
-            android:text="@string/account_manager_done" />
-
-        </LinearLayout>
+      </LinearLayout>
 
     </LinearLayout>
 
-
-  </me.saket.dank.widgets.ViewFlipperWithDebugPreview>
+  </ViewFlipper>
 </FrameLayout>

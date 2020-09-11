@@ -6,23 +6,18 @@ import static me.saket.dank.utils.RxUtils.applySchedulers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ViewFlipper;
 
 import androidx.annotation.CheckResult;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,11 +25,9 @@ import com.airbnb.deeplinkdispatch.DeepLink;
 import dagger.Lazy;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
-import io.reactivex.CompletableSource;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
-import me.saket.dank.ui.accountmanager.AccountManager;
 import timber.log.Timber;
 
 import java.util.ArrayList;
@@ -47,7 +40,6 @@ import me.saket.dank.R;
 import me.saket.dank.data.ErrorResolver;
 import me.saket.dank.data.ResolvedError;
 import me.saket.dank.di.Dank;
-import me.saket.dank.di.RootComponent;
 import me.saket.dank.ui.DankActivity;
 import me.saket.dank.ui.authentication.LoginActivity;
 import me.saket.dank.ui.user.UserSessionRepository;
@@ -59,13 +51,11 @@ import me.saket.dank.utils.itemanimators.SlideUpAlphaAnimator;
 import me.saket.dank.widgets.swipe.RecyclerSwipeListener;
 
 @DeepLink(AccountManagerActivity.DEEP_LINK)
-@RequiresApi(Build.VERSION_CODES.N_MR1)
 public class AccountManagerActivity extends DankActivity {
-  public static final String DEEP_LINK = "dank://accountManager";
+  public static final String DEEP_LINK = "dawn://accountManager";
 
   private final int ACTION_DELETE = 1;
   private final int ACTION_LOGOUT = 2;
-  private int ACTION = 0;
 
   private AccountManager selectedAccount = null;
 
@@ -94,18 +84,7 @@ public class AccountManagerActivity extends DankActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_account_manager);
     ButterKnife.bind(this);
-  }
-
-  @Override
-  protected void onPostCreate(@Nullable Bundle savedState) {
-    super.onPostCreate(savedState);
-
     setupUserList();
-  }
-
-  @Override
-  protected void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
   }
 
   @Override
@@ -127,8 +106,7 @@ public class AccountManagerActivity extends DankActivity {
 
   private Completable confirmAction(int action) {
     if (confirmTimer.isDisposed()) {
-      ACTION = action;
-      int confirmText = ACTION_LOGOUT == ACTION ? R.string.userprofile_confirm_logout : R.string.userprofile_confirm_delete;
+      int confirmText = ACTION_LOGOUT == action ? R.string.userprofile_confirm_logout : R.string.userprofile_confirm_delete;
 
       runOnUiThread(() -> {
         // Stuff that updates the UI
@@ -157,7 +135,7 @@ public class AccountManagerActivity extends DankActivity {
       confirmTimer.dispose();
       timerDisposable.dispose();
 
-      int ongoingActionText = ACTION_LOGOUT == ACTION ? R.string.userprofile_logging_out : R.string.userprofile_deleting_account;
+      int ongoingActionText = ACTION_LOGOUT == action ? R.string.userprofile_logging_out : R.string.userprofile_deleting_account;
       runOnUiThread(() -> {
 
         // Stuff that updates the UI
@@ -165,52 +143,41 @@ public class AccountManagerActivity extends DankActivity {
         logoutButton.setVisibility(View.VISIBLE);
       });
 
-      Thread thread = new Thread()
-      {
-        @Override
-        public void run() {
-          try {
-            while(true) {
-              sleep(2000);
-              runOnUiThread(() -> {
-                if (userSessionRepository.get().isUserLoggedIn()) {
-                  logoutButton.setText(R.string.login_logout);
-                  logoutButton.setVisibility(View.VISIBLE);
-                } else {
-                  logoutButton.setText("");
-                  logoutButton.setVisibility(View.INVISIBLE);
-                }
-              });
-            }
-          } catch (InterruptedException e) {
-            e.printStackTrace();
-          }
-        }
-      };
-
-      if (ACTION == ACTION_DELETE) {
-        timerDisposable = accountManagerRepository.get().delete(this.selectedAccount)
+      if (action == ACTION_DELETE) {
+        //this.userSessionRepository.get().switchAccount(null, getApplicationContext());
+        timerDisposable = accountManagerRepository.get().delete(selectedAccount)
             .subscribeOn(io())
             .observeOn(mainThread())
-            .subscribe(
-                () -> {
-                  //this.userSessionRepository.get().switchAccount(null, getApplicationContext());
-                  thread.start();
-                },
+            .delay(2, TimeUnit.SECONDS)
+            .subscribe(() -> {
+              if (userSessionRepository.get().isUserLoggedIn()) {
+                logoutButton.setText(R.string.login_logout);
+                logoutButton.setVisibility(View.VISIBLE);
+              } else {
+                logoutButton.setText("");
+                logoutButton.setVisibility(View.INVISIBLE);
+              }
+              },
                 error -> {
                   ResolvedError resolvedError = errorResolver.get().resolve(error);
                   resolvedError.ifUnknown(() -> Timber.e(error, "Delete failure"));
                 }
             );
       } else {
+        //this.userSessionRepository.get().switchAccount(null, getApplicationContext());
         timerDisposable = userSessionRepository.get().logout()
             .subscribeOn(io())
             .observeOn(mainThread())
-            .subscribe(
-                () -> {
-                  //this.userSessionRepository.get().switchAccount(null, getApplicationContext());
-                  thread.start();
-                },
+            .delay(2, TimeUnit.SECONDS)
+            .subscribe(() -> {
+              if (userSessionRepository.get().isUserLoggedIn()) {
+                logoutButton.setText(R.string.login_logout);
+                logoutButton.setVisibility(View.VISIBLE);
+              } else {
+                logoutButton.setText("");
+                logoutButton.setVisibility(View.INVISIBLE);
+              }
+            },
                 error -> {
                   ResolvedError resolvedError = errorResolver.get().resolve(error);
                   resolvedError.ifUnknown(() -> Timber.e(error, "Logout failure"));
@@ -228,8 +195,6 @@ public class AccountManagerActivity extends DankActivity {
     accountsRecyclerView.setItemAnimator(animator);
     accountsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     accountsRecyclerView.setAdapter(accountManagerAdapter.get());
-
-    //fullscreenProgressView.setVisibility(View.VISIBLE);
 
     Observable<List<AccountManager>> storedUsers = accountManagerRepository.get().accounts()
         .subscribeOn(io())
@@ -278,7 +243,7 @@ public class AccountManagerActivity extends DankActivity {
     // Switches.
     accountManagerAdapter.get().streamSwitchClicks()
         .observeOn(io())
-        .flatMapCompletable(userToSwitch -> this.userSessionRepository.get().switchAccount(userToSwitch.label(), getBaseContext()))
+        .flatMapCompletable(userToSwitch -> this.userSessionRepository.get().switchAccount(userToSwitch.label()))
         .ambWith(lifecycle().onDestroyCompletable())
         .subscribe();
 
@@ -289,7 +254,7 @@ public class AccountManagerActivity extends DankActivity {
   private ItemTouchHelperDragAndDropCallback createDragAndDropCallbacks() {
     return new ItemTouchHelperDragAndDropCallback() {
       @Override
-      protected boolean onItemMove(RecyclerView.ViewHolder source, RecyclerView.ViewHolder target) {
+      protected boolean onItemMove(@NonNull RecyclerView.ViewHolder source, @NonNull RecyclerView.ViewHolder target) {
         AccountManagerViewHolder sourceViewHolder = (AccountManagerViewHolder) source;
         AccountManagerViewHolder targetViewHolder = (AccountManagerViewHolder) target;
 

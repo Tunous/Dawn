@@ -33,10 +33,10 @@ public class AccountManagerSwipeActionsProvider {
   public AccountManagerSwipeActionsProvider() {
     swipeActions = SwipeActions.builder()
         .startActions(SwipeActionsHolder.builder()
-            .add(SwipeAction.create(ACTION_NAME_DELETE, R.color.account_manager_swipe_delete, 0.3f))
+            .add(SwipeAction.create(ACTION_NAME_DELETE, R.color.destructive_action_background, 0.3f))
             .build())
         .endActions(SwipeActionsHolder.builder()
-            .add(SwipeAction.create(ACTION_NAME_SWITCH, R.color.account_manager_swipe_switch, 1f))
+            .add(SwipeAction.create(ACTION_NAME_SWITCH, R.color.swipeable_row_item_background, 1f))
             .build())
         .build();
 

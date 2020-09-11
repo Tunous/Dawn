@@ -86,7 +86,6 @@ public class InboxActivity extends DankPullCollapsibleActivity implements InboxF
     Intent intent = new Intent(context, InboxActivity.class);
     intent.putExtra(KEY_EXPAND_FROM_SHAPE, (Parcelable) null);
     intent.putExtra(KEY_INITIAL_FOLDER, initialFolder);
-    intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
     return intent;
   }
 

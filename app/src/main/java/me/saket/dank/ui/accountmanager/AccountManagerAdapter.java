@@ -26,10 +26,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import me.saket.dank.R;
-import me.saket.dank.ui.accountmanager.AccountManager;
-import me.saket.dank.ui.accountmanager.AccountManagerPlaceholderUiModel;
-import me.saket.dank.ui.accountmanager.AccountManagerScreenUiModel;
-import me.saket.dank.ui.accountmanager.AccountManagerSwipeActionsProvider;
 import me.saket.dank.utils.ItemTouchHelperDragAndDropCallback;
 import me.saket.dank.utils.Pair;
 import me.saket.dank.utils.RecyclerViewArrayAdapter;
@@ -72,7 +68,7 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
   }
 
   @Override
-  protected RecyclerView.ViewHolder onCreateViewHolder(LayoutInflater inflater, ViewGroup parent, int viewType) {
+  protected RecyclerView.ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent, int viewType) {
     if (viewType == VIEW_TYPE_APP_SHORTCUT) {
       AccountManagerViewHolder holder = AccountManagerViewHolder.create(inflater, parent);
       holder.setupDeleteGesture(swipeActionsProvider.get());
@@ -85,7 +81,7 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
       return holder;
 
     } else {
-      throw new AssertionError();
+      throw new IllegalArgumentException("Invalid view type");
     }
   }
 
@@ -106,15 +102,16 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
       return VIEW_TYPE_PLACEHOLDER;
 
     } else {
-      throw new AssertionError();
+      throw new IllegalArgumentException("Invalid view type");
     }
   }
 
   @Override
   public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
     if (holder instanceof AccountManagerViewHolder) {
-      ((AccountManagerViewHolder) holder).set((AccountManager) getItem(position));
-      ((AccountManagerViewHolder) holder).render();
+      final AccountManagerViewHolder viewHolder = (AccountManagerViewHolder) holder;
+      viewHolder.set((AccountManager) getItem(position));
+      viewHolder.render();
     }
   }
 
@@ -134,12 +131,14 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
     @BindView(R.id.account_manager_item_swipeable_layout) SwipeableLayout swipeableLayout;
     @BindView(R.id.account_manager_item_label) TextView labelView;
     @BindView(R.id.account_manager_item_drag) ImageButton dragButton;
+    private final int recyclerViewDragnDropElevation;
 
     private AccountManager account;
 
     public AccountManagerViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
+      recyclerViewDragnDropElevation = swipeableLayout.getResources().getDimensionPixelSize(R.dimen.elevation_recyclerview_row_drag_n_drop);
     }
 
     public static AccountManagerViewHolder create(LayoutInflater inflater, ViewGroup parent) {
@@ -180,7 +179,7 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
     @Override
     public void onDragStart() {
       swipeableLayout.animate()
-          .translationZ(swipeableLayout.getResources().getDimensionPixelSize(R.dimen.elevation_recyclerview_row_drag_n_drop))
+          .translationZ(recyclerViewDragnDropElevation)
           .setDuration(100)
           .start();
     }

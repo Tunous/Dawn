@@ -2,5 +2,5 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
   android:shape="oval">
 
-  <solid android:color="@color/app_shortcut_background" />
+  <solid android:color="@color/swipeable_row_item_background" />
 </shape>

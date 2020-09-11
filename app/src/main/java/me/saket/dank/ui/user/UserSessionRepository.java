@@ -16,6 +16,7 @@ import javax.inject.Named;
 import dagger.Lazy;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.functions.Action;
 import me.saket.dank.reddit.Reddit;
 import me.saket.dank.ui.accountmanager.AccountManager;
 import me.saket.dank.ui.accountmanager.AccountManagerRepository;
@@ -44,8 +45,7 @@ public class UserSessionRepository {
 
   public void setLoggedInUsername(String username) {
     Preconditions.checkNotNull(username, "username == null");
-    // add user to repository
-    this.userManagementRepository.get()
+    userManagementRepository.get()
         .add(AccountManager.create(username))
         .subscribe();
 
@@ -63,8 +63,8 @@ public class UserSessionRepository {
     loggedInUsername.set(EMPTY);
   }
 
-  public Completable switchAccount(String username, Context ctx) {
-    try {
+  public Completable switchAccount(/* TBD, might not be nullable */ @Nullable String username) {
+    return Completable.fromAction(() -> {
       if (username == null) {
         accountHelper.switchToUserless();
         loggedInUsername.set(EMPTY);
@@ -74,11 +74,7 @@ public class UserSessionRepository {
         accountHelper.trySwitchToUser(username);
         loggedInUsername.set(username);
       }
-    } catch (Exception e) {
-      Timber.e(e, "Error while switching users");
-    }
-
-    return Completable.complete();
+    });
   }
 
   public boolean isUserLoggedIn() {

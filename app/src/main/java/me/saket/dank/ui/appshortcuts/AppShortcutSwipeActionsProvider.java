@@ -28,7 +28,7 @@ public class AppShortcutSwipeActionsProvider {
 
   @Inject
   public AppShortcutSwipeActionsProvider() {
-    SwipeAction deleteAction = SwipeAction.create(ACTION_NAME_DELETE, R.color.appshortcut_swipe_delete, 1);
+    SwipeAction deleteAction = SwipeAction.create(ACTION_NAME_DELETE, R.color.destructive_action_background, 1);
     swipeActions = SwipeActions.builder()
         .startActions(SwipeActionsHolder.builder()
             .add(deleteAction)

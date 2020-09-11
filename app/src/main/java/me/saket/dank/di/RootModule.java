@@ -35,7 +35,6 @@ import me.saket.dank.data.OnLoginRequireListener;
 import me.saket.dank.reply.ReplyRepository;
 import me.saket.dank.ui.UrlRouter;
 import me.saket.dank.ui.accountmanager.AccountManagerActivity;
-import me.saket.dank.ui.authentication.LoginActivity;
 import me.saket.dank.ui.submission.DraftStore;
 import me.saket.dank.ui.submission.LinkOptionsPopup;
 import me.saket.dank.urlparser.Link;
@@ -59,7 +58,7 @@ public class RootModule {
 
   public static final int NETWORK_CONNECT_TIMEOUT_SECONDS = 15;
   public static final int NETWORK_READ_TIMEOUT_SECONDS = 10;
-  private Application appContext;
+  private final Application appContext;
 
   public RootModule(Application appContext) {
     this.appContext = appContext;
@@ -191,7 +190,7 @@ public class RootModule {
   @Provides
   OnLoginRequireListener provideOnLoginRequireListener(Application appContext) {
     return () -> {
-      Intent loginIntent = new Intent(appContext, AccountManagerActivity.class);
+      final Intent loginIntent = AccountManagerActivity.intent(appContext);
       loginIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
       appContext.startActivity(loginIntent);
     };

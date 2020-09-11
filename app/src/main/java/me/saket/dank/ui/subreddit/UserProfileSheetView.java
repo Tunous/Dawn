@@ -12,7 +12,6 @@ import net.dean.jraw.models.Account;
 import net.dean.jraw.pagination.Paginator;
 
 import java.util.NoSuchElementException;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -43,7 +42,6 @@ import timber.log.Timber;
 
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
-import static me.saket.dank.utils.RxUtils.applySchedulers;
 
 public class UserProfileSheetView extends FrameLayout {
 
@@ -59,8 +57,6 @@ public class UserProfileSheetView extends FrameLayout {
   @Inject Lazy<ErrorResolver> errorResolver;
   @Inject Lazy<UserSessionRepository> userSessionRepository;
 
-  private Disposable confirmLogoutTimer = Disposables.disposed();
-  private Disposable logoutDisposable = Disposables.empty();
   private ToolbarExpandableSheet parentSheet;
   private LifecycleOwnerViews.Streams lifecycle;
 
@@ -176,7 +172,6 @@ public class UserProfileSheetView extends FrameLayout {
   @Override
   protected void onDetachedFromWindow() {
     super.onDetachedFromWindow();
-    logoutDisposable.dispose();
   }
 
   public void setParentSheet(ToolbarExpandableSheet parentSheet) {
@@ -206,7 +201,6 @@ public class UserProfileSheetView extends FrameLayout {
   void onClickManageAccounts() {
     parentSheet.collapse();
 
-    Intent intent = new Intent(getContext(), AccountManagerActivity.class);
-    this.getContext().startActivity(intent);
+    getContext().startActivity(AccountManagerActivity.intent(getContext()));
   }
 }

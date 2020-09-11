@@ -1,10 +1,6 @@
 package me.saket.dank.ui.accountmanager;
 
-import android.annotation.TargetApi;
-import android.app.Application;
-import android.content.pm.ShortcutManager;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 
 import androidx.annotation.CheckResult;
 
@@ -16,18 +12,13 @@ import io.reactivex.Observable;
 import java.util.List;
 import javax.inject.Inject;
 
-@TargetApi(Build.VERSION_CODES.N_MR1)
 public class AccountManagerRepository {
 
-  private final Application appContext;
   private final Lazy<BriteDatabase> database;
-  private final Lazy<ShortcutManager> shortcutManager;
 
   @Inject
-  public AccountManagerRepository(Application appContext, Lazy<BriteDatabase> database, Lazy<ShortcutManager> shortcutManager) {
-    this.appContext = appContext;
+  public AccountManagerRepository(Lazy<BriteDatabase> database) {
     this.database = database;
-    this.shortcutManager = shortcutManager;
   }
 
   @CheckResult

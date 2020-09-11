@@ -89,9 +89,9 @@
   <!-- Media -->
   <color name="videoplayer_buffer">@color/gray_800</color>
 
-  <!-- App shortcuts -->
-  <color name="app_shortcut_background">@color/blue_gray_50</color>
-  <color name="appshortcut_swipe_delete">@color/red_300</color>
+  <!-- Swipe actions -->
+  <color name="swipeable_row_item_background">@color/blue_gray_50</color>
+  <color name="destructive_action_background">@color/red_300</color>
 
   <!-- Text -->
   <color name="text_primary">@color/gray_200</color>
@@ -120,7 +120,5 @@
   </array>
   
   <!-- Account Manager -->
-  <color name="account_manager_background">@color/blue_gray_50</color>
-  <color name="account_manager_swipe_delete">@color/red_300</color>
   <color name="account_manager_swipe_switch">@color/blue_300</color>
 </resources>

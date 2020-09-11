@@ -262,7 +262,7 @@ public class InboxRepository {
   public Completable clearMessages() {
     return Completable.fromAction(() -> {
       try (BriteDatabase.Transaction transaction = briteDatabase.newTransaction()) {
-        briteDatabase.delete(CachedMessage.TABLE_NAME, "");
+        briteDatabase.delete(CachedMessage.TABLE_NAME, null);
         transaction.markSuccessful();
       }
     });
