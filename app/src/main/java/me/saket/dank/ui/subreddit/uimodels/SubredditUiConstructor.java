@@ -261,12 +261,18 @@ public class SubredditUiConstructor {
 
     Truss titleBuilder = new Truss();
     int voteColor = ContextCompat.getColor(c, Themes.voteColor(voteDirection));
+    int titleLineSpacingExtra = c.getResources().getDimensionPixelSize(R.dimen.submission_title_extra_spacing);
+
     titleBuilder.pushSpan(new ForegroundColorSpan(voteColor));
     titleBuilder.append(Strings.abbreviateScore(submissionScore));
     titleBuilder.popSpan();
 
-    int lineSpacingExtra = Units.dpToPx(2f, c);
-    ColorReplicationIcons.pushVoteIcon(c, titleBuilder, voteDirection, voteColor, R.dimen.subreddit_submission_title, lineSpacingExtra);
+    ColorReplicationIcons.pushVoteIcon(c,
+        titleBuilder,
+        voteDirection,
+        voteColor,
+        R.dimen.subreddit_submission_title,
+        titleLineSpacingExtra);
 
     titleBuilder.append("  ");
     //noinspection deprecation

@@ -39,7 +39,7 @@
       android:layout_marginBottom="@dimen/spacing8"
       android:layout_marginEnd="@dimen/spacing16"
       android:layout_marginStart="@dimen/spacing16"
-      android:lineSpacingExtra="@dimen/spacing2"
+      android:lineSpacingExtra="@dimen/submission_title_extra_spacing"
       android:textColor="@color/gray_100"
       android:textSize="@dimen/submission_title"
       android:textIsSelectable="false"

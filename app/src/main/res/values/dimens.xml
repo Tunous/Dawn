@@ -38,6 +38,7 @@
 
   <!-- Submission -->
   <dimen name="submission_title">@dimen/textsize16</dimen>
+  <dimen name="submission_title_extra_spacing">@dimen/spacing2</dimen>
   <dimen name="submission_commentssheet_minimum_visible_height">76dp</dimen>
   <!--<dimen name="submission_link_thumbnail_width_reddit_link">60dp</dimen>-->
   <dimen name="submission_link_thumbnail_width_external_link">100dp</dimen>

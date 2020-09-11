@@ -216,6 +216,7 @@ class SubmissionUiConstructor @Inject constructor(
   ): SubmissionCommentsHeader.UiModel {
     val pendingOrDefaultVote = votingManager.getPendingOrDefaultVote(submission, submission.vote)
     val voteDirectionColor = color(context, Themes.voteColor(pendingOrDefaultVote))
+    val titleLineSpacingExtra = context.getResources().getDimensionPixelSize(R.dimen.submission_title_extra_spacing);
     val adapterId = JrawUtils2.generateAdapterId(submission)
 
 
@@ -254,7 +255,6 @@ class SubmissionUiConstructor @Inject constructor(
         .append(Strings.abbreviateScore(vote.toFloat()))
         .popSpan()
 
-    val lineSpacingExtra = Units.dpToPx(2f, context)
     ColorReplicationIcons
         .pushVoteIcon(
           context,
@@ -262,7 +262,7 @@ class SubmissionUiConstructor @Inject constructor(
           pendingOrDefaultVote,
           voteDirectionColor,
           R.dimen.submission_title,
-          lineSpacingExtra
+          titleLineSpacingExtra
         )
 
     titleBuilder = titleBuilder

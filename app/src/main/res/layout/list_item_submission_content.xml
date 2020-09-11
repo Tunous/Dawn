@@ -34,7 +34,7 @@
     android:layout_marginStart="@dimen/subreddit_submission_padding"
     android:layout_marginTop="@dimen/spacing12"
     android:layout_marginEnd="@dimen/subreddit_submission_thumbnail_padding"
-    android:lineSpacingExtra="@dimen/spacing2"
+    android:lineSpacingExtra="@dimen/submission_title_extra_spacing"
     android:textColor="@color/gray_100"
     android:textIsSelectable="false"
     android:textSize="@dimen/subreddit_submission_title"
