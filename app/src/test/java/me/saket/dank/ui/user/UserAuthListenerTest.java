@@ -16,6 +16,7 @@ import io.reactivex.Observable;
 import io.reactivex.functions.Predicate;
 import me.saket.dank.ImmediateSchedulersRule;
 import me.saket.dank.analytics.CrashReporter;
+import me.saket.dank.data.InboxRepository;
 import me.saket.dank.ui.preferences.NetworkStrategy;
 import me.saket.dank.ui.subscriptions.SubscriptionRepository;
 import me.saket.dank.utils.Optional;
@@ -34,6 +35,7 @@ public class UserAuthListenerTest {
   @Mock SubscriptionRepository subscriptionRepository;
   @Mock UserSessionRepository userSessionRepository;
   @Mock CrashReporter crashReporter;
+  @Mock InboxRepository inboxRepository;
   @Mock Preference<Boolean> unreadMessagesPollEnabled;
   @Mock Preference<TimeInterval> unreadMessagesPollInterval;
   @Mock Preference<NetworkStrategy> unreadMessagesPollNetworkStrategy;
@@ -45,6 +47,7 @@ public class UserAuthListenerTest {
     userAuthListener = spy(new UserAuthListener(
         () -> subscriptionRepository,
         () -> userSessionRepository,
+        () -> inboxRepository,
         () -> crashReporter,
         () -> unreadMessagesPollEnabled,
         () -> unreadMessagesPollInterval,
