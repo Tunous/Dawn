@@ -6,9 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.11.0] - 2020-09-22
+
 ### Added
 
--	Icons for OP comments and up/downvote ([#305](https://github.com/Tunous/Dawn/pull/305))
+-   Icons for OP comments and up/downvote ([#305](https://github.com/Tunous/Dawn/pull/305))
 -   Support for reddit galleries ([#312](https://github.com/Tunous/Dawn/pull/312))
 
 ### Changed
@@ -160,7 +162,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Changes before the fork has been made.
 
-[Unreleased]: https://github.com/Tunous/Dawn/compare/0.10.0...HEAD
+[Unreleased]: https://github.com/Tunous/Dawn/compare/0.11.0...HEAD
+
+[0.11.0]: https://github.com/Tunous/Dawn/compare/0.10.0...0.11.0
 
 [0.10.0]: https://github.com/Tunous/Dawn/compare/0.9.2...0.10.0
 
