@@ -1,0 +1,12 @@
+0.11.0 - 2020-09-22
+
+Added
+Icons for OP comments and up/downvote (#305)
+Support for reddit galleries (#312)
+
+Changed
+Increased minimum required API version to 23 (#318)
+
+Fixed
+Correctly parse links with leading/trailing spaces (#319)
+App icon on API versions lower than 26 (#318)
