@@ -16,35 +16,6 @@ jobs:
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      # Cache
-
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
-
-      - name: Cache gradle modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches/modules-2
-          key: ${{ runner.os }}-gradlemodules-${{ hashFiles('checksum.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-gradlemodules-
-
-      - name: Cache gradle jars
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches/jars-3
-          key: ${{ runner.os }}-gradlejars-${{ hashFiles('checksum.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-gradlejars-
-
-      - name: Cache gradle build
-        uses: actions/cache@v1
-        with:
-          path: ~/.gradle/caches/build-cache-1
-          key: ${{ runner.os }}-gradlebuildcache-${{ hashFiles('checksum.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-gradlebuildcache-
-
       # Signing
 
       - name: Setup signing
@@ -55,7 +26,9 @@ jobs:
       # Release APK
 
       - name: Build app
-        run: ./gradlew :app:bundleRelease :app:assembleRelease
+        uses: burrunan/gradle-cache-action@v1
+        with:
+          arguments: :app:bundleRelease :app:assembleRelease
 
       - name: Upload release APK
         uses: actions/upload-artifact@master
