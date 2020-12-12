@@ -142,7 +142,6 @@ public class AccountManagerActivity extends DankActivity {
       });
 
       if (action == ACTION_DELETE) {
-        //this.userSessionRepository.get().switchAccount(null, getApplicationContext());
         timerDisposable = accountManagerRepository.get().delete(selectedAccount)
             .subscribeOn(io())
             .observeOn(mainThread())
@@ -162,7 +161,6 @@ public class AccountManagerActivity extends DankActivity {
                 }
             );
       } else {
-        //this.userSessionRepository.get().switchAccount(null, getApplicationContext());
         timerDisposable = userSessionRepository.get().logout()
             .subscribeOn(io())
             .observeOn(mainThread())
