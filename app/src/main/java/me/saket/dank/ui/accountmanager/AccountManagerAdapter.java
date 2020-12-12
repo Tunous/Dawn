@@ -39,7 +39,7 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
 
   private static final Object NOTHING = LifecycleStreams.NOTHING;
   public static final long ID_ADD_NEW = -99L;
-  private static final int VIEW_TYPE_APP_SHORTCUT = 0;
+  private static final int VIEW_TYPE_USER_ACCOUNT = 0;
   private static final int VIEW_TYPE_PLACEHOLDER = 1;
 
   private final Lazy<AccountManagerSwipeActionsProvider> swipeActionsProvider;
@@ -69,7 +69,7 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
 
   @Override
   protected RecyclerView.ViewHolder onCreateViewHolder(@NonNull LayoutInflater inflater, @NonNull ViewGroup parent, int viewType) {
-    if (viewType == VIEW_TYPE_APP_SHORTCUT) {
+    if (viewType == VIEW_TYPE_USER_ACCOUNT) {
       AccountManagerViewHolder holder = AccountManagerViewHolder.create(inflater, parent);
       holder.setupDeleteGesture(swipeActionsProvider.get());
       holder.setupDragGesture(dragStarts);
@@ -96,7 +96,7 @@ public class AccountManagerAdapter extends RecyclerViewArrayAdapter<AccountManag
     AccountManagerScreenUiModel uiModel = getItem(position);
 
     if (uiModel instanceof AccountManager) {
-      return VIEW_TYPE_APP_SHORTCUT;
+      return VIEW_TYPE_USER_ACCOUNT;
 
     } else if (uiModel instanceof AccountManagerPlaceholderUiModel) {
       return VIEW_TYPE_PLACEHOLDER;
