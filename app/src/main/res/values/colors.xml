@@ -90,7 +90,7 @@
   <color name="videoplayer_buffer">@color/gray_800</color>
 
   <!-- Swipe actions -->
-  <color name="swipeable_row_item_background">@color/blue_gray_50</color>
+  <color name="swipeable_row_item_background">@color/blue_gray_600</color>
   <color name="destructive_action_background">@color/red_300</color>
 
   <!-- Text -->
