@@ -20,7 +20,7 @@ jobs:
       # Debug APK
 
       - name: Assemble debug APK
-        uses: burrunan/gradle-cache-action@v1
+        uses: burrunan/gradle-cache-action@v1.5
         with:
           arguments: :app:assembleDebug
 
@@ -45,7 +45,7 @@ jobs:
       # Tests
 
       - name: Run tests
-        uses: burrunan/gradle-cache-action@v1
+        uses: burrunan/gradle-cache-action@v1.5
         with:
           arguments: testDebug
 
