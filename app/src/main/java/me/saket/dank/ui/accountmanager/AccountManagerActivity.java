@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 import me.saket.dank.R;
@@ -258,10 +259,10 @@ public class AccountManagerActivity extends DankActivity {
         int toPosition = targetViewHolder.getAdapterPosition() - 1;
 
         //noinspection ConstantConditions
-        List<AccountManager> accounts = Observable.fromIterable(accountManagerAdapter.get().getData())
-            .ofType(AccountManager.class)
-            .toList()
-            .blockingGet();
+        List<AccountManager> accounts = accountManagerAdapter.get().getData().stream()
+            .filter(data -> data instanceof AccountManager)
+            .map(data -> (AccountManager) data)
+            .collect(Collectors.toList());
 
         if (fromPosition < toPosition) {
           for (int i = fromPosition; i < toPosition; i++) {
