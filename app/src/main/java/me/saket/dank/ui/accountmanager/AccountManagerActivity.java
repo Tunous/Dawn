@@ -2,7 +2,6 @@ package me.saket.dank.ui.accountmanager;
 
 import static io.reactivex.android.schedulers.AndroidSchedulers.mainThread;
 import static io.reactivex.schedulers.Schedulers.io;
-import static me.saket.dank.utils.RxUtils.applySchedulers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,6 +25,7 @@ import dagger.Lazy;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import timber.log.Timber;
@@ -114,20 +114,18 @@ public class AccountManagerActivity extends DankActivity {
         logoutButton.setVisibility(View.VISIBLE);
       });
 
-
       confirmTimer = Observable.timer(5, TimeUnit.SECONDS)
-          .compose(applySchedulers())
+          .subscribeOn(AndroidSchedulers.mainThread())
+          .observeOn(AndroidSchedulers.mainThread())
           .subscribe(o -> {
-            runOnUiThread(() -> {
-              // Stuff that updates the UI
-              if (userSessionRepository.get().isUserLoggedIn()) {
-                logoutButton.setText(R.string.login_logout);
-                logoutButton.setVisibility(View.VISIBLE);
-              } else {
-                logoutButton.setText("");
-                logoutButton.setVisibility(View.INVISIBLE);
-              }
-            });
+            // Stuff that updates the UI
+            if (userSessionRepository.get().isUserLoggedIn()) {
+              logoutButton.setText(R.string.login_logout);
+              logoutButton.setVisibility(View.VISIBLE);
+            } else {
+              logoutButton.setText("");
+              logoutButton.setVisibility(View.INVISIBLE);
+            }
           });
 
     } else {
