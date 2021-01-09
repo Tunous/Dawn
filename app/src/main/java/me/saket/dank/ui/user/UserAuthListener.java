@@ -16,7 +16,6 @@ import javax.inject.Singleton;
 import dagger.Lazy;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
-import me.saket.dank.analytics.CrashReporter;
 import me.saket.dank.data.InboxRepository;
 import me.saket.dank.notifs.CheckUnreadMessagesJobService;
 import me.saket.dank.ui.preferences.NetworkStrategy;
@@ -34,7 +33,6 @@ public class UserAuthListener {
   private final Lazy<SubscriptionRepository> subscriptionRepository;
   private final Lazy<UserSessionRepository> userSessionRepository;
   private final Lazy<InboxRepository> inboxRepository;
-  private Lazy<CrashReporter> crashReporter;
   private final Lazy<Preference<Boolean>> unreadMessagesPollEnabledPref;
   private final Lazy<Preference<TimeInterval>> unreadMessagesPollInterval;
   private final Lazy<Preference<NetworkStrategy>> unreadMessagesPollNetworkStrategy;
@@ -44,13 +42,11 @@ public class UserAuthListener {
       Lazy<SubscriptionRepository> subscriptionRepository,
       Lazy<UserSessionRepository> userSessionRepository,
       Lazy<InboxRepository> inboxRepository,
-      Lazy<CrashReporter> crashReporter,
       @Named("unread_messages") Lazy<Preference<Boolean>> unreadMessagesPollEnabledPref,
       @Named("unread_messages") Lazy<Preference<TimeInterval>> unreadMessagesPollInterval,
       @Named("unread_messages") Lazy<Preference<NetworkStrategy>> unreadMessagesPollNetworkStrategy
   )
   {
-    this.crashReporter = crashReporter;
     this.unreadMessagesPollEnabledPref = unreadMessagesPollEnabledPref;
     this.unreadMessagesPollInterval = unreadMessagesPollInterval;
     this.subscriptionRepository = subscriptionRepository;
@@ -75,7 +71,7 @@ public class UserAuthListener {
         .skip(1)  // Don't want a log-in callback on app startup.
         .filter(Optional::isPresent)
         .map(Optional::get)
-        .flatMapCompletable(userSession -> Completable.fromAction(() -> handleLoggedIn(context, userSession)));
+        .flatMapCompletable(userSession -> Completable.fromAction(() -> handleLoggedIn(context)));
 
     Completable logOutCompletable = userSessions
         .doOnNext(o -> Timber.w("session: %s", o))
@@ -93,11 +89,7 @@ public class UserAuthListener {
   }
 
   @VisibleForTesting
-  void handleLoggedIn(Context context, UserSession userSession) {
-    //Timber.d("User is logged in. Doing things.");
-
-    crashReporter.get().identifyUser(userSession.username());
-
+  void handleLoggedIn(Context context) {
     // Reload subreddit subscriptions. Not implementing onError() is intentional.
     // This code is not supposed to fail :/
     subscriptionRepository.get().removeAll()
@@ -114,10 +106,6 @@ public class UserAuthListener {
 
   @VisibleForTesting
   void handleLoggedOut() {
-    //Timber.d("User logged out. Doing things.");
-
-    crashReporter.get().identifyUser(null);
-
     subscriptionRepository.get().removeAll()
         .subscribeOn(io())
         .subscribe(() -> {

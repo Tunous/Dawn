@@ -15,7 +15,6 @@ import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.functions.Predicate;
 import me.saket.dank.ImmediateSchedulersRule;
-import me.saket.dank.analytics.CrashReporter;
 import me.saket.dank.data.InboxRepository;
 import me.saket.dank.ui.preferences.NetworkStrategy;
 import me.saket.dank.ui.subscriptions.SubscriptionRepository;
@@ -34,7 +33,6 @@ public class UserAuthListenerTest {
 
   @Mock SubscriptionRepository subscriptionRepository;
   @Mock UserSessionRepository userSessionRepository;
-  @Mock CrashReporter crashReporter;
   @Mock InboxRepository inboxRepository;
   @Mock Preference<Boolean> unreadMessagesPollEnabled;
   @Mock Preference<TimeInterval> unreadMessagesPollInterval;
@@ -48,7 +46,6 @@ public class UserAuthListenerTest {
         () -> subscriptionRepository,
         () -> userSessionRepository,
         () -> inboxRepository,
-        () -> crashReporter,
         () -> unreadMessagesPollEnabled,
         () -> unreadMessagesPollInterval,
         () -> unreadMessagesPollNetworkStrategy));
@@ -78,7 +75,7 @@ public class UserAuthListenerTest {
         .test()
         .assertSubscribed();
 
-    verify(userAuthListener).handleLoggedIn(any(), any());
+    verify(userAuthListener).handleLoggedIn(any());
     verify(subscriptionRepository).removeAll();
     verify(subscriptionRepository).refreshAndSaveSubscriptions();
   }

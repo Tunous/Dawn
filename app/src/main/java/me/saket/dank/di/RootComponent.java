@@ -5,8 +5,6 @@ import com.squareup.moshi.Moshi;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import me.saket.dank.analytics.AnalyticsDaggerModule;
-import me.saket.dank.analytics.CrashReporter;
 import me.saket.dank.cache.CacheModule;
 import me.saket.dank.cache.DatabaseCacheRecyclerJobService;
 import me.saket.dank.data.ErrorResolver;
@@ -63,7 +61,6 @@ import me.saket.dank.widgets.IndentedLayout;
     CacheModule.class,
     MarkdownModule.class,
     WalkthroughModule.class,
-    AnalyticsDaggerModule.class,
     RedditModule.class,
     StorageModule.class,
 })
@@ -85,8 +82,6 @@ public interface RootComponent {
   AppShortcutRepository shortcutRepository();
 
   TypefaceInflationInterceptor typefaceInflationInterceptor();
-
-  CrashReporter crashReporter();
 
   void inject(MediaAlbumViewerActivity target);
 

@@ -27,7 +27,6 @@ import javax.inject.Singleton
 
 @Singleton
 class LinkMetadataRepository @Inject constructor(
-  dankApi: Lazy<DankApi>,
   cacheFileSystem: FileSystem,
   moshi: Moshi,
   private val errorResolver: Lazy<ErrorResolver>,

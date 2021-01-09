@@ -233,9 +233,5 @@
     <meta-data
       android:name="android.webkit.WebView.EnableSafeBrowsing"
       android:value="true" />
-
-    <meta-data
-      android:name="com.bugsnag.android.API_KEY"
-      android:value="c43ce2455a82c6f0e4e0276df109fd4f" />
   </application>
 </manifest>
