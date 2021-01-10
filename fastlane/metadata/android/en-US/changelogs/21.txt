@@ -1,0 +1,4 @@
+0.12.0 - 2021-01-10
+
+Added
+Support for multiple accounts #329

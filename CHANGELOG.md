@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.12.0] - 2021-01-10
 
+### Added
+
+-   Support for multiple accounts ([#329](https://github.com/Tunous/Dawn/pull/329))
+
 ## [0.11.0] - 2020-09-22
 
 ### Added
