@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.12.0] - 2021-01-10
+
 ## [0.11.0] - 2020-09-22
 
 ### Added
@@ -162,7 +164,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Changes before the fork has been made.
 
-[Unreleased]: https://github.com/Tunous/Dawn/compare/0.11.0...HEAD
+[Unreleased]: https://github.com/Tunous/Dawn/compare/0.12.0...HEAD
+
+[0.12.0]: https://github.com/Tunous/Dawn/compare/0.11.0...0.12.0
 
 [0.11.0]: https://github.com/Tunous/Dawn/compare/0.10.0...0.11.0
 
