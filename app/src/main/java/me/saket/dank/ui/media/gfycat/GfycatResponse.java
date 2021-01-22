@@ -25,10 +25,10 @@ public abstract class GfycatResponse {
     @Json(name = "gfyName")
     public abstract String threeWordId();
 
-    @Json(name = "webmUrl")
+    @Json(name = "mp4Url")
     public abstract String highQualityUrl();
 
-    @Json(name = "miniUrl")
+    @Json(name = "mobileUrl")
     public abstract String lowQualityUrl();
 
     public static JsonAdapter<Data> jsonAdapter(Moshi moshi) {
