@@ -272,9 +272,6 @@ public interface SubmissionCommentsHeader {
       // keeps popping up, so it's probably necessary to set it in code
       selfTextView.setTextIsSelectable(true);
       selfTextView.setMovementMethod(movementMethod);
-
-      // limit selection to title
-      SubmissionTitleSpan.limitSelectionForTextView(titleView);
     }
 
     private void setSubmissionByline(UiModel uiModel) {
@@ -283,6 +280,9 @@ public interface SubmissionCommentsHeader {
 
     private void setSubmissionTitle(UiModel uiModel) {
       titleView.setText(uiModel.title());
+
+      // limit selection to title
+      SubmissionTitleSpan.limitSelectionForTextView(titleView);
     }
 
     public void renderPartialChanges(List<Object> payloads) {
