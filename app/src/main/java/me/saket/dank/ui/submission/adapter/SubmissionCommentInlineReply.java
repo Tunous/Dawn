@@ -155,12 +155,14 @@ public interface SubmissionCommentInlineReply {
       });
     }
 
-    public void setupSavingOfDraftOnFocusLost() {
+    public void setupSavingOfDraft() {
       replyField.setOnFocusChangeListener((v, hasFocus) -> {
         if (!hasFocus) {
           saveDraftAsynchronouslyIfAllowed();
         }
       });
+      indentedLayout
+          .setOnDetachAndGoingInvisibleListener(this::saveDraftAsynchronouslyIfAllowed);
     }
 
     private void saveDraftAsynchronouslyIfAllowed() {
@@ -260,7 +262,7 @@ public interface SubmissionCommentInlineReply {
       );
       // Note: We'll have to remove MarkdownHintOptions from Dagger graph when we introduce a light theme.
       holder.setupMarkdownHints(markdownHintOptions, markdownSpanPool);
-      holder.setupSavingOfDraftOnFocusLost();
+      holder.setupSavingOfDraft();
       return holder;
     }
 
