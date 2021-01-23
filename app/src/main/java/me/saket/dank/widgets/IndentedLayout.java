@@ -9,8 +9,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.LinearLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
 
@@ -40,6 +42,8 @@ public class IndentedLayout extends LinearLayout {
   private int indentationDepth;
   private List<ColoredTree> trees = new ArrayList<>();
   @Inject @Named("show_colored_comments_tree") Preference<Boolean> coloredDepthPreference;
+
+  private Runnable onDetachAndGoingInvisibleListener = () -> {};
 
   public IndentedLayout(Context context, @Nullable AttributeSet attrs) {
     super(context, attrs);
@@ -94,6 +98,24 @@ public class IndentedLayout extends LinearLayout {
       indentationLinePaint.setColor(tree.color);
       canvas.drawPath(tree.path, indentationLinePaint);
     }
+  }
+
+  @Override
+  protected void onDetachedFromWindow() {
+    onDetachAndGoingInvisibleListener.run();
+    super.onDetachedFromWindow();
+  }
+
+  @Override
+  protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+    if (visibility != View.VISIBLE) {
+      onDetachAndGoingInvisibleListener.run();
+    }
+    super.onVisibilityChanged(changedView, visibility);
+  }
+
+  public void setOnDetachAndGoingInvisibleListener(Runnable listener) {
+    this.onDetachAndGoingInvisibleListener = listener;
   }
 
   public void setIndentationDepth(int depth) {
