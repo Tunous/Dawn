@@ -28,6 +28,7 @@ dependencies {
 
   implementation 'com.github.saketme:markwon:b68d3058ca'
   implementation "com.vladsch.flexmark:flexmark-java:$versions.flexmark"
+  implementation "com.vladsch.flexmark:flexmark-util-ast:$versions.flexmark"
   implementation "com.vladsch.flexmark:flexmark-ext-superscript:$versions.flexmark"
   implementation "com.vladsch.flexmark:flexmark-ext-gfm-strikethrough:$versions.flexmark"
 

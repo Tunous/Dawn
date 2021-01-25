@@ -1,11 +1,11 @@
 package me.saket.dank.markdownhints;
 
-import com.vladsch.flexmark.ast.DelimitedNode;
+import com.vladsch.flexmark.ext.superscript.internal.SuperscriptDelimiterProcessor;
+import com.vladsch.flexmark.ext.superscript.Superscript;
 import com.vladsch.flexmark.parser.Parser;
 import com.vladsch.flexmark.parser.core.delimiter.AsteriskDelimiterProcessor;
 import com.vladsch.flexmark.parser.core.delimiter.Delimiter;
-import com.vladsch.flexmark.superscript.Superscript;
-import com.vladsch.flexmark.superscript.internal.SuperscriptDelimiterProcessor;
+import com.vladsch.flexmark.util.ast.DelimitedNode;
 import com.vladsch.flexmark.util.data.MutableDataHolder;
 import com.vladsch.flexmark.util.sequence.BasedSequence;
 
