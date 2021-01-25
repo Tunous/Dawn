@@ -48,7 +48,7 @@ public class DeepLinkHandlingActivity extends DankActivity {
     super.onCreate(savedInstanceState);
 
     // DeepLinkDelegate and AppDeepLinkModuleLoader are generated at compile-time.
-    DeepLinkDelegate deepLinkDelegate = new DeepLinkDelegate(new AppDeepLinkModuleLoader());
+    DeepLinkDelegate deepLinkDelegate = new DeepLinkDelegate(new AppDeepLinkModuleRegistry());
     DeepLinkResult result = deepLinkDelegate.dispatchFrom(this);
 
     if (!result.isSuccessful()) {
