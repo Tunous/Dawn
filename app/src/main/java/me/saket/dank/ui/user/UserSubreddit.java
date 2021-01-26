@@ -3,12 +3,14 @@ package me.saket.dank.ui.user;
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 /**
  * Holds information about Reddit's new "profile pages", which are somewhat like user's
  * own subreddit with a banner image, profile image and a bio.
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class UserSubreddit {
 

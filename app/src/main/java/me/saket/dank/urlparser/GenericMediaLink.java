@@ -4,6 +4,7 @@ import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import me.saket.dank.utils.Urls;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Direct link to a media hosted by an unknown/unsupported-yet website.
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class GenericMediaLink extends MediaLink implements Parcelable {
 

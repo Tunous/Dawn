@@ -3,6 +3,7 @@ package me.saket.dank.ui.giphy;
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import me.saket.dank.di.DankApi;
 /**
  * API response for {@link DankApi#giphySearch(String, String, int, int)} and {@link DankApi#giphyTrending(String, int, int)}.
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class GiphySearchResponse {
 

@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.exceptions.Exceptions;
 
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class TimeInterval {
 

@@ -6,11 +6,13 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 /**
  * Meta-data of a URL.
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class LinkMetadata {
 

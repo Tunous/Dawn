@@ -3,8 +3,10 @@ package me.saket.dank.ui.media.gfycat;
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class GfycatResponse {
 

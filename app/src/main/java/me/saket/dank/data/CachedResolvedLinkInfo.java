@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import me.saket.dank.ui.media.MediaHostRepository;
@@ -16,6 +17,7 @@ import me.saket.dank.urlparser.StreamableLink;
 /**
  * Used by {@link MediaHostRepository} to figure out the wrapped class type for deserializing the actual resolved link.
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class CachedResolvedLinkInfo {
 

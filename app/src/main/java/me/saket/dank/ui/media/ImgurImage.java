@@ -8,8 +8,10 @@ import com.google.auto.value.AutoValue;
 import com.google.auto.value.extension.memoized.Memoized;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class ImgurImage implements Parcelable {
 

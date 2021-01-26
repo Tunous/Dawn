@@ -4,6 +4,7 @@ import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import me.saket.dank.BuildConfig;
@@ -14,6 +15,7 @@ import timber.log.Timber;
 /**
  * Gfycat.com for GIFs (converted to MP4).
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class GfycatLink extends MediaLink implements Parcelable {
 

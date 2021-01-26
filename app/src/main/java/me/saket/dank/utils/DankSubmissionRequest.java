@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import net.dean.jraw.models.CommentSort;
@@ -18,6 +19,7 @@ import me.saket.dank.ui.submission.AuditedCommentSort;
  * <p>
  * TODO Use CommentsRequest#copy().
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class DankSubmissionRequest implements Parcelable {
 

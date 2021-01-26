@@ -4,6 +4,7 @@ import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import me.saket.dank.BuildConfig;
@@ -11,6 +12,7 @@ import me.saket.dank.utils.Urls;
 import org.jetbrains.annotations.NotNull;
 import timber.log.Timber;
 
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class StreamableLink extends MediaLink implements Parcelable {
 

@@ -4,10 +4,12 @@ import android.os.Parcelable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import net.dean.jraw.models.CommentSort;
 
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class AuditedCommentSort implements Parcelable {
 

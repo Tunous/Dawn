@@ -4,6 +4,7 @@ import com.google.auto.value.AutoValue;
 import com.google.auto.value.extension.memoized.Memoized;
 import com.squareup.moshi.Json;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 
 import java.util.Collections;
@@ -14,6 +15,7 @@ import me.saket.dank.di.DankApi;
 /**
  * API response body of {@link DankApi#imgurImage(String)}.
  */
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class ImgurImageResponse implements ImgurResponse {
 

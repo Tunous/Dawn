@@ -6,11 +6,13 @@ import androidx.annotation.Nullable;
 
 import com.google.auto.value.AutoValue;
 import com.squareup.moshi.JsonAdapter;
+import com.squareup.moshi.JsonClass;
 import com.squareup.moshi.Moshi;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+@JsonClass(generateAdapter = true, generator = "avm")
 @AutoValue
 public abstract class ImgurAlbumLink extends MediaAlbumLink<ImgurLink> implements Parcelable {
 
