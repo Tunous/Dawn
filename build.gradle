@@ -7,7 +7,7 @@ buildscript {
       supportLib      : '28.0.0',
       glide           : '4.11.0',
       autoValue       : '1.5',
-      autoValueMoshi  : '0.4.3',
+      autoValueMoshi  : '0.4.7',
       moshi           : '1.11.0',
       stetho          : '1.5.1',
       nytStore        : '3.1.1',
