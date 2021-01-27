@@ -50,7 +50,7 @@ allprojects {
     // Our markwon dependency brings in outdated and conflicting commonmark versions, which we repair here.
     resolutionStrategy.eachDependency { DependencyResolveDetails details ->
       if (details.requested.group == "com.atlassian.commonmark") {
-        details.useVersion versions.commonmark
+        details.useTarget group: "org.commonmark", name: details.requested.name, version: versions.commonmark
         details.because "Markwon transitively includes outdated commonmark versions"
       }
     }
