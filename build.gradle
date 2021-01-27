@@ -26,6 +26,7 @@ buildscript {
       room            : '2.2.6',
       jsoup           : '1.13.1',
       rxjava          : '2.2.20',
+      commonmark      : '0.17.0',
   ]
 
   repositories {
@@ -44,6 +45,15 @@ allprojects {
     google()
     jcenter()
     maven { url 'https://jitpack.io' }
+  }
+  configurations.all {
+    // Our markwon dependency brings in outdated and conflicting commonmark versions, which we repair here.
+    resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+      if (details.requested.group == "com.atlassian.commonmark") {
+        details.useVersion versions.commonmark
+        details.because "Markwon transitively includes outdated commonmark versions"
+      }
+    }
   }
 }
 
