@@ -131,7 +131,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 
   testImplementation "junit:junit:$versions.junit"
-  testImplementation 'org.powermock:powermock-module-junit4:2.0.7'
+  testImplementation 'org.powermock:powermock-module-junit4:2.0.9'
   testImplementation 'org.powermock:powermock-api-mockito2:2.0.9'
   testImplementation "com.google.truth:truth:1.1.2"
   testImplementation 'org.robolectric:robolectric:4.5'
