@@ -1,5 +1,6 @@
 package me.saket.dank.ui.comments
 
+import android.os.Looper
 import com.google.common.truth.Truth.assertThat
 import me.saket.dank.ui.submission.SubmissionCommentTreeUiConstructor
 import me.saket.dank.ui.submission.adapter.SubmissionRemoteComment
@@ -8,6 +9,7 @@ import me.saket.dank.walkthrough.SyntheticSubmission
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.Shadows
 
 @RunWith(RobolectricTestRunner::class)
 class SubmissionCommentTreeBylineTest: SubmissionCommentTreeBaseTest() {
@@ -26,6 +28,7 @@ class SubmissionCommentTreeBylineTest: SubmissionCommentTreeBaseTest() {
     val uiModel = buildCommentTree(submission, comment).test()
       .assertReturnsSingleUiModel<SubmissionRemoteComment.UiModel>()
 
+    executeQueuedMainThreadTasks()
     assertThat(uiModel.byline().toString()).isEqualTo("Dawn \u00b7 5 points \u00b7 Flair \u00b7 Just now")
   }
 
@@ -43,6 +46,7 @@ class SubmissionCommentTreeBylineTest: SubmissionCommentTreeBaseTest() {
     val uiModel = buildCommentTree(submission, comment).test()
       .assertReturnsSingleUiModel<SubmissionRemoteComment.UiModel>()
 
+    executeQueuedMainThreadTasks()
     assertThat(uiModel.byline().toString()).isEqualTo("Dawn \u00b7 [score hidden] \u00b7 Flair \u00b7 Just now")
   }
 
@@ -60,6 +64,7 @@ class SubmissionCommentTreeBylineTest: SubmissionCommentTreeBaseTest() {
     val uiModel = buildCommentTree(submission, comment).test()
       .assertReturnsSingleUiModel<SubmissionRemoteComment.UiModel>()
 
+    executeQueuedMainThreadTasks()
     assertThat(uiModel.byline().toString()).isEqualTo("Dawn \u00b7 1 point \u00b7 Just now")
   }
 
@@ -89,7 +94,12 @@ class SubmissionCommentTreeBylineTest: SubmissionCommentTreeBaseTest() {
     val uiModels = buildCommentTree(submission, commentWithReply, commentWithoutReply).test()
       .assertReturnsUiModels<SubmissionRemoteComment.UiModel>()
 
+    executeQueuedMainThreadTasks()
     assertThat(uiModels[0].byline().toString()).isEqualTo("Dawn \u00b7 2 hidden")
     assertThat(uiModels[1].byline().toString()).isEqualTo("Dawn \u00b7 1 hidden")
+  }
+
+  private fun executeQueuedMainThreadTasks() {
+    Shadows.shadowOf(Looper.getMainLooper()).idle()
   }
 }
