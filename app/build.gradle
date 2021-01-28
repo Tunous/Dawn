@@ -200,7 +200,7 @@ dependencies {
   implementation 'io.github.inflationx:viewpump:2.0.3'
 
   implementation 'com.github.saketme:markwon:b68d3058ca'
-  implementation "org.commonmark:commonmark-ext-autolink:$versions.commonmark"
+  implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.15.2'
 
   implementation "org.threeten:threetenbp:1.3.6:no-tzdb"
   implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
