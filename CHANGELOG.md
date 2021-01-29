@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [0.12.1] - 2021-01-29
+
 ### Fixed
 
 -   Fix Gfycat ([#363](https://github.com/Tunous/Dawn/pull/363))
@@ -175,7 +177,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 Changes before the fork has been made.
 
-[Unreleased]: https://github.com/Tunous/Dawn/compare/0.12.0...HEAD
+[Unreleased]: https://github.com/Tunous/Dawn/compare/0.12.1...HEAD
+
+[0.12.1]: https://github.com/Tunous/Dawn/compare/0.12.0...0.12.1
 
 [0.12.0]: https://github.com/Tunous/Dawn/compare/0.11.0...0.12.0
 
