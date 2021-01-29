@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
   compileSdkVersion versions.compileSdk
@@ -29,4 +30,6 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
   implementation "org.jsoup:jsoup:$versions.jsoup"
   implementation "io.reactivex.rxjava2:rxjava:$versions.rxjava"
+  implementation "com.squareup.moshi:moshi:$versions.moshi"
+  kapt "com.squareup.moshi:moshi-kotlin-codegen:$versions.moshi"
 }

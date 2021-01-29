@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 -   Fix Gfycat ([#363](https://github.com/Tunous/Dawn/pull/363))
 -   Fix post title selection after vote ([#365](https://github.com/Tunous/Dawn/pull/365))
 -   Keep text in comment reply on screen rotation ([#366](https://github.com/Tunous/Dawn/pull/366))
+-   Fix link previews ([#384](https://github.com/Tunous/Dawn/pull/384))
 
 ## [0.12.0] - 2021-01-10
 

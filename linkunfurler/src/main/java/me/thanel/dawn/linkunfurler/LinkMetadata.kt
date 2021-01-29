@@ -1,5 +1,8 @@
 package me.thanel.dawn.linkunfurler
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class LinkMetadata(
   val url: String,
   val title: String?,
