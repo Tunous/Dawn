@@ -1,4 +1,4 @@
-This is an open-source fork of <a href=‘https://github.com/saket/dank’>Dank for Reddit</a> originally created by Saket Narayan.
+This is an open-source fork of <a href='https://github.com/saket/dank'>Dank for Reddit</a> originally created by Saket Narayan.
 
 As <i>Dank</i> did, <i>Dawn</i> puts the focus on user-generated content. The UI takes a back-seat so that you can enjoy photos posted by Reddit’s lovely users in their full glory. It is driven by gestures. Unlike taps, gestures enable faster navigation, are easier to build muscle memories for (because of their larger surface areas) and most important of all — they are downright enjoyable.
 
