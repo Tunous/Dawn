@@ -6,3 +6,5 @@ update_configs:
     ignored_updates:
       - match:
           dependency_name: "com.alexvasilkov:gesture-views"
+      - match:
+          dependency_name: "com.atlassian.commonmark:commonmark-ext-autolink"
