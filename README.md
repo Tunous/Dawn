@@ -17,7 +17,7 @@
         <img alt="GitHub Release" src="https://img.shields.io/github/release/Tunous/Dawn?logo=github"/>
     </a>
     <a href='https://f-droid.org/en/packages/me.thanel.dank'>
-        <img alt="F-Droid Release" src="https://img.shields.io/f-droid/v/me.thanel.dank.svg"/>
+        <img alt="F-Droid Release" src="https://img.shields.io/f-droid/v/me.thanel.dank.svg?logo=f-droid"/>
     </a>
 </p>
 
