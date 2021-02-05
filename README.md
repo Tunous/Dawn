@@ -5,16 +5,19 @@
     <a href='https://play.google.com/store/apps/details?id=me.thanel.dank&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
         <img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="75"/>
     </a>
+    <a href='https://f-droid.org/en/packages/me.thanel.dank'>
+        <img alt='Get it on F-Droid' src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75"/>
+    </a>
 </p>
 <p align='center'>
-    <a href="https://app.bitrise.io/app/a0f2d377c14a1631">
-        <img alt="Bitrise Build Status" src="https://app.bitrise.io/app/a0f2d377c14a1631/status.svg?token=O3cpfpDkImw61dz-hkBWpw&branch=master"/>
-    </a>
     <a href="https://github.com/Tunous/Dawn/actions?query=workflow%3ADebug">
         <img alt="Build Status" src="https://github.com/Tunous/Dawn/workflows/Debug/badge.svg"/>
     </a>
     <a href="https://github.com/Tunous/Dawn/releases">
         <img alt="GitHub Release" src="https://img.shields.io/github/release/Tunous/Dawn?logo=github"/>
+    </a>
+    <a href='https://f-droid.org/en/packages/me.thanel.dank'>
+        <img alt="F-Droid Release" src="https://img.shields.io/f-droid/v/me.thanel.dank.svg"/>
     </a>
 </p>
 
