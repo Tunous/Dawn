@@ -25,7 +25,7 @@ buildscript {
       kotlin          : '1.4.30',
       room            : '2.2.6',
       jsoup           : '1.13.1',
-      rxjava          : '2.2.20',
+      rxjava          : '2.2.21',
   ]
 
   repositories {
