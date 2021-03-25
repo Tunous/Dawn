@@ -24,7 +24,7 @@ android {
 dependencies {
   testImplementation "junit:junit:$versions.junit"
   implementation "com.jakewharton.timber:timber:$versions.timber"
-  implementation 'androidx.annotation:annotation:1.1.0'
+  implementation 'androidx.annotation:annotation:1.2.0'
 
   implementation 'com.github.saketme:markwon:b68d3058ca'
   implementation "com.vladsch.flexmark:flexmark-java:$versions.flexmark"
