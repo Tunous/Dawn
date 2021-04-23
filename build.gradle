@@ -14,7 +14,7 @@ buildscript {
       okHttp          : '4.9.1',
       retrofit        : '2.9.0',
       rxBindings      : '2.2.0',
-      dagger          : '2.34.1',
+      dagger          : '2.35',
       butterKnife     : '10.2.3',
       commonmark      : '0.10.0',
       flexmark        : '0.62.2',
