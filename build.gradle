@@ -26,6 +26,7 @@ buildscript {
       room            : '2.2.6',
       jsoup           : '1.13.1',
       rxjava          : '2.2.21',
+      markwon         : '4.6.2',
   ]
 
   repositories {
