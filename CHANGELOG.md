@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+
+-   Limited images cache to 200 MB ([#381](https://github.com/Tunous/Dawn/pull/381))
+
 ## [0.12.2] - 2021-01-31
 
 ### Changed
