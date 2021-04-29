@@ -1,0 +1,15 @@
+version: 2
+updates:
+- package-ecosystem: gradle
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: com.alexvasilkov:gesture-views
+    versions:
+    - ">= 2.3.1"
+  - dependency-name: com.atlassian.commonmark:commonmark-ext-autolink
+    versions:
+    - ">= 0.15.2"
