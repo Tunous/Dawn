@@ -199,7 +199,7 @@ dependencies {
   kapt "com.airbnb:deeplinkdispatch-processor:$versions.deeplinkDispatch"
   implementation 'io.github.inflationx:viewpump:2.0.3'
 
-  implementation 'com.github.saketme:markwon:b68d3058ca'
+  implementation "ru.noties:markwon:$versions.markwon"
   implementation 'com.atlassian.commonmark:commonmark-ext-autolink:0.15.2'
 
   implementation "org.threeten:threetenbp:1.3.6:no-tzdb"
