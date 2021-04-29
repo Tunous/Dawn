@@ -9,25 +9,7 @@ updates:
   ignore:
   - dependency-name: com.alexvasilkov:gesture-views
     versions:
-    - ">= 0"
+    - ">= 2.3.1"
   - dependency-name: com.atlassian.commonmark:commonmark-ext-autolink
     versions:
-    - ">= 0"
-  - dependency-name: com.google.dagger:dagger-compiler
-    versions:
-    - "2.35"
-  - dependency-name: com.google.dagger:dagger
-    versions:
-    - "2.35"
-  - dependency-name: org.jetbrains.kotlin:kotlin-stdlib-jdk7
-    versions:
-    - 1.4.21-2
-  - dependency-name: org.jetbrains.kotlin:kotlin-gradle-plugin
-    versions:
-    - 1.4.21-2
-  - dependency-name: com.squareup.okhttp3:logging-interceptor
-    versions:
-    - 4.9.0
-  - dependency-name: com.squareup.okhttp3:okhttp
-    versions:
-    - 4.9.0
+    - ">= 0.15.2"
