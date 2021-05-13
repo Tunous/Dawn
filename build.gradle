@@ -35,7 +35,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:4.1.3' // See ndkVersion in build.gradle (:app) when updating
+    classpath 'com.android.tools.build:gradle:4.2.0' // See ndkVersion in build.gradle (:app) when updating
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
   }
 }
