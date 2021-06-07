@@ -20,7 +20,7 @@ buildscript {
       flexmark        : '0.62.2',
       timber          : '4.7.1',
       junit           : '4.13.2',
-      deeplinkDispatch: '5.4.2',
+      deeplinkDispatch: '5.4.3',
       androidTest     : '1.0.2',
       kotlin          : '1.5.10',
       room            : '2.3.0',
