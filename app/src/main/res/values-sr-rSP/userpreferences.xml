@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="activity_userpreferences">Preferences</string>
+  <string name="userpreferences_look_and_feel">Look &amp; feel</string>
+  <string name="userpreferences_look_and_feel_description">Customize appearance and gestures</string>
+  <string name="userpreferences_data_usage">Data usage</string>
+  <string name="userpreferences_data_usage_description">Balance data consumption and quality</string>
+  <string name="userpreferences_filters">Filters</string>
+  <string name="userpreferences_filters_description">NSFW and other content filters</string>
+  <string name="userpreferences_misc">Miscellaneous</string>
+  <string name="userpreferences_misc_description">Options that don\'t fit elsewhere</string>
+  <string name="userpreferences_about">About Dawn</string>
+  <string name="userpreferences_about_description">Learn about OP, send feedback, etc.</string>
+  <string name="userprefs_group_subreddit">Subreddit</string>
+  <string name="userprefs_submission_thumbnails">Submission thumbnails</string>
+  <string name="userprefs_submission_thumbnail_summary_on">Show if available</string>
+  <string name="userprefs_submission_thumbnail_summary_off">Always hidden</string>
+  <string name="userprefs_submission_image_style">Submission image style</string>
+  <string name="userprefs_show_submission_thumbnails_on_left">Thumbnails position</string>
+  <string name="userprefs_show_submission_thumbnails_on_left_summary_on">Show on the left</string>
+  <string name="userprefs_show_submission_thumbnails_on_left_summary_off">Show on the right</string>
+  <string name="userprefs_show_submission_type_indicator_on_left">Submission type indicator position</string>
+  <string name="userprefs_item_byline_comment_count">Submission comments count</string>
+  <string name="userprefs_item_byline_comment_count_summary_on">Always show</string>
+  <string name="userprefs_item_byline_comment_count_summary_off">Always hidden</string>
+  <string name="userprefs_show_colored_comments_tree">Colored comments depth level</string>
+  <string name="userprefs_show_colored_comments_tree_on">Lines are colored</string>
+  <string name="userprefs_show_colored_comments_tree_off">Same color for all lines</string>
+  <string name="userprefs_group_gestures">Gestures</string>
+  <string name="userprefs_customize_submission_gestures">Submission gesture actions</string>
+  <string name="userprefs_customize_comment_gestures">Comment gesture actions</string>
+  <string name="userprefs_gestures_summary_disabled">Disabled</string>
+  <string name="userprefs_gestures_summary_last_separator">and</string>
+  <string name="userprefs_gestures_group_swipe_start_to_end">Swipe left to right</string>
+  <string name="userprefs_gestures_group_swipe_end_to_start">Swipe right to left</string>
+  <string name="userprefs_group_messaging">Messaging</string>
+  <string name="userprefs_check_for_new_messages">Poll for new messages</string>
+  <string name="userprefs_messages_poll_interval_on_wifi">Every %s only on WiFi</string>
+  <string name="userprefs_messages_poll_interval_on_wifi_or_mobile">Every %s on any network</string>
+  <string name="userprefs_messages_poll_interval_never">Never</string>
+  <plurals name="userprefs_message_poll_interval_days">
+    <item quantity="one">day</item>
+    <item quantity="few">%d days</item>
+    <item quantity="other">%d days</item>
+  </plurals>
+  <plurals name="userprefs_message_poll_interval_minutes">
+    <item quantity="one">minute</item>
+    <item quantity="few">%d minutes</item>
+    <item quantity="other">%d minutes</item>
+  </plurals>
+  <plurals name="userprefs_message_poll_interval_hours">
+    <item quantity="one">hour</item>
+    <item quantity="few">%d hours</item>
+    <item quantity="other">%d hours</item>
+  </plurals>
+  <string name="userprefs_checkfornewmessages_poll_interval">Poll interval</string>
+  <string name="userprefs_checkfornewmessages_network_type">Network type</string>
+  <string name="userprefs_checkfornewmessages_disable">Disable</string>
+  <string name="userprefs_checkfornewmessages_15_mins">15 minutes</string>
+  <string name="userprefs_checkfornewmessages_30_mins">30 minutes</string>
+  <string name="userprefs_checkfornewmessages_1_hour">1 hour</string>
+  <string name="userprefs_checkfornewmessages_3_hours">3 hours</string>
+  <string name="userprefs_checkfornewmessages_6_hours">6 hours</string>
+  <string name="userprefs_checkfornewmessages_24_hours">Daily</string>
+  <string name="userprefs_group_media_quality">Media Quality</string>
+  <string name="userprefs_mediaquality_load_hq_media_in_submissions">Prefer loading HD media in submissions</string>
+  <string name="userprefs_mediaquality_load_hq_media_in_gallery">Prefer loading HD media in Gallery</string>
+  <string name="userprefs_mediaquality_autoplay_videos">Auto-play videos</string>
+  <string name="userprefs_group_caching">Caching</string>
+  <string name="userprefs_group_caching_summary">Dawn can pre-fetch content for subscribed subreddits when you visit them.
+    This way they\'re immediately available for consumption.</string>
+  <string name="userprefs_prefetch_images">Pre-fetch images</string>
+  <string name="userprefs_prefetch_link_descriptions">Pre-fetch link descriptions</string>
+  <string name="userprefs_prefetch_comments">Pre-fetch comments</string>
+  <string name="userprefs_networkstrategy_only_on_wifi">Only on WiFi</string>
+  <string name="userprefs_networkstrategy_wifi_or_mobile_data">WiFi or mobile data</string>
+  <string name="userprefs_networkstrategy_never">Never</string>
+  <string name="userprefes_group_link_handling">Link handling</string>
+  <string name="userprefs_open_links_in_apps">Open links in known apps</string>
+  <string name="userprefs_open_links_in_apps_summary">Open links in their dedicated apps if they exist, bypassing the browser.</string>
+  <string name="userprefs_use_chrome_custom_tabs">Use Chrome custom tabs</string>
+  <string name="userprefs_use_chrome_custom_tabs_description">Note: pull-to-collapse is only supported in the internal browser.</string>
+  <string name="userprefs_group_media">Media</string>
+  <string name="userprefs_show_nsfw_content">NSFW content</string>
+  <string name="userprefs_show_nsfw_content_summary_on">Always show</string>
+  <string name="userprefs_show_nsfw_content_summary_off">Keep hidden</string>
+  <string name="userprefs_group_external_links">External links</string>
+  <string name="userprefs_externallinks_default_web_browser">Default browser</string>
+  <string name="userprefs_externallinks_internal_browser">Dawn\'s internal browser</string>
+  <string name="userprefs_externallinks_chrome_custom_tabs">Chrome custom tabs</string>
+  <string name="userprefs_group_launcher">Launcher</string>
+  <string name="userprefs_launcher_app_shortcuts">Customize launcher app shortcuts</string>
+  <string name="userprefs_launcher_app_shortcuts_summary">Jump to your favorite subreddits by long-pressing Dawn\'s launcher icon. This will only work with launchers that support app shortcuts.</string>
+  <string name="userprefs_externallinks_open_links_in_apps">Open known links in apps</string>
+  <string name="userprefs_externallinks_open_links_in_apps_summary">Bypass the browser and open these links in their own apps</string>
+  <string name="userprefs_about_join_subreddit">Join r/GetDank</string>
+  <string name="userprefs_about_join_subreddit_summary">Request features or discuss Dawn with fellow users</string>
+  <string name="userprefs_about_rate_on_play_store">Rate on Play Store</string>
+  <string name="userprefs_about_attributions">Attributions &amp; licenses</string>
+  <string name="userprefs_about_group_contact">Contact</string>
+  <string name="userprefs_about_follow_on_twitter_summary">Follow on Twitter</string>
+  <string name="userprefs_about_send_email_summary">Send an email</string>
+  <string name="userprefs_about_error_no_email_app_found">No email app found</string>
+  <string name="userprefs_about_feedback_and_source">Feedback &amp; Source</string>
+  <string name="userprefs_about_report_issue">Report an issue</string>
+  <string name="userprefs_about_report_issue_summary">Create a new issue on GitHub</string>
+  <string name="userprefs_about_source_code">Source code</string>
+  <string name="userprefs_about_changelog">Changelog</string>
+  <!-- STYLES -->
+  <style name="DankUserPreferenceDraggable" parent="DankUserPreferenceButton">
+    <!--<item name="android:clickable">false</item>-->
+  </style>
+  <!-- DIMENS -->
+  <dimen name="userprefs_item_padding">@dimen/spacing16</dimen>
+  <dimen name="userprefs_item_padding_for_preference_popups">@dimen/spacing12</dimen>
+  <!-- ATTRS -->
+  <declare-styleable name="UserPreferenceButtonView">
+    <attr name="prefbutton_title" format="string"></attr>
+    <attr name="prefbutton_summary" format="string"></attr>
+  </declare-styleable>
+  <declare-styleable name="UserPreferenceSwitchView">
+    <attr name="prefswitch_title" format="string"></attr>
+    <attr name="prefswitch_summary" format="string"></attr>
+  </declare-styleable>
+</resources>
