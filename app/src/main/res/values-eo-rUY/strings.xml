@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string name="subreddit_name_r_prefix">r/%s</string>
-  <string name="user_name_u_prefix">u/%s</string>
-  <string name="comma_separator_for_multiple_words">,</string>
   <string name="and_suffix_for_comma_separated_words">kaj</string>
   <string name="timestamp_just_now">Ĵus nun</string>
   <string name="work_in_progress">Laboro en progreso</string>
@@ -10,13 +7,9 @@
   <string name="dank_welcome">Ĉi tio\nestas via nova\nRedita apo</string>
   <!-- Notification channels -->
   <string name="notification_channel_unread_messages">Nelegitaj mesaĝoj</string>
-  <string name="notification_channel_unread_messages_id">unread_messages</string>
   <string name="notification_channel_unread_messages_description">Rektaj mesaĝoj kaj komentoj de malpli grandaj reditanoj</string>
-  <string name="notification_channel_messaging_comment_replies_id">@string/notification_channel_unread_messages_id</string>
   <string name="notification_channel_media_downloads">Videaĵaj elŝutoj</string>
-  <string name="notification_channel_media_downloads_id">media_downloads</string>
   <string name="notification_channel_media_downloads_description">Elŝutoj de bildoj kaj videaĵoj</string>
-  <string name="notification_channel_debug_notifs_id">debug_notifs</string>
   <!-- Common -->
   <string name="common_error_retry">Reprovi</string>
   <string name="common_emptystate_reload">Reŝargi</string>
@@ -24,7 +17,6 @@
   <string name="common_network_error_with_reddit_message">Ho ve, ne povas akiri Rediton.</string>
   <string name="common_network_error_with_other_websites_message">Ho ve, ne povas akiri interreton.</string>
   <string name="common_reddit_is_down_error_message">Vi rompis Rediton</string>
-  <string name="common_error_cancelation_emoji">( ͡° ͜ʖ ͡°)</string>
   <string name="common_error_cancelation_message">Io intence nuligitis. Uzanto neniam vidu tion.</string>
   <string name="common_share_sheet_title">Konigi per</string>
   <string name="common_error_no_app_found_to_handle_url">Neniu apo trovita por trakti ligilon: %s</string>
@@ -116,7 +108,6 @@
   <string name="userprofile_karma_count">%s karmo</string>
   <string name="userprofile_loading_karma">Ŝargas karmon…</string>
   <string name="userprofile_error_user_karma_load">Ne povas konigi karmon</string>
-  <string name="userprofile_deleting_account"></string>
   <string name="userprofile_confirm_logout">Ĉu vere elsaluti?</string>
   <string name="userprofile_confirm_delete">Ĉu vere forigi?</string>
   <string name="userprofile_logging_out">Elsalutas</string>
@@ -162,9 +153,7 @@
   <string name="submission_media_content_load_failure_tap_to_retry">Tuŝetu por reprovi</string>
   <string name="submission_nsfw_content_disabled_error">MPL</string>
   <string name="submission_tap_to_enable_nsfw_content">Tuŝetu por malŝalti cenzuri</string>
-  <string name="submission_byline">r/%1$s \u00b7 %2$s \u00b7 %3$s</string>
   <!-- r/subreddit * author * timestamp -->
-  <string name="submission_comment_byline_item_separator">\u0020\u00b7\u0020</string>
   <string name="submission_crosspost">Disafiŝita el r/%1$s</string>
   <!-- Crossposted from r/Android -->
   <plurals name="submission_comment_byline_item_score">
@@ -177,7 +166,6 @@
   <string name="cd_submission_comment_reply_go_fullscreen">Verki respondon en la plenekrana redaktilo</string>
   <string name="cd_submission_comment_reply_insert_gif">Enmeti movbildon</string>
   <string name="cd_submission_comment_reply_discard">Nuligi respondon</string>
-  <string name="submission_comment_reply_author_hint">%s</string>
   <!-- {username} -->
   <string name="submission_comment_reply_byline_failed_status">Malsukcesis. Reprovos poste. Tuŝetu por reprovi nun.</string>
   <string name="submission_comment_reply_byline_posting_status">Afiŝas…</string>
@@ -217,7 +205,6 @@
   <string name="inbox_tab_post_replies">Afiŝaj respondoj</string>
   <string name="inbox_tab_username_mentions">Mencioj de uzantnomo</string>
   <string name="inbox_empty_state_message_for_unread">Ĉiuj legitaj! Vi havas neniun nelegitan mesaĝon</string>
-  <string name="inbox_empty_state_message_for_private_messages">You don\'t have any private messages. \nLooks like you don\'t have any friends.</string>
   <string name="inbox_empty_state_message_for_comment_replies">Vi havas nenian respondon de komentoj. \nNeniu respondas al vi je redito.</string>
   <string name="inbox_empty_state_message_for_post_replies">Vi havas nenian respondon de afiŝoj. \nDivenu kiu malpopularas je redito.</string>
   <string name="inbox_empty_state_message_for_username_mentions">Vi havas nenian uzantnoman mencion.</string>
@@ -241,9 +228,6 @@
   <string name="inbox_message_sender_info_for_private_message">De %s</string>
   <string name="cd_privatemessagethread_fullscreen">Verki respondon en la plenekrana redaktilo</string>
   <string name="cd_privatemessagethread_send_message">Sendi mesaĝon</string>
-  <string name="privatemessagethread_comment_reply_hint">@string/submission_comment_reply_hint</string>
-  <string name="privatemessagethread_reply_byline_failed_status">@string/submission_comment_reply_byline_failed_status</string>
-  <string name="privatemessagethread_reply_byline_posting_status">@string/submission_comment_reply_byline_posting_status</string>
   <!-- Notifications -->
   <string name="messagenotification_below_nougat_multiple_messages_title">%d novaj mesaĝoj</string>
   <string name="messagenotification_below_nougat_multiple_messages_title_indeterminate">%d+ novaj mesaĝoj</string>
@@ -292,17 +276,14 @@
   <string name="userprofilepopup_link_karma">Ligila karmo</string>
   <string name="userprofilepopup_comment_karma">Komenta karmo</string>
   <string name="userprofilepopup_account_age_in_days">%dt</string>
-  <string name="userprofilepopup_account_age_in_months">%dm</string>
   <string name="userprofilepopup_account_age_in_years">%dj</string>
   <string name="userprofilepopup_error_message_tap_to_retry">Tuŝeti por reprovi.</string>
-  <string name="userprofilepopup_error_message_period">.</string>
   <!-- Full-stop in english. -->
   <string name="userprofilepopup_user_not_found">Ne, ne. Ĉi-uzanto ne ekzistas.</string>
   <string name="userprofilepopup_user_suspended">Ĉi tiu uzanto estis suspendita.</string>
   <!-- GIPHY picker -->
   <string name="giphypicker_search_gifs">Serĉi movbildoj</string>
   <string name="cd_giphypicker_giphy_attribution">Funkciigita de GIPHY</string>
-  <string name="giphypicker_empty_state_emoji">( ͡° ͜ʖ ͡°)</string>
   <string name="giphypicker_empty_state_message">Neniu trovita.\nVia movbildaj deziroj estas… malkonvenciaj.</string>
   <!-- Launcher app shortcuts -->
   <string name="appshortcuts_title">Apaj ŝparvojoj</string>
@@ -312,9 +293,7 @@
   <string name="appshortcuts_add_new_search_hint">Ŝerĉi subrediton</string>
   <string name="appshortcuts_done">Farita</string>
   <string name="appshrotcuts_swipe_action_delete">Forigi</string>
-  <string name="appshortcuts_cd_reorder_shortcut">Re-order app shortcut</string>
   <!-- Gesture preferences -->
-  <string name="gesturepreferences_cd_reorder_swipeaction">Re-order swipe action</string>
   <string name="gesturepreferences_add_new_action">Aldoni agon</string>
   <string name="image_style_disabled">Malŝaltita</string>
   <string name="image_style_thumbnail">Miniatura</string>
