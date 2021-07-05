@@ -189,7 +189,7 @@
   <string name="comment_sorting_new">Novaj</string>
   <string name="comment_sorting_controversial">Diskuteblaj</string>
   <string name="comment_sorting_old">Malnovaj</string>
-  <string name="comment_sorting_qna">DⳤR</string>
+  <string name="comment_sorting_qna">DϗR</string>
   <string name="comment_sorting_random">Hazardaj</string>
   <string name="comment_sorting_live">Vive</string>
   <string name="submission_comments_refresh">Aktualigi</string>
@@ -271,7 +271,7 @@
   <!-- User profile popup -->
   <string name="userprofilepopup_send_a_private_message">Mesaĝi</string>
   <string name="userprofilepopup_view_full_profile">Tuta profilo</string>
-  <string name="userprofilepopup_body">Reditano por %1$d jaroj \n%2$s afiŝa ⳤ %3$s komenta karmo</string>
+  <string name="userprofilepopup_body">Reditano por %1$d jaroj \n%2$s afiŝa ϗ %3$s komenta karmo</string>
   <string name="cd_userprofilepopup_profile_image">Uzantbildo de %s</string>
   <string name="userprofilepopup_redditor_since">Reditano\nekde</string>
   <string name="userprofilepopup_link_karma">Ligila karmo</string>
