@@ -12,14 +12,14 @@
   <string name="userpreferences_about">O Dawn</string>
   <string name="userpreferences_about_description">Dowiedz się więcej o OP, wyślij opinię, itp.</string>
   <string name="userprefs_group_subreddit">Subreddit</string>
-  <string name="userprefs_submission_thumbnails">Miniaturki treści</string>
+  <string name="userprefs_submission_thumbnails">Miniaturki postów</string>
   <string name="userprefs_submission_thumbnail_summary_on">Pokaż jeśli dostępne</string>
   <string name="userprefs_submission_thumbnail_summary_off">Zawsze ukryte</string>
-  <string name="userprefs_submission_image_style">Styl obrazu treści</string>
+  <string name="userprefs_submission_image_style">Styl obrazu postów</string>
   <string name="userprefs_show_submission_thumbnails_on_left">Pozycja miniatur</string>
   <string name="userprefs_show_submission_thumbnails_on_left_summary_on">Wyświetl z lewej strony</string>
   <string name="userprefs_show_submission_thumbnails_on_left_summary_off">Wyświetl z prawej strony</string>
-  <string name="userprefs_show_submission_type_indicator_on_left">Pozycja wskaźnika typu treści</string>
+  <string name="userprefs_show_submission_type_indicator_on_left">Pozycja wskaźnika typu posta</string>
   <string name="userprefs_item_byline_comment_count">Licznik komentarzy</string>
   <string name="userprefs_item_byline_comment_count_summary_on">Zawsze pokazuj</string>
   <string name="userprefs_item_byline_comment_count_summary_off">Zawsze ukryte</string>
@@ -27,7 +27,7 @@
   <string name="userprefs_show_colored_comments_tree_on">Linie są kolorowe</string>
   <string name="userprefs_show_colored_comments_tree_off">Taki sam kolor dla wszystkich linii</string>
   <string name="userprefs_group_gestures">Gesty</string>
-  <string name="userprefs_customize_submission_gestures">Akcje gestu na treści</string>
+  <string name="userprefs_customize_submission_gestures">Akcje gestu na postach</string>
   <string name="userprefs_customize_comment_gestures">Akcje gestu komentarza</string>
   <string name="userprefs_gestures_summary_disabled">Wyłączone</string>
   <string name="userprefs_gestures_summary_last_separator">i</string>
@@ -66,7 +66,7 @@
   <string name="userprefs_checkfornewmessages_6_hours">6 godzin</string>
   <string name="userprefs_checkfornewmessages_24_hours">Codziennie</string>
   <string name="userprefs_group_media_quality">Jakość mediów</string>
-  <string name="userprefs_mediaquality_load_hq_media_in_submissions">Preferuj ładowanie mediów HD w treściach</string>
+  <string name="userprefs_mediaquality_load_hq_media_in_submissions">Preferuj ładowanie mediów HD w postach</string>
   <string name="userprefs_mediaquality_load_hq_media_in_gallery">Preferuj ładowanie nośników HD w galerii</string>
   <string name="userprefs_mediaquality_autoplay_videos">Auto-odtwarzanie wideo</string>
   <string name="userprefs_group_caching">Buforowanie</string>
