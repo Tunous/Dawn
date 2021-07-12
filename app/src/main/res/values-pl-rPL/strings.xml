@@ -85,7 +85,7 @@
   <string name="sorting_mode_new">Nowe</string>
   <string name="sorting_mode_rising">Wschodzące</string>
   <string name="sorting_mode_controversial">Kontrowersyjne</string>
-  <string name="sorting_mode_top">Najlepsze</string>
+  <string name="sorting_mode_top">Najwięcej punktów</string>
   <string name="sorting_time_period_hour">Godzina</string>
   <string name="sorting_time_period_day">Dzień</string>
   <string name="sorting_time_period_week">Tydzień</string>
@@ -189,7 +189,7 @@
     <item quantity="other">%d ukrytych</item>
   </plurals>
   <string name="comment_sorting_best">Najlepsze</string>
-  <string name="comment_sorting_top">Najlepsze</string>
+  <string name="comment_sorting_top">Najwięcej punktów</string>
   <string name="comment_sorting_new">Nowe</string>
   <string name="comment_sorting_controversial">Kontrowersyjne</string>
   <string name="comment_sorting_old">Stare</string>
