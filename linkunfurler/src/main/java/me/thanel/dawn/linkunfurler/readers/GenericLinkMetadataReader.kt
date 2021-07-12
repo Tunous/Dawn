@@ -93,7 +93,7 @@ open class GenericLinkMetadataReader : LinkMetadataReader {
       if (elements.isEmpty()) {
         return null
       }
-      var largestSizeUrl = elements.first().attr("abs:href")
+      var largestSizeUrl = elements.first()?.attr("abs:href") ?: return null
       var largestSize = 0
       for (element in elements) { // Some websites have multiple icons for different sizes. Find the largest one.
         val sizes = element.attr("sizes")
