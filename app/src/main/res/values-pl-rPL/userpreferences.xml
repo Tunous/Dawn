@@ -22,7 +22,7 @@
   <string name="userprefs_show_submission_type_indicator_on_left">Pozycja wskaźnika typu posta</string>
   <string name="userprefs_item_byline_comment_count">Licznik komentarzy</string>
   <string name="userprefs_item_byline_comment_count_summary_on">Zawsze pokazuj</string>
-  <string name="userprefs_item_byline_comment_count_summary_off">Zawsze ukryte</string>
+  <string name="userprefs_item_byline_comment_count_summary_off">Zawsze ukryty</string>
   <string name="userprefs_show_colored_comments_tree">Kolorowy poziom głębokości komentarzy</string>
   <string name="userprefs_show_colored_comments_tree_on">Linie są kolorowe</string>
   <string name="userprefs_show_colored_comments_tree_off">Taki sam kolor dla wszystkich linii</string>
