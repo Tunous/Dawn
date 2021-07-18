@@ -22,9 +22,9 @@ buildscript {
       junit           : '4.13.2',
       deeplinkDispatch: '5.4.3',
       androidTest     : '1.0.2',
-      kotlin          : '1.5.20',
+      kotlin          : '1.5.21',
       room            : '2.3.0',
-      jsoup           : '1.13.1',
+      jsoup           : '1.14.1',
       rxjava          : '2.2.21',
       markwon         : '2.0.2',
   ]
@@ -35,7 +35,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:4.2.1' // See ndkVersion in build.gradle (:app) when updating
+    classpath 'com.android.tools.build:gradle:4.2.2' // See ndkVersion in build.gradle (:app) when updating
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
   }
 }
